@@ -240,12 +240,13 @@ pub fn run() {
         // The LaunchAgent is named after the app. Pinned to "Prevail" so an
         // install that enabled start-on-boot before the Glyph Studio rename keeps
         // the same agent (no duplicate, and the toggle still reads it as on).
-        .plugin(
-            tauri_plugin_autostart::Builder::new()
-                .macos_launcher(tauri_plugin_autostart::MacosLauncher::LaunchAgent)
-                .app_name("Prevail")
-                .build(),
-        )
+        .plugin({
+            let b = tauri_plugin_autostart::Builder::new();
+            // macos_launcher exists only on the macOS build of the plugin.
+            #[cfg(target_os = "macos")]
+            let b = b.macos_launcher(tauri_plugin_autostart::MacosLauncher::LaunchAgent);
+            b.app_name("Prevail").build()
+        })
         // System tray + close-to-tray. Clicking the tray shows the window;
         // closing the window hides it instead of quitting when the
         // "Close to tray" pref is on (read from the window's localStorage via

@@ -20,7 +20,7 @@ export const loadChatPanel = tracked(() => import("./chatpanel"));
 export const loadCouncilPanel = tracked(() => import("./councilpanel"));
 export const loadSettingsPanel = tracked(() => import("./settingspanel"));
 export const loadWorkPanel = tracked(() => import("./workpanel"));
-export const loadBenchmarkPanel = tracked(() => import("./benchpanel"));
+export const loadBenchmarkPanel = tracked(() => import("./arenahandoff"));
 
 /**
  * A code-split panel: lazy until its chunk is here, then rendered directly.

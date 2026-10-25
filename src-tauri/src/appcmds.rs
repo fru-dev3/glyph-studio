@@ -827,3 +827,18 @@ pub(crate) fn secs_to_ymdhms(secs: i64) -> (i32, u32, u32, u32, u32, u32) {
     let day = days as u32 + 1;
     (year, month, day, hh, mm, ss)
 }
+
+/// Open Glyph Arena, the separate app that writes the routing policy Studio
+/// follows. Fixed bundle id, so this can only ever launch that one app.
+/// Ok(false) when it is not installed (the caller then opens its web page).
+#[tauri::command]
+pub(crate) async fn open_glyph_arena() -> Result<bool, String> {
+    if !cfg!(target_os = "macos") {
+        return Ok(false);
+    }
+    let out = std::process::Command::new("/usr/bin/open")
+        .args(["-b", "dev.fru.glyph.arena"])
+        .output()
+        .map_err(|e| e.to_string())?;
+    Ok(out.status.success())
+}

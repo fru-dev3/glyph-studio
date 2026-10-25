@@ -27,7 +27,7 @@ const ChatPanel = lazyPanel(loadChatPanel, (m) => m.ChatPanel);
 const CouncilPanel = lazyPanel(loadCouncilPanel, (m) => m.CouncilPanel);
 const SettingsPanel = lazyPanel(loadSettingsPanel, (m) => m.SettingsPanel);
 const WorkPanel = lazyPanel(loadWorkPanel, (m) => m.WorkPanel);
-const BenchmarkPanel = lazyPanel(loadBenchmarkPanel, (m) => m.BenchmarkPanel);
+const ArenaHandoff = lazyPanel(loadBenchmarkPanel, (m) => m.ArenaHandoff);
 // The phone frame (bottom tab bar, big header, one full-width surface). Only
 // fetched at phone width, so the desktop bundle stays as it was.
 const PhoneShell = lazy(() => import("./phoneshell").then((m) => ({ default: m.PhoneShell })));
@@ -1325,7 +1325,6 @@ export default function App() {
   }, []);
   // A domain can launch a scoped benchmark; it dispatches this event and we
   // jump to the Benchmark page pre-scoped to that domain.
-  const [benchScope, setBenchScope] = useState<string | null>(null);
   // The Benchmark panel stays mounted (hidden) on other tabs so an in-flight run
   // keeps its live progress when you navigate away. But it's a heavy lazy chunk,
   // so don't load it until the tab is first opened - if it was never visited,
@@ -1339,13 +1338,11 @@ export default function App() {
   const [councilEverVisited, setCouncilEverVisited] = useState(false);
   useEffect(() => { if (tab === "council") setCouncilEverVisited(true); }, [tab]);
   useEffect(() => {
-    const onBench = (e: Event) => {
-      const d = (e as CustomEvent<string>).detail || null;
-      setBenchScope(d);
+    const onBench = () => {
       setTab("benchmark");
     };
-    window.addEventListener("prevail:benchmark-domain", onBench as EventListener);
-    return () => window.removeEventListener("prevail:benchmark-domain", onBench as EventListener);
+    window.addEventListener("prevail:benchmark-domain", onBench);
+    return () => window.removeEventListener("prevail:benchmark-domain", onBench);
   }, []);
   // I4: a high-stakes quick-action (Decision / Risks) routes to the Council. The
   // card dispatches this event; we switch the domain + Council tab and seed the
@@ -1800,11 +1797,7 @@ export default function App() {
                 and back. The global cockpit lives in the configuration page. */}
             {benchEverVisited && (
               <div className={tab === "benchmark" ? "h-full" : "hidden"}>
-                <BenchmarkPanel
-                  key={selectedDomain || benchScope || "all"}
-                  vaultPath={vaultPath}
-                  initialDomain={selectedDomain || benchScope}
-                />
+                <ScrollPage testId="arena-page"><ArenaHandoff /></ScrollPage>
               </div>
             )}
             </Suspense>
@@ -2067,7 +2060,7 @@ export default function App() {
                   </button>
                   <button
                     onClick={() => setTab("benchmark")}
-                    title="Arena: score models head-to-head on your questions"
+                    title="Arena: now its own app, Glyph Arena"
                     className={`flex items-center gap-1 rounded whitespace-nowrap px-1.5 py-0.5 text-[11px] transition-colors ${
                       tab === "benchmark" ? "bg-accent text-background shadow-sm" : "text-text-muted hover:bg-surface-warm hover:text-accent"
                     }`}

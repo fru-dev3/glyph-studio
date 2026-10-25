@@ -1,6 +1,6 @@
 {
   "name": "prevail-desktop",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "Glyph Studio: a private AI harness for your life, as a native macOS app",
   "license": "GPL-3.0-only",
   "type": "module",

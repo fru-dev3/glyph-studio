@@ -4,6 +4,12 @@ All notable changes to Glyph Studio (formerly Prevail desktop). Format: [Keep a 
 
 ---
 
+## [0.4.10] 2026-10-25 · Arena is now Glyph Arena
+
+### Changed
+- **Auto follows Glyph Arena's routing policy** (`build/_meta/arena/policy.json`) for the chat's domain, kind of task and weight class, only on the turn's own runtime and only with an available model; the route chip shows "routed by Arena" and opens Glyph Arena. No policy file: routing unchanged. A repeated manual pick still wins.
+- **Arena moved to its own app.** The Arena tab and Settings section are a handoff to Glyph Arena (https://glyph.fru.dev/arena). Removed: the benchmark panel, run setup, presets and the 3D arena from Studio. Past runs stay in the vault.
+
 ## [0.4.9] 2026-10-25 · Prevail is now Glyph Studio
 
 ### Changed

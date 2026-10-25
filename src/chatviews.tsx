@@ -1,5 +1,6 @@
 // Chat-display leaf components extracted from App.tsx: ChatBubble (one rendered
 // turn), MessageList (windowed transcript), DomainStatusBar, and DomainHome.
+import { openGlyphArena } from "./arenahandoff";
 import { JobCard } from "./jobcard";
 import { BringInCard, DomainMissions, MissionStartCard } from "./missioncards";
 import { filedIdOf, jobIdOf, toldIdOf } from "./plansmodel";
@@ -94,7 +95,17 @@ function RouteChip({ route, onRerun }: { route: RouteInfo; onRerun?: () => void 
     >
       <Sparkles className="h-2.5 w-2.5" />
       Auto <ArrowRight className="h-2.5 w-2.5" /> {modelLabel(route.cli, route.model)}
-      {route.reason && <span className="hidden text-accent/70 sm:inline">· {route.reason}</span>}
+      {route.reason?.startsWith("Arena:") ? (
+        <button
+          onClick={() => void openGlyphArena()}
+          title={`${route.reason.slice(6).trim()} Open Glyph Arena`}
+          className="hidden rounded px-1 text-accent/80 underline decoration-dotted underline-offset-2 transition-colors hover:bg-accent hover:text-background sm:inline"
+        >
+          routed by Arena
+        </button>
+      ) : (
+        route.reason && <span className="hidden text-accent/70 sm:inline">· {route.reason}</span>
+      )}
       <button
         onClick={pin}
         title={pinned ? "Pinned as this runtime's default" : `Always use ${route.model} on ${route.cli}`}

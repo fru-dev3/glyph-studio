@@ -544,6 +544,7 @@ pub fn run() {
             appcmds::read_file,
             telegram::telegram_send,
             appcmds::open_in_finder,
+            appcmds::open_glyph_arena,
             appcmds::move_to_applications,
             appcmds::create_domain,
             domain::domain_context,

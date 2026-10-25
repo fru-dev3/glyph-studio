@@ -1,6 +1,6 @@
 [package]
 name = "prevail-desktop"
-version = "0.4.9"
+version = "0.4.10"
 description = "Glyph Studio, a private AI harness for your life (macOS desktop app)"
 authors = ["example.com"]
 edition = "2021"

@@ -23,7 +23,7 @@ import { CouncilSettingsSection } from "./councils";
 import { track } from "./telemetry";
 import { ModelsSection } from "./settings7";
 import { WorkspaceSection } from "./settings8";
-import { BenchmarkPanel } from "./benchpanel";
+import { ArenaHandoff } from "./arenahandoff";
 import { HooksSection } from "./hookssection";
 import { ProfilesSection } from "./profilessection";
 import { KnowledgeSourcesSection, useKnowledgeSources } from "./knowledgesources";
@@ -31,7 +31,7 @@ import type { CliInfo } from "./types";
 
 // Sections that are a SideSpine screen: they fill the pane edge to edge and
 // scroll their column and detail on their own.
-const FLUSH_SECTIONS = new Set<string>(["intent", "entities", "models", "benchmark", "council", "toolkit", "activity", "connections", "privacy-safety", "settings"]);
+const FLUSH_SECTIONS = new Set<string>(["intent", "entities", "models", "council", "toolkit", "activity", "connections", "privacy-safety", "settings"]);
 
 export function SettingsPanel({
   appearance,
@@ -153,7 +153,7 @@ export function SettingsPanel({
         {/* Full width: settings use the whole pane. */}
         
           {section === "models" && <ModelsSection clis={clis} onStartChatWith={onStartChatWith} onActivated={onRefreshClis} vaultPath={vaultPath} />}
-          {section === "benchmark" && <BenchmarkPanel key={row ?? ""} vaultPath={vaultPath} initial={row} />}
+          {section === "benchmark" && <ArenaHandoff />}
           {section === "council" && <CouncilSettingsSection clis={clis} />}
           {section === "toolkit" && <ToolkitSection vaultPath={vaultPath} />}
           {section === "intent" && <MirrorPanel vaultPath={vaultPath} title="Intent" />}

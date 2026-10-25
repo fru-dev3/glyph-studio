@@ -684,32 +684,14 @@ test("24b · Council: Use in chat opens the chat Council tab on that council, an
   expect(await page.evaluate(() => localStorage.getItem("prevail.council.defaultId"))).toBe("default");
 });
 
-test("25 · Arena: the page header sits above the side column, and internal folders are not domains", async ({ page }) => {
-  await mockTauri(page, {
-    scan_vault: [
-      { name: "career", path: "/tmp/smoke-vault/data/domains/career", has_state: true, state_preview: null },
-      { name: "_log", path: "/tmp/smoke-vault/data/domains/_log", has_state: false, state_preview: null },
-      { name: "_meta", path: "/tmp/smoke-vault/data/domains/_meta", has_state: false, state_preview: null },
-    ],
-  });
+test("25 · Arena: the page header holds the handoff to Glyph Arena", async ({ page }) => {
+  await mockTauri(page);
   await page.goto("/");
   await page.getByText("What should we work on?").waitFor({ timeout: 15_000 });
   await page.evaluate(() => window.dispatchEvent(new CustomEvent("prevail:open-settings", { detail: "benchmark" })));
-  const arena = page.getByTestId("arena-page");
   const header = page.locator("[data-shell=header]");
   await expect(header).toContainText("Arena", { timeout: 10_000 });
-  await expect(header.getByRole("button", { name: /Run a benchmark/ })).toBeVisible();
-  const nav = arena.getByTestId("arena-nav");
-  const hb = await header.boundingBox();
-  const nb = await nav.boundingBox();
-  expect(hb!.y + hb!.height).toBeLessThanOrEqual(nb!.y + 1);
-  // Run a benchmark is the first row and the default detail; domains are
-  // picked inside it, and internal folders are not among them.
-  await expect(nav.getByTestId("arena-row-run")).toHaveAttribute("aria-current", "true");
-  const run = arena.getByTestId("arena-run");
-  await expect(run.getByTestId("arena-domain-career")).toBeVisible();
-  await expect(run.getByText(/^(Log|Meta)/)).toHaveCount(0);
-  await expect(run.locator("[data-testid^='arena-domain-_']")).toHaveCount(0);
+  await expect(page.getByTestId("open-glyph-arena")).toBeVisible();
 });
 
 const TOOLKIT_FX = {
@@ -877,7 +859,7 @@ test("32 · the Settings nav is 9 rows, and each opens a header above a side col
     const header = pageEl.getByTestId("page-header").filter({ hasText: l }).first();
     await expect(header).toBeVisible({ timeout: 10_000 });
     // Intent with no captured prompts shows its empty state, not a column.
-    if (l === "Intent") continue;
+    if (l === "Intent" || l === "Arena") continue; // Arena is a one-card handoff to Glyph Arena since 0.4.10
     const col = pageEl.locator("[data-spine-column]").first();
     await expect(col).toBeVisible();
     const hb = await header.boundingBox();

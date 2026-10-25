@@ -6,6 +6,6 @@
        crashes on mic access without it). Used by Quick Capture's voice note
        transcription. Tauri merges this into the generated Info.plist. -->
   <key>NSMicrophoneUsageDescription</key>
-  <string>Prevail uses the microphone to capture voice notes, transcribing your speech to text.</string>
+  <string>Glyph Studio uses the microphone to capture voice notes, transcribing your speech to text.</string>
 </dict>
 </plist>

@@ -343,18 +343,26 @@ pub(crate) async fn open_in_finder(app: tauri::AppHandle, path: String) -> Resul
     Ok(())
 }
 
-// Copy Prevail.app to /Applications/. Tries a plain `cp -R` first; if that
-// fails (permissions), falls back to `osascript` which can prompt for admin.
+// Copy the running .app bundle to /Applications/ under its own name (an
+// install updated from Prevail keeps the Prevail.app folder name; a fresh
+// install is "Glyph Studio.app"). Tries a plain `cp -R` first; if that fails
+// (permissions), falls back to `osascript` which can prompt for admin.
 // The source path must end in ".app".
 #[tauri::command]
 pub(crate) async fn move_to_applications(app: tauri::AppHandle, source: String) -> Result<String, String> {
     if !cfg!(target_os = "macos") {
         return Err("move_to_applications is macOS-only".into());
     }
-    let dest = "/Applications/Prevail.app";
     if source.starts_with("/Applications/") {
         return Ok("already in /Applications/".into());
     }
+    let bundle = std::path::Path::new(source.trim_end_matches('/'))
+        .file_name()
+        .map(|n| n.to_string_lossy().into_owned())
+        .filter(|n| n.ends_with(".app"))
+        .unwrap_or_else(|| "Glyph Studio.app".into());
+    let dest = format!("/Applications/{bundle}");
+    let dest = dest.as_str();
     // Remove existing copy first so cp -R succeeds cleanly.
     let _ = std::fs::remove_dir_all(dest);
     let out = app.shell()
@@ -631,7 +639,9 @@ pub(crate) fn app_uninstall(app: tauri::AppHandle, scope: String) -> Result<(), 
         script.push_str("security delete-generic-password -s prevail.providers >/dev/null 2>&1\n");
         script.push_str("security delete-generic-password -s prevail.ingestion >/dev/null 2>&1\n");
     }
-    script.push_str("rm -rf \"/Applications/Prevail.app\"\n");
+    // The bundle is "Glyph Studio.app" on a fresh install and stays "Prevail.app"
+    // on one updated in place from Prevail (same bundle id, same app).
+    script.push_str("rm -rf \"/Applications/Glyph Studio.app\" \"/Applications/Prevail.app\"\n");
     let tmp = std::env::temp_dir().join("prevail-uninstall.sh");
     fs::write(&tmp, &script).map_err(|e| format!("write uninstaller: {e}"))?;
     std::process::Command::new("bash")

@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import { APP_VERSION } from "./constants";
 import { isBunkerOn } from "./storage";
 
-export const RELEASES_URL = "https://github.com/fru-dev3/fd-apps-prevail-desktop/releases/latest";
-const API = "https://api.github.com/repos/fru-dev3/fd-apps-prevail-desktop/releases/latest";
+export const RELEASES_URL = "https://github.com/fru-dev3/glyph-studio/releases/latest";
+const API = "https://api.github.com/repos/fru-dev3/glyph-studio/releases/latest";
 
 /// True when `a` is a strictly newer x.y.z than `b`. Tolerates a leading "v".
 export function isNewer(a: string, b: string): boolean {

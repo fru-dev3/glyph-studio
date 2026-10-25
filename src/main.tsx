@@ -34,10 +34,10 @@ function showFatal(msg: string, err?: unknown) {
     el.innerHTML =
       '<div style="height:100vh;overflow:auto;background:#faf8f1;padding:24px;' +
       'font:13px ui-monospace,SFMono-Regular,Menlo,monospace">' +
-      '<div style="color:#1a1a1a;font-weight:700;margin-bottom:6px">Prevail hit an error and stopped this view.</div>' +
+      '<div style="color:#1a1a1a;font-weight:700;margin-bottom:6px">Glyph Studio hit an error and stopped this view.</div>' +
       '<div style="color:#555;margin-bottom:14px">Your vault data is safe on disk. Reload to continue.</div>' +
       '<button onclick="location.reload()" style="padding:8px 18px;border-radius:8px;border:1px solid var(--color-accent,#008000);' +
-      'background:var(--color-accent,#008000);color:#fff;font:600 13px ui-monospace,monospace;cursor:pointer;margin-bottom:18px">Reload Prevail</button>' +
+      'background:var(--color-accent,#008000);color:#fff;font:600 13px ui-monospace,monospace;cursor:pointer;margin-bottom:18px">Reload Glyph Studio</button>' +
       '<pre style="white-space:pre-wrap;color:#b3261e;margin:0">' +
       msg.replace(/</g, "&lt;") +
       "</pre></div>";

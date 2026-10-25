@@ -414,7 +414,7 @@ export function ObsidianCard() {
           <h3 className="text-sm font-semibold text-text-primary">Obsidian vault</h3>
         </div>
         <p className="mb-3 text-[12px] leading-relaxed text-text-muted">
-          Imports your notes as AI-readable source. One-way: Prevail never writes to Obsidian.
+          Imports your notes as AI-readable source. One-way: Glyph Studio never writes to Obsidian.
         </p>
         <div className="flex flex-wrap items-center gap-2">
           <button onClick={() => void pickObsidian()} className="flex items-center gap-2 rounded-md border border-border bg-background px-3 py-1.5 text-left text-sm text-text-secondary transition-colors hover:border-accent-border">
@@ -539,7 +539,7 @@ export function GeneralSection({ appearance, part, vaultPath = "" }: { appearanc
         />
         <Row
           title="Show Briefing on home"
-          desc="Top recommendations and what Prevail learned, on the home screen."
+          desc="Top recommendations and what Glyph Studio learned, on the home screen."
           control={<Switch on={showBriefing} onChange={(v) => { setShowBriefing(v); setPref(PREF.showHomeBriefing, v ? "1" : "0"); }} />}
         />
         <Row
@@ -549,7 +549,7 @@ export function GeneralSection({ appearance, part, vaultPath = "" }: { appearanc
         />
         <Row
           title="Close to tray"
-          desc="Closing the window leaves Prevail in the menu bar."
+          desc="Closing the window leaves Glyph Studio in the menu bar."
           control={<Switch on={closeToTray} onChange={(v) => { setCloseToTray(v); setPref(PREF.closeToTray, v ? "1" : "0"); }} />}
         />
         <Row
@@ -589,7 +589,7 @@ export function GeneralSection({ appearance, part, vaultPath = "" }: { appearanc
         />
         <Row
           title="Proactive check-ins"
-          desc="Prevail nudges you when approvals or overdue work are waiting."
+          desc="Glyph Studio nudges you when approvals or overdue work are waiting."
           control={<Switch on={heartbeat} onChange={(v) => { setHeartbeat(v); setPref(PREF.heartbeatEnabled, v ? "1" : "0"); }} />}
         />
         <Row
@@ -671,7 +671,7 @@ export function GeneralSection({ appearance, part, vaultPath = "" }: { appearanc
         <GenSub id="appearance" title="Appearance" icon={Palette} summary={appearance?.mode ? `${appearance.mode} theme` : "theme & palette"}>
           <div className="mb-6 border-t border-border-subtle pt-4">
             <div className="mb-1 font-medium">Color Mode</div>
-            <div className="mb-4 text-sm text-text-secondary">Pick a fixed mode or let Prevail follow your system setting.</div>
+            <div className="mb-4 text-sm text-text-secondary">Pick a fixed mode or let Glyph Studio follow your system setting.</div>
             <div className="inline-flex items-center rounded-md border border-border bg-background p-1 text-xs">
               {([{ id: "light", label: "Light", icon: Sun }, { id: "dark", label: "Dark", icon: Moon }, { id: "system", label: "System", icon: Monitor }] as const).map((m) => {
                 const Icon = m.icon; const active = appearance.mode === m.id;

@@ -30,7 +30,7 @@ const UNKNOWN = [
 const src = (id: string, title: string, wave: number, on: boolean, extra: Record<string, unknown> = {}) => ({ id, title, wave, reads: `what ${title} counts`, never: "the content", defaultOn: on, emits: [], on, decided: false, state: on ? "ok" : "off", ...extra });
 const SOURCES = [
   src("browsers", "Browser domains", 1, true, { last_sync: "2026-10-02T10:00:00Z" }),
-  src("screentime", "Screen Time", 2, true, { fda: true, state: "needs-fda", note: "grant Full Disk Access to Prevail to read Screen Time" }),
+  src("screentime", "Screen Time", 2, true, { fda: true, state: "needs-fda", note: "grant Full Disk Access to Glyph Studio to read Screen Time" }),
   src("gmail", "Gmail headers", 2, true, { state: "auth-failed", note: "sign in again" }),
   src("apple-health", "Apple Health export", 3, false, { connect: "drop export.zip in the inbox folder" }),
   src("photos", "Apple Photos", 4, false, { localOnly: true, fda: true }),
@@ -97,7 +97,7 @@ for (const width of [390, 768, 1280, 1920]) {
     test("the stack: tabs, Needs you, categories, a row opened, unknown, the Full Disk Access line", async ({ page }) => {
       await openApps(page, width);
       await expect(page.getByTestId("tab-stack")).toHaveAttribute("aria-selected", "true");
-      await expect(page.getByTestId("stack-fda")).toContainText("Screen Time needs Full Disk Access for Prevail");
+      await expect(page.getByTestId("stack-fda")).toContainText("Screen Time needs Full Disk Access for Glyph Studio");
       if (!phone) await expect(page.getByText("$242 a month known · 3 in use")).toBeVisible();
       if (phone) await page.getByTestId("stack-spine-needs").click();
       await expect(page.getByTestId("stack-card")).toHaveCount(3);

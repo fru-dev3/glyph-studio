@@ -25,7 +25,7 @@ const LABELS: Record<string, string> = {
   openclaw: "Openclaw",
   hermes: "Hermes",
   pi: "Pi",
-  prevail: "Prevail",
+  prevail: "Glyph Studio",
 };
 
 export function IntegrationsPanel({ vaultPath }: { vaultPath: string; clis: CliInfo[] }) {
@@ -102,9 +102,9 @@ export function IntegrationsPanel({ vaultPath }: { vaultPath: string; clis: CliI
 
       {/* USE PREVAIL FROM YOUR TOOLS (MCP) - one-click OR manual, tabbed ------ */}
       <div className="border-t border-border-subtle pt-4">
-        <h2 className="mb-1 text-[15px] font-semibold text-text-primary">Use Prevail from your AI tools</h2>
+        <h2 className="mb-1 text-[15px] font-semibold text-text-primary">Use Glyph Studio from your AI tools</h2>
         <div className="mb-4 text-sm text-text-secondary">
-          MCP (Model Context Protocol) lets the AI CLIs you already use call into Prevail - run a council across your models, read a life domain's state, or list your domains - right inside the tool. Register Prevail once and it shows up as tools in Claude Code, Codex, Gemini and more. Uses a local stdio connection; nothing leaves your machine.
+          MCP (Model Context Protocol) lets the AI CLIs you already use call into Glyph Studio - run a council across your models, read a life domain's state, or list your domains - right inside the tool. Register Glyph Studio once and it shows up as tools in Claude Code, Codex, Gemini and more. Uses a local stdio connection; nothing leaves your machine.
         </div>
 
         {/* Auto-council moved to Settings → Council (it governs the council, not

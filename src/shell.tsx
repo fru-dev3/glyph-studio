@@ -172,7 +172,7 @@ export function BunkerRibbon({ enabled, compact = false }: { enabled: boolean; c
           href={RELEASES_URL}
           target="_blank"
           rel="noreferrer"
-          title={`Prevail ${updateAvailable} is available. You have ${APP_VERSION}. Click to download.`}
+          title={`Glyph Studio ${updateAvailable} is available. You have ${APP_VERSION}. Click to download.`}
           data-testid="update-available"
           className="absolute right-3 inline-flex items-center gap-1.5 rounded-full bg-ok px-2.5 py-0.5 font-mono text-[10px] font-bold tracking-wider text-background hover:opacity-90"
         >

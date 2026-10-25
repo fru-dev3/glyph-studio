@@ -432,7 +432,7 @@ export function DomainContextView({
                 value={profileDraft}
                 onChange={(e) => setProfileDraft(e.target.value)}
                 rows={8}
-                placeholder="Who you are, what matters to you, how you like to work. Prevail reads this as standing context for every answer."
+                placeholder="Who you are, what matters to you, how you like to work. Glyph Studio reads this as standing context for every answer."
                 className="w-full resize-y rounded-md border border-border bg-background px-2.5 py-2 text-[14px] leading-normal text-text-primary focus:border-accent-border focus:outline-none"
               />
               <div className="mt-2 flex items-center gap-4">
@@ -443,7 +443,7 @@ export function DomainContextView({
               </div>
             </div>
           ) : (
-            <FileBody body={profile} empty="Not set yet. Add your profile so Prevail grounds every answer in who you are." />
+            <FileBody body={profile} empty="Not set yet. Add your profile so Glyph Studio grounds every answer in who you are." />
           )
         } />
         {mode === "list" && (
@@ -1361,7 +1361,7 @@ export function DomainPrefsPanel({
             <Check className="h-3.5 w-3.5" /> Save
           </button>
           <button onClick={draftIdealWithAI} disabled={draftingIdeal}
-            title={`Draft from what Prevail knows about your ${titleCase(domain)} - review before saving`}
+            title={`Draft from what Glyph Studio knows about your ${titleCase(domain)} - review before saving`}
             className="inline-flex items-center gap-1.5 px-2 text-[13px] font-medium text-accent hover:underline disabled:opacity-50">
             {draftingIdeal ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
             {draftingIdeal ? "Drafting…" : domainIdeal.trim() ? "Redraft with AI" : "Draft with AI"}
@@ -1417,7 +1417,7 @@ export function DomainPrefsPanel({
 
       <PrefSection title="Routines" icon={<Cpu className="h-4 w-4" />} subtitle={`${[daemonTaskgen, daemonReminders, daemonSkillgen].filter(Boolean).length}/3 on`}>
         <p className="mb-2.5 text-[12px] text-text-muted">
-          Background work Prevail does for {titleCase(domain)} on its own, even when the app is closed.
+          Background work Glyph Studio does for {titleCase(domain)} on its own, even when the app is closed.
         </p>
         <div>
           {([

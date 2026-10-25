@@ -1,7 +1,7 @@
 [package]
 name = "prevail-desktop"
 version = "0.1.144"
-description = "Prevail desktop — native macOS cockpit for AI council deliberation"
+description = "Glyph Studio, a private AI harness for your life (macOS desktop app)"
 authors = ["example.com"]
 edition = "2021"
 license = "GPL-3.0-only"

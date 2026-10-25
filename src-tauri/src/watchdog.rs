@@ -182,7 +182,7 @@ pub fn start(app: AppHandle) {
                                 footprint_mb: footprint / 1024 / 1024,
                                 limit_mb: kill_limit / 1024 / 1024,
                                 message: format!(
-                                    "Prevail was using {:.1} GB and risked freezing your Mac, so the largest running task was stopped ({:.1} GB reclaimed). Your data is safe.",
+                                    "Glyph Studio was using {:.1} GB and risked freezing your Mac, so the largest running task was stopped ({:.1} GB reclaimed). Your data is safe.",
                                     gb(footprint),
                                     gb(rss),
                                 ),
@@ -201,7 +201,7 @@ pub fn start(app: AppHandle) {
                                     footprint_mb: footprint / 1024 / 1024,
                                     limit_mb: kill_limit / 1024 / 1024,
                                     message: format!(
-                                        "Prevail is using {:.1} GB. Consider closing a long conversation to free memory.",
+                                        "Glyph Studio is using {:.1} GB. Consider closing a long conversation to free memory.",
                                         gb(footprint),
                                     ),
                                 },
@@ -220,7 +220,7 @@ pub fn start(app: AppHandle) {
                             footprint_mb: footprint / 1024 / 1024,
                             limit_mb: kill_limit / 1024 / 1024,
                             message: format!(
-                                "Prevail is using {:.1} GB. If it keeps climbing, the largest task will be stopped to protect your Mac.",
+                                "Glyph Studio is using {:.1} GB. If it keeps climbing, the largest task will be stopped to protect your Mac.",
                                 gb(footprint),
                             ),
                         },

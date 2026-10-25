@@ -38,7 +38,7 @@ interface Dot { day: string; hour: number; kind: "prompt" | "commit" }
 interface Source { id: string; kind: string; files: string[]; first?: string; last?: string; events: number; note?: string; hosts?: string[] }
 
 const FAMILY_ICON: Record<string, typeof Cpu> = {
-  "AI and building": Cpu, "Prevail itself": Sparkles, Exploration: MapIcon, "Learning and attention": BookOpen, Money: Wallet,
+  "AI and building": Cpu, "Glyph Studio itself": Sparkles, "Prevail itself": Sparkles, Exploration: MapIcon, "Learning and attention": BookOpen, Money: Wallet,
 };
 const TIER: Record<string, string> = { measured: "Measured", derived: "Derived", inferred: "Inferred", asked: "Asked" };
 
@@ -281,7 +281,7 @@ export function MetricsView({ vaultPath, phone }: { vaultPath: string; phone: bo
     detail = (
       <section data-testid="metrics-proposals">
         <h2 className={DETAIL_TITLE}>Proposals</h2>
-        <p className={`${META} mt-1`}>Metrics Prevail could track for you, from your ideal states, your Compass goals and what you say in chat. One tap each; two "not useful" on a kind and it stops proposing that kind.</p>
+        <p className={`${META} mt-1`}>Metrics Glyph Studio could track for you, from your ideal states, your Compass goals and what you say in chat. One tap each; two "not useful" on a kind and it stops proposing that kind.</p>
         {err(propQ)}
         {!props.length && !loading(propQ) && <p className={`${META} mt-4`}>No proposals right now.</p>}
         <ul className="mt-3 max-w-4xl">{props.map((p) => <ProposalCard key={p.key} p={p} vaultPath={vaultPath} onAnswered={() => { invalidateQueries("engine_metric_proposals"); invalidateQueries("engine_review"); void propQ.refresh(); }} />)}</ul>
@@ -326,7 +326,7 @@ export function MetricsView({ vaultPath, phone }: { vaultPath: string; phone: bo
     detail = (
       <section data-testid="metrics-sources">
         <h2 className={DETAIL_TITLE}>Sources</h2>
-        <p className={`${META} mt-1`}>What Prevail may read on this Mac. Connections and sensitive sources stay off until you turn them on; counts only, never content.</p>
+        <p className={`${META} mt-1`}>What Glyph Studio may read on this Mac. Connections and sensitive sources stay off until you turn them on; counts only, never content.</p>
         <SourcesConsent vaultPath={vaultPath} />
         <h3 className={`${SECTION_TITLE} mt-8`}>What each number read</h3>
         {err(sourcesQ)}

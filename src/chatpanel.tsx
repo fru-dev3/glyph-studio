@@ -2576,7 +2576,7 @@ export function ChatPanel({
     const googleAccountArg = (scopeApp && scopeGoogleAccount) || inheritedGoogleAccount(pickedGoogleAccounts, googleConnectedAccounts, googleInContext, boundGoogleAccount);
     if (sendCli && ENGINE_ONLY.has(sendCli) && !useEngine) {
       const label = chatCli === "openrouter" ? "OpenRouter" : chatCli === "lmstudio" ? "LM Studio" : "oMLX";
-      setMessages((m) => [...m.slice(0, -1), { role: "assistant", content: `${label} runs through the engine, which isn't available right now. Make sure the Prevail engine is installed, then try again.`, ts: Date.now(), cli: chatCli, model: chatModel ?? undefined }]);
+      setMessages((m) => [...m.slice(0, -1), { role: "assistant", content: `${label} runs through the engine, which isn't available right now. Make sure the Glyph Engine is installed, then try again.`, ts: Date.now(), cli: chatCli, model: chatModel ?? undefined }]);
       onStreamEnd(sessionRef.current);
       return;
     }

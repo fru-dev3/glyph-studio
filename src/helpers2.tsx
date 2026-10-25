@@ -195,7 +195,7 @@ export function buildOmegaPreamble(omegaMd: string): string {
   const t = omegaMd.trim();
   if (!t) return "";
   return (
-    "# OMEGA: what Prevail has LEARNED across all your domains. App-wide context.\n" +
+    "# OMEGA: what Glyph Studio has LEARNED across all your domains. App-wide context.\n" +
     "Durable lessons, preferences, and patterns that hold across everything. Apply them by default. " +
     "They rank BELOW the Ideal State above: if they ever conflict, the Ideal State wins.\n\n" +
     t.slice(0, 3000) +

@@ -85,7 +85,7 @@ export function VaultEncryptionCard({ vaultPath }: { vaultPath: string }) {
             onClick={() => window.location.reload()}
             className="mt-2 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-background hover:bg-accent-hover"
           >
-            I saved it · Restart Prevail
+            I saved it · Restart Glyph Studio
           </button>
           <span className="ml-2 text-[12px] text-text-muted">Restarting re-opens the vault through the unlock screen so every view reads it correctly.</span>
         </div>

@@ -223,7 +223,7 @@ class PanelBoundary extends Component<{ resetKey: unknown; children: ReactNode }
     return (
       <div className="flex h-full w-full flex-col items-center justify-center gap-3 px-6 text-center">
         <div className="text-sm font-medium text-text-primary">This section didn't load</div>
-        <div className="max-w-sm text-xs text-text-muted">The rest of Prevail is fine and your vault is safe. This can happen if the app updated while it was open.</div>
+        <div className="max-w-sm text-xs text-text-muted">The rest of Glyph Studio is fine and your vault is safe. This can happen if the app updated while it was open.</div>
         <button onClick={() => this.setState({ err: null })} className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text-primary hover:bg-surface-strong focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent">Reload this section</button>
       </div>
     );
@@ -909,7 +909,7 @@ export default function App() {
       setMemoryAlert({ kind, message });
       if (typeof Notification !== "undefined" && notifyPermissionRef.current === "granted") {
         try {
-          new Notification(kind === "killed" ? "Prevail stopped a runaway task" : "Prevail memory is high", { body: message });
+          new Notification(kind === "killed" ? "Glyph Studio stopped a runaway task" : "Glyph Studio memory is high", { body: message });
         } catch {}
       }
     }).then((f) => { un = f; }).catch(() => {});
@@ -1045,7 +1045,7 @@ export default function App() {
         const prev = prevDecisionsRef.current;
         if (prev >= 0 && n > prev) {
           const added = n - prev;
-          const title = "Prevail needs your approval";
+          const title = "Glyph Studio needs your approval";
           const body = added === 1 ? "An automation is waiting for you to approve an action." : `${n} actions are waiting for your approval.`;
           if (isBrowser()) {
             // X8: mobile/web (WebUI) - foreground browser notification so a phone
@@ -1115,7 +1115,7 @@ export default function App() {
       const parts: string[] = [];
       if (decisionsCount > 0) parts.push(`${decisionsCount} waiting on your approval`);
       if (dueAlert.overdue > 0) parts.push(`${dueAlert.overdue} overdue`);
-      void invoke("notify_user", { title: "Prevail check-in", body: `${parts.join(" · ")}. Open Prevail when you have a moment.` }).catch(() => {});
+      void invoke("notify_user", { title: "Glyph Studio check-in", body: `${parts.join(" · ")}. Open Glyph Studio when you have a moment.` }).catch(() => {});
       lsSet(HEARTBEAT_KEY, String(now.getTime()));
     };
     const id = window.setInterval(tick, 10 * 60_000); // evaluate every 10 min
@@ -1597,7 +1597,7 @@ export default function App() {
     // fallback - guide the user to the desktop instead of crashing. (B4)
     if (isBrowser()) {
       window.alert(
-        "Pick your vault from the Prevail desktop app on this Mac: a browser can't open a native folder picker. The web view then syncs to it automatically.",
+        "Pick your vault from the Glyph Studio desktop app on this Mac: a browser can't open a native folder picker. The web view then syncs to it automatically.",
       );
       return;
     }

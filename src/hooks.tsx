@@ -152,10 +152,10 @@ export function ThinkingWord() {
 }
 
 // A playful, ever-changing vocabulary for "the model is working" states (council
-// and chat thinking). "Prevailing" always belongs; the rest mix real and
+// and chat thinking). "Glyphing" always belongs; the rest mix real and
 // invented words so it never feels mechanical.
 export const PLAYFUL_WORDS = [
-  "Prevailing", "Conjuring", "Convopulating", "Maximizing", "Jambalaya-ing",
+  "Glyphing", "Conjuring", "Convopulating", "Maximizing", "Jambalaya-ing",
   "Pondering", "Synthesizing", "Marinating", "Percolating", "Noodling",
   "Ruminating", "Cogitating", "Brewing", "Distilling", "Spelunking",
   "Confabulating", "Effervescing", "Concocting", "Crystallizing", "Untangling",

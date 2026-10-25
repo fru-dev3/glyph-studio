@@ -237,10 +237,15 @@ pub fn run() {
         .plugin(tauri_plugin_deep_link::init())
         // Start-on-boot (LaunchAgent). The frontend toggles it via the
         // autostart plugin's enable/disable in Settings → General.
-        .plugin(tauri_plugin_autostart::init(
-            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
-            None,
-        ))
+        // The LaunchAgent is named after the app. Pinned to "Prevail" so an
+        // install that enabled start-on-boot before the Glyph Studio rename keeps
+        // the same agent (no duplicate, and the toggle still reads it as on).
+        .plugin(
+            tauri_plugin_autostart::Builder::new()
+                .macos_launcher(tauri_plugin_autostart::MacosLauncher::LaunchAgent)
+                .app_name("Prevail")
+                .build(),
+        )
         // System tray + close-to-tray. Clicking the tray shows the window;
         // closing the window hides it instead of quitting when the
         // "Close to tray" pref is on (read from the window's localStorage via
@@ -278,8 +283,8 @@ pub fn run() {
             let briefing = MenuItemBuilder::with_id("briefing", "Today's briefing").build(app)?;
             let incognito = MenuItemBuilder::with_id("incognito", "Toggle incognito").build(app)?;
             let sep1 = PredefinedMenuItem::separator(app)?;
-            let show = MenuItemBuilder::with_id("show", "Show Prevail").build(app)?;
-            let quit = MenuItemBuilder::with_id("quit", "Quit Prevail").build(app)?;
+            let show = MenuItemBuilder::with_id("show", "Show Glyph Studio").build(app)?;
+            let quit = MenuItemBuilder::with_id("quit", "Quit Glyph Studio").build(app)?;
             let menu = MenuBuilder::new(app)
                 .items(&[&new_chat, &council, &briefing, &incognito, &sep1, &show, &quit])
                 .build()?;

@@ -526,7 +526,7 @@ export function PhoneSection() {
         ) : !running ? (
           <div className="max-w-xl">
             <Smartphone className="h-6 w-6 text-accent" />
-            <div className="mt-2 text-[15px] font-semibold text-text-primary">Put Prevail on your phone</div>
+            <div className="mt-2 text-[15px] font-semibold text-text-primary">Put Glyph Studio on your phone</div>
             <p className="mt-1 text-[14px] text-text-secondary">
               Turn this on and a QR code appears. Scan it and your phone is signed in, with no password to type. It installs to the home screen like a normal app.
             </p>

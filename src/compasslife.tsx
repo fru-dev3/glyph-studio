@@ -57,7 +57,7 @@ export function YearlyReviews({ vaultPath }: { vaultPath: string }) {
   return (
     <section data-testid="compass-detail-yearly">
       <h2 className={DETAIL_TITLE}>Yearly review</h2>
-      <p className={`${META} mt-1 mb-4`}>Once a year Prevail writes a review of your health, relationships, work, money, growth and joy, beside your values and purpose; answer in it, edit it, or talk it through.</p>
+      <p className={`${META} mt-1 mb-4`}>Once a year Glyph Studio writes a review of your health, relationships, work, money, growth and joy, beside your values and purpose; answer in it, edit it, or talk it through.</p>
       <Group title="Reviews" count={rows.length}>
         <ul data-testid="yearly-list">
           {rows.map((r) => (

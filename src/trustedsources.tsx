@@ -188,7 +188,7 @@ export function TrustedSourceDetail({ vaultPath, app, onChanged }: { vaultPath: 
           )}
         </section>
       ) : null}
-      <p className={META}>Read only, on this Mac. Prevail never stores a password or database key for a source; the address must work without one.</p>
+      <p className={META}>Read only, on this Mac. Glyph Studio never stores a password or database key for a source; the address must work without one.</p>
     </div>
   );
 

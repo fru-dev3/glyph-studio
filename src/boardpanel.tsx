@@ -55,9 +55,9 @@ function humanizeAgentError(label: string, cli: string, raw: string): string {
     return [
       `${label} started but isn't signed in to a model provider yet, so it couldn't run.`,
       "",
-      `${label} is a separate agent that runs on its own model, so it needs a one-time login in its own app. Open a terminal and run \`${cli}\`, then \`/login\`. Prevail confirmed ${label} is installed (that's the green check), but it can't sign in on ${label}'s behalf.`,
+      `${label} is a separate agent that runs on its own model, so it needs a one-time login in its own app. Open a terminal and run \`${cli}\`, then \`/login\`. Glyph Studio confirmed ${label} is installed (that's the green check), but it can't sign in on ${label}'s behalf.`,
       "",
-      `Once ${label} is logged in, run this task again. Or hand it to the built-in Prevail agent, which runs on your Prevail model and needs no separate login.`,
+      `Once ${label} is logged in, run this task again. Or hand it to the built-in Glyph Studio agent, which runs on your Glyph Studio model and needs no separate login.`,
       "",
       "- original message -",
       raw,
@@ -207,7 +207,7 @@ export function BoardPanel({ vaultPath, initialDomain, clis }: { vaultPath: stri
     // "prevail" is the built-in agent: run with the default runtime (no --cli),
     // so it uses whatever model Prevail already runs on, no harness login needed.
     const effectiveCli = cli === "prevail" ? "" : cli;
-    const agentLabel = cli === "prevail" ? "Prevail" : cli;
+    const agentLabel = cli === "prevail" ? "Glyph Studio" : cli;
     setAgentRunning((s) => new Set(s).add(taskId));
     const session = `agent-${taskId}-${Date.now()}`;
     let result = "";

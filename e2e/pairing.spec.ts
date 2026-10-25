@@ -58,7 +58,7 @@ test("an expired code falls back to the sign-in form instead of a dead end", asy
   await page.goto(`/#p=${CODE}`);
 
   // Refused: the user still gets a way in, plus a pointer back to the QR.
-  await expect(page.getByRole("heading", { name: "Prevail Web" })).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByRole("heading", { name: "Glyph Studio Web" })).toBeVisible({ timeout: 20_000 });
   await expect(page.getByPlaceholder("Password")).toBeVisible();
   await expect(page.getByText(/scan the QR code/i)).toBeVisible();
   expect(pairCalls).toHaveLength(1);

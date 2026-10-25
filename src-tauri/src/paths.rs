@@ -312,7 +312,7 @@ pub(crate) fn guard_managed_path(path: &str, must_contain: &str, ext: &str) -> R
         return Err("path must be absolute".into());
     }
     if !path.contains(must_contain) || !path.ends_with(ext) {
-        return Err(format!("path must be a Prevail {must_contain} {ext} file"));
+        return Err(format!("path must be a Glyph Studio {must_contain} {ext} file"));
     }
     // Symlink-escape defense (audit #3): resolve the real path — or, for a target
     // that doesn't exist yet, its real parent plus the final component — and
@@ -331,7 +331,7 @@ pub(crate) fn guard_managed_path(path: &str, must_contain: &str, ext: &str) -> R
     };
     let resolved_str = resolved.to_string_lossy();
     if !resolved_str.contains(must_contain) || !resolved_str.ends_with(ext) {
-        return Err("path resolves outside a Prevail-managed location".into());
+        return Err("path resolves outside a Glyph Studio managed location".into());
     }
     Ok(())
 }

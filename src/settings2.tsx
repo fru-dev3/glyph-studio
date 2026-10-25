@@ -209,7 +209,7 @@ export function DaemonsSection({ vaultPath, embedded = false, sel: selProp }: { 
     { id: "taskgen", hubOnly: true, does: "Suggests new tasks from your goals, memory and domain state.", icon: ListChecks, title: "Task generation", running: !!taskgenSt?.running, enabled: taskgenEnabled, summary: taskgenSt?.tasks_generated ? `${taskgenSt.tasks_generated} generated` : taskgenEnabled ? "on" : "off" },
     { id: "skillgen", hubOnly: true, does: "Learns reusable skills from each domain's conversations.", icon: GraduationCap, title: "Skill learning", running: !!skillgenSt?.running, enabled: skillgenEnabled, summary: skillgenSt?.skills_created ? `${skillgenSt.skills_created} learned` : skillgenEnabled ? "on" : "off" },
     { id: "intent", hubOnly: true, does: "Infers your high-level intents from the prompts you type.", icon: Lightbulb, title: "Intent distillation", running: !!intentSt?.running, enabled: intentEnabled, summary: intentSt?.last_intent_count ? `${intentSt.last_intent_count} intents` : intentEnabled ? "Auto" : "Off" },
-    { id: "headless", icon: Server, title: "Work with the app closed", does: "Keeps learning in the background after you quit Prevail." },
+    { id: "headless", icon: Server, title: "Work with the app closed", does: "Keeps learning in the background after you quit Glyph Studio." },
     { id: "memory", does: "The memory and context these routines produce.", icon: Brain, title: "Memory & Context", summary: "what the daemons produce" },
     { id: "role", icon: isClient ? Laptop : Server, title: "This machine's role", summary: isClient ? "Client" : "Hub", does: "Only the hub runs background automation when two Macs share a vault." },
   ];
@@ -545,7 +545,7 @@ export function MemoryContextSection({ headerless }: { vaultPath: string; header
       {!headerless && (
         <SettingsHeader
           title="Memory & Context"
-          subtitle="What Prevail has learned about you."
+          subtitle="What Glyph Studio has learned about you."
         />
       )}
       {/* The distiller runs on the Daemons page; this is its outcome view. A

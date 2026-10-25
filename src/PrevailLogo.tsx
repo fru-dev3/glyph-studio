@@ -53,7 +53,7 @@ export function PrevailLogo({
       height={size}
       style={{ width: size, height: size, display: "block" }}
       role="img"
-      aria-label="Prevail"
+      aria-label="Glyph Studio"
     >
       <rect x="0" y="0" width="512" height="512" rx="116" fill="#141416" />
       <g fill="none" strokeLinecap="round" strokeLinejoin="round">

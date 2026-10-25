@@ -180,7 +180,7 @@ function MoreAggregators() {
       <div className="min-w-0 flex-1">
         <span className="text-text-secondary">More aggregators are on the roadmap</span> (Bedrock, Vertex, Azure, Together, Fireworks, Groq). Most hosted models are already reachable today through OpenRouter above, or add a vendor key directly below.{" "}
         <a
-          href="https://github.com/fru-dev3/prevail-desktop/issues/new"
+          href="https://github.com/fru-dev3/glyph-studio/issues/new"
           target="_blank"
           rel="noreferrer"
           className="text-accent underline decoration-dotted underline-offset-2 hover:opacity-80"

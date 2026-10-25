@@ -115,7 +115,7 @@ export function MirrorDetail({ app, vaultPath, domains, onChanged }: {
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[13px] text-text-secondary">
             {app.status === "disabled" ? `${app.name} is turned off in ${runtimeLabel}.` : app.status === "error" ? `${runtimeLabel} reports a problem with ${app.name}.` : `${app.name} needs you to sign in again in ${runtimeLabel}.`}
-            {" "}Prevail uses the sign-in your runtime already has.
+            {" "}Glyph Studio uses the sign-in your runtime already has.
           </p>
           <SigninHelp app={app} />
         </div>
@@ -184,7 +184,7 @@ export function MirrorDetail({ app, vaultPath, domains, onChanged }: {
                   </li>
                 ))}
               </ul>
-              <p className="mt-2 text-[12px] leading-relaxed text-text-muted">Chat can read across every account. Drafts go to one account and wait for you; Prevail never sends.</p>
+              <p className="mt-2 text-[12px] leading-relaxed text-text-muted">Chat can read across every account. Drafts go to one account and wait for you; Glyph Studio never sends.</p>
             </section>
           )}
           <div className={`${card} flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between`}>
@@ -206,7 +206,7 @@ export function MirrorDetail({ app, vaultPath, domains, onChanged }: {
             <div className={`${card} flex items-start gap-3`}>
               <Info className="mt-0.5 h-4 w-4 shrink-0 text-text-muted" />
               <p className="text-[13px] leading-relaxed text-text-secondary">
-                Listed from {runtimeLabel} so you can see everything in one place. It cannot be synced yet: Prevail runs recipes through runtimes that support unattended, read-only runs.
+                Listed from {runtimeLabel} so you can see everything in one place. It cannot be synced yet: Glyph Studio runs recipes through runtimes that support unattended, read-only runs.
               </p>
             </div>
           ) : (

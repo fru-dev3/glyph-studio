@@ -78,7 +78,7 @@ export function ProfileSwitcher({ collapsed, trailing }: { collapsed: boolean; t
       <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-ok ring-2 ring-surface-strong" />
     </span>
   );
-  const name = active?.label ?? "Prevail";
+  const name = active?.label ?? "Glyph Studio";
   const second = active?.email || "Personal workspace";
 
   return (
@@ -87,7 +87,7 @@ export function ProfileSwitcher({ collapsed, trailing }: { collapsed: boolean; t
         <button
           onClick={() => active && setOpen((v) => !v)}
           disabled={!active}
-          title={active ? `Profile: ${active.label}, click to switch` : "Prevail"}
+          title={active ? `Profile: ${active.label}, click to switch` : "Glyph Studio"}
           aria-label="Switch profile"
           className={`flex min-w-0 items-center rounded-lg transition-colors hover:bg-surface-warm disabled:hover:bg-transparent ${collapsed ? "justify-center p-1" : "flex-1 gap-2 px-1 py-1"}`}
         >

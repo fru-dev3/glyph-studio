@@ -143,7 +143,7 @@ export function RemoteSection() {
       <SettingsHeader title="Remote (WebUI)" subtitle="Reach this app from another device." />
       <DesktopOnly feature="The WebUI server">
       <div>
-        <SettingsRowLite title="Enable WebUI" desc="Run the bridge server so a browser can use Prevail. This Mac must stay on."
+        <SettingsRowLite title="Enable WebUI" desc="Run the bridge server so a browser can use Glyph Studio. This Mac must stay on."
           control={<Toggle on={running} onChange={toggle} />} />
         <SettingsRowLite title="Port" desc="Local port the WebUI listens on."
           control={<input type="number" value={port} disabled={running} onChange={(e) => { setPort(e.target.value); setPref(PREF.webuiPort, e.target.value); }} className="w-24 rounded-md border border-border bg-background px-2 py-1.5 text-right text-sm focus:border-accent-border focus:outline-none disabled:opacity-50" />} />

@@ -50,9 +50,9 @@ export function DesktopOnly({ children, feature, inline }: { children: ReactNode
     return (
       <div className="flex items-center gap-2 rounded-md border border-border-subtle bg-surface-warm px-3 py-2 text-xs text-text-muted">
         <Monitor className="h-3.5 w-3.5 shrink-0" />
-        {feature} is available in the Prevail desktop app.
+        {feature} is available in the Glyph Studio desktop app.
       </div>
     );
   }
-  return <EmptyState icon={Monitor} title="Desktop only" body={`${feature} is configured in the Prevail desktop app, not the web view.`} />;
+  return <EmptyState icon={Monitor} title="Desktop only" body={`${feature} is configured in the Glyph Studio desktop app, not the web view.`} />;
 }

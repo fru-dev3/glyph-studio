@@ -88,7 +88,7 @@ export function ObsidianImportModal({ vaultPath, domains, onClose, onDone }: {
         ) : (
           <div className="space-y-3">
             <p className="text-[13px] leading-relaxed text-text-muted">
-              Point Prevail at your existing Obsidian vault folder. Its notes are copied in as markdown (wikilinks and embeds converted, tags and frontmatter kept) so your AI can read and ground on them.
+              Point Glyph Studio at your existing Obsidian vault folder. Its notes are copied in as markdown (wikilinks and embeds converted, tags and frontmatter kept) so your AI can read and ground on them.
             </p>
             <div>
               <label className="mb-1 block text-[11px] text-text-muted">Obsidian vault folder</label>

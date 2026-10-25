@@ -160,7 +160,7 @@ test("7 · Phone is a top-level section and turns itself on in one tap", async (
   await expect(phoneNav).toBeVisible({ timeout: 10_000 });
   await expect(phoneNav).toContainText("Off");
   await phoneNav.click();
-  await expect(page.getByText("Put Prevail on your phone")).toBeVisible();
+  await expect(page.getByText("Put Glyph Studio on your phone")).toBeVisible();
 
   await page.getByRole("button", { name: "Turn on phone access" }).click();
   await page.evaluate((s) => { (window as unknown as { __fixtures: Record<string, unknown> }).__fixtures.webui_status = s; }, live);

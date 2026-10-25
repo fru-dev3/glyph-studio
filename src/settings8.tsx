@@ -27,7 +27,7 @@ export function AppearanceSection({ appearance }: { appearance: ReturnType<typeo
           <div>
             <div className="font-medium">Color Mode</div>
             <div className="mt-1 text-sm text-text-secondary">
-              Pick a fixed mode or let Prevail follow your system setting.
+              Pick a fixed mode or let Glyph Studio follow your system setting.
             </div>
           </div>
           <div className="inline-flex shrink-0 items-center rounded-md border border-border bg-background p-1 text-xs">

@@ -42,7 +42,7 @@ export function HarnessPicker({
             <Sparkles className="h-3 w-3" />
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-xs font-medium text-text-primary">Prevail</span>
+            <span className="block truncate text-xs font-medium text-text-primary">Glyph Studio</span>
             <span className="block truncate text-[12px] text-text-muted">Built in, on your default model. No login needed.</span>
           </span>
         </button>

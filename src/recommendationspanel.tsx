@@ -274,7 +274,7 @@ export function RecommendationsPanel({ vaultPath }: { vaultPath: string }) {
     body = (
       <div className="py-6">
         <p className="text-[14px] text-text-secondary">{savedOnly ? "Nothing saved yet." : "Nothing to do right now."}</p>
-        <p className={`${META} mt-0.5`}>Recommendations appear as Prevail reads your prompts, projects, apps and benchmarks.</p>
+        <p className={`${META} mt-0.5`}>Recommendations appear as Glyph Studio reads your prompts, projects, apps and benchmarks.</p>
       </div>
     );
   } else if (sel === "all") {

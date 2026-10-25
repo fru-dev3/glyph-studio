@@ -114,14 +114,14 @@ export function OmegaSection({ vaultPath, headerless }: { vaultPath: string; hea
         <SettingsHeader
           title="Omega"
           icon={Sigma}
-          subtitle="What Prevail has learned across your domains."
+          subtitle="What Glyph Studio has learned across your domains."
         />
       )}
 
       {/* One line on how Omega sits beside the constitution, then tiny actions. */}
       <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2">
         <p className={`${META} min-w-0 flex-1 basis-64`} title="Journals, intents and each domain's memory compound into Omega.">
-          {editing ? "Editing. The auto block is rewritten on each distill; write above it." : "What Prevail learned from how you work. Your constitution wins any conflict; both ride every turn."}
+          {editing ? "Editing. The auto block is rewritten on each distill; write above it." : "What Glyph Studio learned from how you work. Your constitution wins any conflict; both ride every turn."}
         </p>
         <span className="flex shrink-0 items-center gap-1">
           <label className="mr-1 inline-flex items-center gap-1.5 text-[12px] text-text-muted" title="Auto-distill Omega across your domains on a slow cadence (default daily)">
@@ -161,7 +161,7 @@ export function OmegaSection({ vaultPath, headerless }: { vaultPath: string; hea
         </div>
       ) : !loaded ? null : empty ? (
         <div>
-          <p className={META}>Nothing learned yet. It fills in as Prevail learns across your domains.</p>
+          <p className={META}>Nothing learned yet. It fills in as Glyph Studio learns across your domains.</p>
           <div className="mt-2 flex items-center gap-4">
             <button onClick={distill} disabled={distilling} className={link}>
               {distilling ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}

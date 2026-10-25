@@ -6,7 +6,7 @@
     var el = document.getElementById("root") || document.body;
     if (el)
       el.innerHTML =
-        '<pre style="white-space:pre-wrap;padding:20px;margin:0;font:12px ui-monospace,Menlo,monospace;color:#b3261e;background:#faf8f1;height:100vh;overflow:auto">Prevail hit an error:\n\n' +
+        '<pre style="white-space:pre-wrap;padding:20px;margin:0;font:12px ui-monospace,Menlo,monospace;color:#b3261e;background:#faf8f1;height:100vh;overflow:auto">Glyph Studio hit an error:\n\n' +
         String(msg).replace(/</g, "&lt;") +
         "</pre>";
   }

@@ -254,7 +254,7 @@ export function AppStackView({ vaultPath, tabs }: { vaultPath: string; tabs: Rea
       {fda.length > 0 && (
         <p data-testid="stack-fda" className={`shrink-0 ${phone ? "px-4 pt-3" : "px-8 pt-3"} flex items-start gap-2 text-[13px] text-warn`}>
           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-          <span className="min-w-0 break-words">Screen Time needs Full Disk Access for Prevail: System Settings, Privacy and Security, Full Disk Access.</span>
+          <span className="min-w-0 break-words">Screen Time needs Full Disk Access for Glyph Studio: System Settings, Privacy and Security, Full Disk Access.</span>
         </p>
       )}
       <SideSpine storageKey="prevail.stack.spine" title="Stack" label="the stack" testId="stack-list" meta={s ? `${s.apps.length} apps` : undefined}

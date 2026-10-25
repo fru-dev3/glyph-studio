@@ -89,7 +89,7 @@ function RebuildCheck({ vaultPath, slug }: { vaultPath: string; slug: string }) 
   return (
     <section className="mt-6 border-t border-border-subtle pt-4" data-testid="rebuild-check">
       <h3 className="text-[15px] font-semibold text-text-primary flex items-center gap-2"><FolderSearch className="h-4 w-4 text-text-muted" />Check a rebuild</h3>
-      <p className="mt-1 text-[12px] text-text-muted">Point at the folder a model built from this brief. Prevail reads it and says which requirements it met. The folder is only read.</p>
+      <p className="mt-1 text-[12px] text-text-muted">Point at the folder a model built from this brief. Glyph Studio reads it and says which requirements it met. The folder is only read.</p>
       <div className="mt-3 flex flex-wrap gap-2">
         <input value={folder} onChange={(e) => setFolder(e.target.value)} placeholder="/path/to/rebuild" aria-label="Rebuild folder"
           className="h-9 min-w-0 flex-1 basis-60 rounded-lg border border-border bg-background px-3 text-[14px] text-text-primary focus:border-accent-border focus:outline-none" />

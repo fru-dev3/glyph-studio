@@ -910,7 +910,7 @@ export function Sidebar({
             )}
             {sortedDomains.length === 0 && !vaultError && !collapsed && domainsOpen && (
               <div className={`${SECTION_PAD} py-2`}>
-                <p className="mb-2 text-[13px] text-text-muted">No domains yet. Let Prevail suggest a starter set, or add one with the + above.</p>
+                <p className="mb-2 text-[13px] text-text-muted">No domains yet. Let Glyph Studio suggest a starter set, or add one with the + above.</p>
                 <button
                   onClick={onOpenOnboarding}
                   className="flex h-9 w-full items-center justify-center gap-2 rounded-lg bg-accent px-3 text-[14px] font-semibold text-on-accent transition-opacity hover:opacity-90"

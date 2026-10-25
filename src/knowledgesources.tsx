@@ -119,7 +119,7 @@ function AddSource({ vaultPath, domains, existing, onAdded }: { vaultPath: strin
       </div>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
         <p className={`${META} min-w-0 flex-1`}>
-          {guess.kind ? <>Looks like {A_KIND[guess.kind]}. Prevail checks it before it is used.</> : <>For example: a feed for your wealth briefings, or ~/Documents/foo-notes.</>}
+          {guess.kind ? <>Looks like {A_KIND[guess.kind]}. Glyph Studio checks it before it is used.</> : <>For example: a feed for your wealth briefings, or ~/Documents/foo-notes.</>}
         </p>
         <button type="button" className={textLink} aria-expanded={fields} data-testid="knowledge-fields-toggle" onClick={openFields}>
           <SlidersHorizontal className="h-3.5 w-3.5" /> Fields
@@ -278,7 +278,7 @@ export function KnowledgeSourcesSection({ vaultPath }: { vaultPath: string }) {
   return (
     <div data-testid="knowledge-sources" className="space-y-6">
       <SettingsHeader title="Knowledge sources" icon={Library} tint="knowledge"
-        subtitle="What Prevail reads when it briefs and updates you: MCP servers, sites and feeds, folders, databases. Read only." />
+        subtitle="What Glyph Studio reads when it briefs and updates you: MCP servers, sites and feeds, folders, databases. Read only." />
       <AddSource vaultPath={vaultPath} domains={domains} existing={rows} onAdded={refresh} />
       <section aria-label="Your sources">
         <h3 className={`${SECTION_TITLE} mb-1`}>Your sources{rows.length ? <span className="ml-2 text-[12px] font-normal text-text-muted">{rows.length}</span> : null}</h3>

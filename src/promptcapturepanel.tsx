@@ -39,7 +39,7 @@ export const CAPTURE_LABELS: Record<string, string> = {
   openclaw: "Openclaw",
   hermes: "Hermes",
   pi: "Pi",
-  prevail: "Prevail",
+  prevail: "Glyph Studio",
 };
 
 export function PromptCapturePanel({ vaultPath }: { vaultPath: string }) {

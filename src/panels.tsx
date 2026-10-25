@@ -201,7 +201,7 @@ export function LockScreen({ vault, encrypted, onUnlock }: { vault: string | nul
   async function tryTouchId() {
     setErr("");
     try {
-      const ok = await invoke<boolean>("engine_biometric_authenticate", { reason: "unlock Prevail" });
+      const ok = await invoke<boolean>("engine_biometric_authenticate", { reason: "unlock Glyph Studio" });
       if (ok) onUnlock();
       else setErr("Touch ID didn't match.");
     } catch (e) { setErr(`Touch ID unavailable: ${String(e)}`); }
@@ -250,7 +250,7 @@ export function LockScreen({ vault, encrypted, onUnlock }: { vault: string | nul
       {mode === "passcode" ? (
         <>
           <p className="mt-1 text-sm text-text-muted">
-            {encrypted ? "Enter your passcode to unlock your encrypted vault." : "Enter your passcode to open Prevail."}
+            {encrypted ? "Enter your passcode to unlock your encrypted vault." : "Enter your passcode to open Glyph Studio."}
           </p>
           <form onSubmit={submit} className="mt-6 flex w-72 flex-col gap-3">
             <input
@@ -360,7 +360,7 @@ export function WebVaultLinking({ resolving, onRetry }: { resolving: boolean; on
         <>
           <h1 className="mt-5 font-display text-2xl font-semibold tracking-tight">Your Mac has no vault yet</h1>
           <p className="mt-1 max-w-xs text-sm text-text-muted">
-            Finish setting Prevail up on the Mac, then come back. Nothing needs to be set up on this phone.
+            Finish setting Glyph Studio up on the Mac, then come back. Nothing needs to be set up on this phone.
           </p>
           <button onClick={onRetry} className="mt-5 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-on-accent">
             Try again
@@ -402,7 +402,7 @@ export function WebLogin({ onAuthed }: { onAuthed: () => void }) {
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-background px-6">
       <PrevailLogo size={64} src="/logo-512.png" animated={false} />
-      <h1 className="mt-5 font-display text-2xl font-semibold tracking-tight">Prevail Web</h1>
+      <h1 className="mt-5 font-display text-2xl font-semibold tracking-tight">Glyph Studio Web</h1>
       <p className="mt-1 text-sm text-text-muted">Sign in to your remote agent.</p>
       <div className="mt-6 w-full max-w-xs space-y-2">
         <input value={user} onChange={(e) => setUser(e.target.value)} placeholder="Username" className="w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:border-accent-border focus:outline-none" />
@@ -1176,7 +1176,7 @@ export function NewSkillForm({ vaultPath, domain, seed, onCreated }: { vaultPath
   if (!open) {
     return (
       <div className="mb-3 flex w-full items-center justify-between">
-        <p className="text-xs text-text-muted">Skills are reusable prompts Prevail runs on demand (<span className="font-mono text-accent">/name</span> in chat). Pin your favorites to auto-attach.</p>
+        <p className="text-xs text-text-muted">Skills are reusable prompts Glyph Studio runs on demand (<span className="font-mono text-accent">/name</span> in chat). Pin your favorites to auto-attach.</p>
         <button onClick={() => setOpen(true)} className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-[12px] text-text-muted hover:border-accent-border hover:bg-accent-soft hover:text-accent">
           <Sparkles className="h-3 w-3" /> New skill
         </button>
@@ -1218,7 +1218,7 @@ export function NewSkillForm({ vaultPath, domain, seed, onCreated }: { vaultPath
             value={describe}
             onChange={(e) => setDescribe(e.target.value)}
             rows={4}
-            placeholder="Describe what you want this skill to do. Prevail drafts it in the right format, grounded in this domain, for you to review."
+            placeholder="Describe what you want this skill to do. Glyph Studio drafts it in the right format, grounded in this domain, for you to review."
             className="mb-2 w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-accent-border focus:outline-none"
           />
           {err && <div className="mb-2 text-xs text-warn">{err}</div>}
@@ -1257,7 +1257,7 @@ export function NewSkillForm({ vaultPath, domain, seed, onCreated }: { vaultPath
       {/* Proactive suggestions: ideas only, turned into a draft on click. Never auto-created. */}
       <div className="mt-3 border-t border-border-subtle pt-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs text-text-muted">Not sure what to add? Prevail can suggest skills for this domain.</span>
+          <span className="text-xs text-text-muted">Not sure what to add? Glyph Studio can suggest skills for this domain.</span>
           <button onClick={suggest} disabled={suggesting} className="inline-flex shrink-0 items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-[12px] text-text-muted hover:border-accent-border hover:bg-accent-soft hover:text-accent disabled:opacity-40">
             {suggesting ? <Loader2 className="h-3 w-3 animate-spin" /> : <Lightbulb className="h-3 w-3" />} Suggest skills
           </button>
@@ -1896,7 +1896,7 @@ export function HeadlessLearnCard({ vaultPath }: { vaultPath: string }) {
         <div className="min-w-0 flex-1">
           <div className="text-sm font-semibold">Keep working with the app closed</div>
           <div className="text-xs text-text-secondary">
-            Installs login agents (launchd) that keep Prevail working headlessly when it is not open: self-learning (distill chats from MCP/Telegram/CLI into memory + state), domain loops, and app sync (apps refresh on their schedule). While on, the in-app distiller defers to it.
+            Installs login agents (launchd) that keep Glyph Studio working headlessly when it is not open: self-learning (distill chats from MCP/Telegram/CLI into memory + state), domain loops, and app sync (apps refresh on their schedule). While on, the in-app distiller defers to it.
             {installed === true && " Currently running at login."}
           </div>
         </div>
@@ -1963,7 +1963,7 @@ export function AppLockCard() {
     setBusy(true); setNote(null);
     try {
       const r = await invoke<{ ok: boolean; error?: string }>("engine_lock_set", { passcode: value });
-      if (r.ok) { setLockSet(true); setValue(""); setNote("Passcode set. You'll be asked for it next time you open Prevail."); }
+      if (r.ok) { setLockSet(true); setValue(""); setNote("Passcode set. You'll be asked for it next time you open Glyph Studio."); }
       else setNote(r.error ?? "Could not set passcode.");
     } catch (e) { setNote(`Failed: ${String(e)}`); } finally { setBusy(false); }
   }
@@ -1992,7 +1992,7 @@ export function AppLockCard() {
         <Shield className="h-3.5 w-3.5" /> App lock {lockSet ? "· on" : "· off"}
       </div>
       <p className="mt-2 text-xs text-text-muted">
-        Require a passcode to open Prevail. This locks the app window. It does <span className="font-semibold">not</span> encrypt your vault files on disk.
+        Require a passcode to open Glyph Studio. This locks the app window. It does <span className="font-semibold">not</span> encrypt your vault files on disk.
       </p>
       <div className="mt-3 flex items-center gap-2">
         <input

@@ -105,7 +105,7 @@ export function VaultEncryptPrompt({ vaultPath, onClose }: { vaultPath: string; 
             </div>
             <button onClick={() => window.location.reload()}
               className="mt-3 rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-background hover:bg-accent-hover">
-              I saved it · Restart Prevail
+              I saved it · Restart Glyph Studio
             </button>
           </div>
         )}

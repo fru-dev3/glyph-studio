@@ -281,7 +281,7 @@ function Notice({ n, name }: { n: AppNotice; name: (id: string) => string }) {
       <KeyRound className="hidden h-4 w-4 shrink-0 text-warn sm:block" />
       <div className="min-w-0 flex-1">
         <p className="text-[14px] font-semibold text-text-primary">{label} needs sign-in</p>
-        <p className="text-[13px] text-text-muted">Sign in once, then ask again. Prevail uses the sign-in your runtime keeps.</p>
+        <p className="text-[13px] text-text-muted">Sign in once, then ask again. Glyph Studio uses the sign-in your runtime keeps.</p>
       </div>
       <button type="button" onClick={() => (href ? openExternal(href) : openApp({ id: n.app, tab: "connection" }))}
         className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md border border-accent-border bg-accent-soft px-3 py-1.5 text-[13px] font-semibold text-accent hover:bg-accent/15">

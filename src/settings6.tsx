@@ -476,7 +476,7 @@ function RoutingRow() {
   return (
     <section data-testid="auto-routing" className="border-t border-border-subtle px-5 py-4">
       <h4 className="flex items-center gap-1.5 text-[15px] font-semibold text-text-primary"><Sparkles className="h-4 w-4 text-accent" /> Auto routing</h4>
-      <p className="mt-0.5 text-[13px] text-text-muted">When a chat uses Auto, Prevail picks a model for each prompt. Lean it toward cost or quality.</p>
+      <p className="mt-0.5 text-[13px] text-text-muted">When a chat uses Auto, Glyph Studio picks a model for each prompt. Lean it toward cost or quality.</p>
     <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
       <div className="inline-flex rounded-md border border-border bg-background p-0.5" role="radiogroup" aria-label="Auto routing bias">
         {ROUTE_BIAS_OPTIONS.map((o) => (
@@ -843,8 +843,8 @@ export function AgentCard({
             <div className="text-sm font-semibold text-text-primary">{cli.error ? `Reinstall ${cli.label}` : `Set up ${cli.label}`}</div>
             <p className="text-xs leading-relaxed text-text-secondary">
               {cli.error
-                ? `Reinstall ${cli.label} to repair the launcher. It runs on your own subscription, no key to paste here. Prevail auto-detects it; hit Re-check once it's fixed.`
-                : `Install ${cli.label} from its setup guide. It runs on your own subscription, no key to paste here. Prevail auto-detects it; hit Re-check once it's installed.`}
+                ? `Reinstall ${cli.label} to repair the launcher. It runs on your own subscription, no key to paste here. Glyph Studio auto-detects it; hit Re-check once it's fixed.`
+                : `Install ${cli.label} from its setup guide. It runs on your own subscription, no key to paste here. Glyph Studio auto-detects it; hit Re-check once it's installed.`}
             </p>
             {meta?.cmd && (
               <div className="flex items-center gap-2 rounded-md border border-border-subtle bg-surface-warm/60 px-2 py-1.5">

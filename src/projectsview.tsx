@@ -383,7 +383,7 @@ export function ProjectsView({ vaultPath, initialSlug }: { vaultPath: string; in
       <div className="mx-auto max-w-xl p-8">
         <h2 className={DETAIL_TITLE}>Turn your prompts into projects</h2>
         <p className={`${BODY} mt-2 text-text-secondary`}>
-          Prevail reads every prompt you have typed, in every AI tool, groups them by what you were building, and writes each project a replay brief: one prompt that carries every requirement and correction, so a newer model can rebuild it without the back-and-forth. Your original prompts are never changed.
+          Glyph Studio reads every prompt you have typed, in every AI tool, groups them by what you were building, and writes each project a replay brief: one prompt that carries every requirement and correction, so a newer model can rebuild it without the back-and-forth. Your original prompts are never changed.
         </p>
         <button onClick={() => build()} disabled={!!building} className="mt-5 inline-flex h-9 items-center gap-2 rounded-lg bg-accent px-4 text-[13px] font-semibold text-on-accent hover:bg-accent-hover disabled:opacity-60">
           {building ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} {building ? "Building. This takes a while the first time." : "Build my projects"}

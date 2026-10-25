@@ -269,7 +269,7 @@ export function TelegramCard() {
     setStatus({ kind: "idle", msg: "sending…" });
     try {
       const r = await invoke<{ ok: boolean; description?: string }>("telegram_send", {
-        token: "", chatId, text: "◆ Prevail desktop · test message ✓",
+        token: "", chatId, text: "◆ Glyph Studio · test message ✓",
       });
       if (r.ok) {
         setStatus({ kind: "ok", msg: "delivered ✓" });
@@ -810,7 +810,7 @@ export function McpCard() {
         <Toggle on={enabled} onChange={setEnabled} label="Enable MCP server" />
       </div>
       <p className="mt-3 text-xs text-text-muted">
-        For full MCP coverage right now, run the <BrandMark /> CLI's <code className="text-accent">mcp-server</code> command: it ships read-only by default and is parent-process verified.
+        For full MCP coverage right now, run Glyph Engine's <code className="text-accent">mcp-server</code> command: it ships read-only by default and is parent-process verified.
       </p>
     </div>
   );
@@ -846,7 +846,7 @@ export function McpSection({ vaultPath }: { vaultPath: string }) {
   const clients: { id: string; label: string; kind: "shell" | "json" | "toml"; body: string; note: string }[] = [
     {
       id: "claude-code", label: "Claude Code", kind: "shell",
-      body: `claude mcp add prevail -- ${mcpCommand} mcp --vault ${vaultPath}`,
+      body: `claude mcp add prevail -- ${/\s/.test(mcpCommand) ? `"${mcpCommand}"` : mcpCommand} mcp --vault ${vaultPath}`,
       note: "Run this in your terminal. Restart Claude Code, then `/mcp` to confirm.",
     },
     {
@@ -888,16 +888,16 @@ export function McpSection({ vaultPath }: { vaultPath: string }) {
     <>
       <SettingsHeader title="MCP" icon={Wrench} subtitle="Drive your vault from another AI tool, with no UI." />
       <div className="mb-5">
-        <div className="mb-2 text-[14px] font-semibold text-text-primary">Connected servers (Prevail consumes)</div>
+        <div className="mb-2 text-[14px] font-semibold text-text-primary">Connected servers (Glyph Studio consumes)</div>
         <McpCard />
       </div>
       <div className="border-t border-border-subtle pt-4">
-        <div className="mb-1 text-[14px] font-semibold text-text-primary">Expose Prevail to your agent</div>
+        <div className="mb-1 text-[14px] font-semibold text-text-primary">Expose Glyph Studio to your agent</div>
         <div className="mb-3 text-xs text-text-secondary">Copy the config into your tool and restart it, then test the handshake.</div>
         {mcpPathUnstable && (
           <div className="mb-3 rounded-md border border-warn/40 bg-warn/10 px-3 py-2 text-[12px] text-warn">
-            <div className="mb-2 font-medium">Prevail is not in your Applications folder.</div>
-            <div className="mb-2">MCP requires a stable path. Move Prevail.app to /Applications/ once and this resolves permanently.</div>
+            <div className="mb-2 font-medium">Glyph Studio is not in your Applications folder.</div>
+            <div className="mb-2">MCP requires a stable path. Move Glyph Studio to /Applications/ once and this resolves permanently.</div>
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={async () => {
@@ -967,11 +967,11 @@ function StarOnGitHubCard() {
   const [stars, setStars] = useState<number | null>(null);
   useEffect(() => {
     let cancelled = false;
-    fetch("https://img.shields.io/github/downloads/fru-dev3/prevail-desktop/total.json")
+    fetch("https://img.shields.io/github/downloads/fru-dev3/glyph-studio/total.json")
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => { if (!cancelled && j && typeof j.value === "string") setDownloads(j.value); })
       .catch(() => {});
-    fetch("https://api.github.com/repos/fru-dev3/prevail-desktop")
+    fetch("https://api.github.com/repos/fru-dev3/glyph-studio")
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => { if (!cancelled && j && typeof j.stargazers_count === "number") setStars(j.stargazers_count); })
       .catch(() => {});
@@ -984,7 +984,7 @@ function StarOnGitHubCard() {
         <Star className="h-5 w-5" />
       </span>
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-semibold text-text-primary">Enjoying Prevail? Star it on GitHub.</div>
+        <div className="text-sm font-semibold text-text-primary">Enjoying Glyph Studio? Star it on GitHub.</div>
         <div className="mt-0.5 text-xs text-text-secondary">
           Open source, GPL-3.0. A star helps other people find it.
           {hasStats && (
@@ -997,7 +997,7 @@ function StarOnGitHubCard() {
         </div>
       </div>
       <a
-        href="https://github.com/fru-dev3/prevail-desktop"
+        href="https://github.com/fru-dev3/glyph-studio"
         target="_blank"
         rel="noreferrer"
         className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-text-primary px-3 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
@@ -1104,7 +1104,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
   }
 
   function diagText(): string {
-    const head = `Prevail Desktop v${APP_VERSION}`;
+    const head = `Glyph Studio v${APP_VERSION}`;
     const lines = (checks ?? []).map((c) => `[${c.status.toUpperCase()}] ${c.label}: ${c.detail}`);
     return [head, ...lines].join("\n");
   }
@@ -1144,7 +1144,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
   }
 
   async function resetConfig() {
-    const ok = await tauriConfirm("Reset all Prevail preferences to defaults? Your vault, chats, and stored secrets are not affected.", { title: "Reset to defaults", kind: "warning" });
+    const ok = await tauriConfirm("Reset all Glyph Studio preferences to defaults? Your vault, chats, and stored secrets are not affected.", { title: "Reset to defaults", kind: "warning" });
     if (!ok) return;
     const keys: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -1158,9 +1158,9 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
 
   async function uninstall(scope: "app" | "data") {
     const msg = scope === "app"
-      ? "Remove Prevail.app from Applications? Your config, chats, and secrets stay so you can reinstall later."
+      ? "Remove Glyph Studio from Applications? Your config, chats, and secrets stay so you can reinstall later."
       : "Remove the app, all app data, caches, and stored secrets? Your vault folder is NOT deleted. This cannot be undone.";
-    const ok = await tauriConfirm(msg, { title: "Uninstall Prevail", kind: "warning" });
+    const ok = await tauriConfirm(msg, { title: "Uninstall Glyph Studio", kind: "warning" });
     if (!ok) return;
     try { await invoke("app_uninstall", { scope }); } catch (e) { console.error("uninstall", e); }
   }
@@ -1200,7 +1200,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
       // bouncing to a browser, and offer an explicit manual download as backup.
       setCheckErr(`Update check couldn't run (${String(pluginErr).slice(0, 140)}). You can download it manually below.`);
       try {
-        const r = await fetch("https://api.github.com/repos/fru-dev3/prevail-desktop/releases?per_page=10");
+        const r = await fetch("https://api.github.com/repos/fru-dev3/glyph-studio/releases?per_page=10");
         if (r.ok) {
           const releases = await r.json() as Array<{ tag_name: string; prerelease: boolean; html_url: string }>;
           const top = releases.find((rel) => !rel.prerelease) ?? releases[0];
@@ -1232,7 +1232,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
       // mismatch). Offer the manual download as backup.
       setCheckErr(`In-place install couldn't run (${String(pluginErr).slice(0, 140)}). You can download it manually below.`);
       try {
-        const r = await fetch("https://api.github.com/repos/fru-dev3/prevail-desktop/releases?per_page=10");
+        const r = await fetch("https://api.github.com/repos/fru-dev3/glyph-studio/releases?per_page=10");
         if (r.ok) {
           const releases = await r.json() as Array<{ tag_name: string; prerelease: boolean; html_url: string }>;
           const top = releases.find((rel) => !rel.prerelease) ?? releases[0];
@@ -1272,13 +1272,13 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
     // uses the width and fits with far less vertical scroll.
     <div className="w-full">
       <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-surface p-4 shadow-sm">
-        <img src="/logo.png" alt="Prevail" className="h-14 w-14 shrink-0 rounded-2xl shadow-md" />
+        <img src="/logo.png" alt="Glyph Studio" className="h-14 w-14 shrink-0 rounded-2xl shadow-md" />
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-2xl font-extrabold tracking-tight">
             <BrandMark className="[letter-spacing:0.12em]" />
             <span className="ml-2 align-middle rounded-full bg-surface-warm px-2.5 py-1 font-mono text-xs font-normal text-text-secondary">v{APP_VERSION}</span>
           </h1>
-          <p className="mt-0.5 text-xs text-text-secondary">One desktop. Your AI council, grounded in your domains.</p>
+          <p className="mt-0.5 text-xs text-text-secondary">A private AI harness for your life, grounded in your domains.</p>
         </div>
         <div className="flex shrink-0 flex-col items-end gap-1">
           <button
@@ -1327,25 +1327,25 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
           className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-primary shadow-sm transition-colors hover:border-accent-border hover:text-accent">
           Take the tour <span className="text-text-muted">↻</span>
         </button>
-        <Row label="Help & documentation" href="https://github.com/fru-dev3/prevail-desktop#readme" />
-        <Row label="Update log" href="https://github.com/fru-dev3/prevail-desktop/releases" />
-        <Row label="Report an issue" href="https://github.com/fru-dev3/prevail-desktop/issues/new" />
-        <Row label="Prevail CLI" href="https://github.com/fru-dev3/prevail-cli" />
-        <Row label="Official website" href="https://prevail.sh" />
+        <Row label="Help & documentation" href="https://github.com/fru-dev3/glyph-studio#readme" />
+        <Row label="Update log" href="https://github.com/fru-dev3/glyph-studio/releases" />
+        <Row label="Report an issue" href="https://github.com/fru-dev3/glyph-studio/issues/new" />
+        <Row label="Glyph Engine" href="https://github.com/fru-dev3/glyph-engine" />
+        <Row label="Official website" href="https://glyph.fru.dev/studio" />
       </div>
 
       {/* Beta / liability disclaimer */}
       <div className="mt-3 border-t border-border-subtle pt-3">
         <div className="mb-1.5 text-[14px] font-semibold text-text-primary">Beta software</div>
         <p className="text-xs leading-relaxed text-text-secondary">
-          Prevail is a beta release. It is provided "as is",
+          Glyph Studio is a beta release. It is provided "as is",
           without warranty of any kind, express or implied, and you use it at your own risk. The authors are not liable
           for any data loss, costs, or damages arising from its use. It runs third-party AI tools and, unless Bunker
           Mode is on, may send data to cloud providers. Always review anything important yourself. Feedback and bug
           reports are very welcome, they directly shape what comes next.
         </p>
         <a
-          href="https://github.com/fru-dev3/prevail-desktop/issues/new"
+          href="https://github.com/fru-dev3/glyph-studio/issues/new"
           target="_blank"
           rel="noreferrer"
           className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-text-secondary transition-colors hover:border-accent-border hover:text-accent"
@@ -1381,7 +1381,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
             )}
           </div>
         </div>
-        <p className="mb-3 text-xs text-text-muted">Verifies everything Prevail depends on is healthy. Copy the report when filing an issue.</p>
+        <p className="mb-3 text-xs text-text-muted">Verifies everything Glyph Studio depends on is healthy. Copy the report when filing an issue.</p>
         {checks && (
           <div className="flex flex-col gap-1.5">
             {checks.map((c) => (
@@ -1410,7 +1410,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
           <button onClick={() => uninstall("app")}
             className="rounded-md border border-border bg-background px-3 py-2 text-left text-sm text-text-primary hover:border-warn/50">
             <div className="font-medium">Uninstall the app</div>
-            <div className="text-xs text-text-secondary">Remove /Applications/Prevail.app. Keeps all config, chats, and secrets.</div>
+            <div className="text-xs text-text-secondary">Remove the app from /Applications. Keeps all config, chats, and secrets.</div>
           </button>
           <button onClick={() => uninstall("data")}
             className="rounded-md border border-warn/40 bg-warn/10 px-3 py-2 text-left text-sm text-warn hover:bg-warn/20">

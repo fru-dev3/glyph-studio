@@ -178,7 +178,7 @@ export function TaskDetailPanel({ task, vaultPath, onClose, onChanged, harnesses
               <button
                 onClick={() => setPickerOpen((v) => !v)}
                 disabled={delegating}
-                title="Hand this task to an agent (Prevail, or a connected oracle like Hermes, Pi, OpenClaw). It runs the task and posts the result here."
+                title="Hand this task to an agent (Glyph Studio, or a connected oracle like Hermes, Pi, OpenClaw). It runs the task and posts the result here."
                 className="inline-flex items-center gap-1.5 text-[13px] text-text-secondary hover:text-accent disabled:opacity-60"
               >
                 {delegating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Zap className="h-3.5 w-3.5" />} {delegating ? "Running" : "Delegate to agent"}

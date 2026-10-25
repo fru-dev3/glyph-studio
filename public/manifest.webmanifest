@@ -1,7 +1,7 @@
 {
-  "name": "Prevail",
-  "short_name": "Prevail",
-  "description": "Your private AI that learns your life. This is the same Prevail app, served from your own Mac.",
+  "name": "Glyph Studio",
+  "short_name": "Glyph Studio",
+  "description": "Your private AI that learns your life. This is the same Glyph Studio app, served from your own Mac.",
   "id": "/",
   "start_url": "/",
   "scope": "/",

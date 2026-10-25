@@ -322,7 +322,7 @@ export function SystemActivity({ vaultPath, initial }: { vaultPath: string; init
       <SettingsHeader
         icon={Activity}
         title="Activity"
-        subtitle="What Prevail did on its own, and what your models cost."
+        subtitle="What Glyph Studio did on its own, and what your models cost."
       />
       <SideSpine storageKey="prevail.activity.spine" title="Show" label="activity" testId="activity-list"
         actions={

@@ -96,7 +96,7 @@ function friendlyOnboardError(e: unknown, action: string): string {
   const raw = String(e ?? "").trim();
   const detail = raw.replace(/^prevail exited \d+:?\s*/i, "").trim();
   if (/no output/i.test(raw)) return `Couldn't ${action}: the engine returned nothing. Try again in a moment.`;
-  if (/spawn|not found|ENOENT/i.test(raw)) return `Couldn't ${action}: the Prevail engine isn't reachable. Restart the app and try again.`;
+  if (/spawn|not found|ENOENT/i.test(raw)) return `Couldn't ${action}: the Glyph Engine isn't reachable. Restart the app and try again.`;
   return detail
     ? `Couldn't ${action}: ${detail}`
     : `Couldn't ${action} right now. Try again in a moment.`;
@@ -489,7 +489,7 @@ export function DomainAppsTab({ domain, vaultPath }: { domain: string; vaultPath
         </div>
         {visibleSuggestions.length === 0 ? (
           <div className="px-1 py-2 text-[12px] text-text-muted">
-            {suggesting ? "Learning from your activity in this domain…" : "No suggestions yet. They appear automatically as Prevail learns from your activity here, or hit refresh."}
+            {suggesting ? "Learning from your activity in this domain…" : "No suggestions yet. They appear automatically as Glyph Studio learns from your activity here, or hit refresh."}
           </div>
         ) : (
           <div className="space-y-1.5">

@@ -568,7 +568,7 @@ export function ChatBubble({
             )}
             {onMakeSkill && (
               <ActionButton
-                title="Save this as a reusable skill Prevail can replay"
+                title="Save this as a reusable skill Glyph Studio can replay"
                 label="Skill"
                 onClick={() => onMakeSkill(msg.content)}
                 icon={<Sparkles className="h-3 w-3" />}

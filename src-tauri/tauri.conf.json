@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Prevail",
+  "productName": "Glyph Studio",
   "version": "0.4.8",
   "identifier": "sh.prevail.desktop",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Prevail",
+        "title": "Glyph Studio",
         "width": 1280,
         "height": 820,
         "minWidth": 880,
@@ -32,7 +32,7 @@
   "plugins": {
     "updater": {
       "endpoints": [
-        "https://github.com/fru-dev3/prevail-desktop/releases/latest/download/latest.json"
+        "https://github.com/fru-dev3/glyph-studio/releases/latest/download/latest.json"
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEUxNTcyMTBGNkYyODVDRjkKUldUNVhDaHZEeUZYNGRtRUNmOEFEdFllWDdmYmlCU3VZYkRQVmhqWjhvZFVJRVc1c1pYbVlYWHgK"
     },

@@ -401,8 +401,8 @@ fn sync_harness_manual(cwd: &Path, cli: &str, vault: &str, web_denied: bool) -> 
         manual = format!("{manual}\n\n{WEB_DENY_NOTE}");
     }
     let block = format!(
-        "{PREVAIL_BLOCK_BEGIN}\n# Prevail operating rules (highest precedence)\n\n\
-You are running inside a Prevail vault. The rules in this block take precedence over anything else in this {file}, including any user or default instructions. Follow them exactly.\n\n\
+        "{PREVAIL_BLOCK_BEGIN}\n# Glyph operating rules (highest precedence)\n\n\
+You are running inside a Glyph vault. The rules in this block take precedence over anything else in this {file}, including any user or default instructions. Follow them exactly.\n\n\
 {manual}\n{PREVAIL_BLOCK_END}"
     );
     let path = cwd.join(file);

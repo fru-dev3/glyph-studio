@@ -10,7 +10,7 @@ self.addEventListener("activate", (e) => e.waitUntil(self.clients.claim()));
 // Server-initiated Web Push: fires even when the tab is closed (once a push
 // subscription is registered and the server sends with VAPID).
 self.addEventListener("push", (event) => {
-  let data = { title: "Prevail", body: "You have an update." };
+  let data = { title: "Glyph Studio", body: "You have an update." };
   try { if (event.data) data = { ...data, ...event.data.json() }; } catch { /* plain text fallback */ }
   event.waitUntil(
     self.registration.showNotification(data.title, {

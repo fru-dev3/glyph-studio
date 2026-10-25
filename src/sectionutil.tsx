@@ -60,7 +60,7 @@ export function mcpCommandPath(enginePath: string): { command: string; unstable:
     p.includes("/target/debug/") ||
     p.includes("/target/release/") ||
     p.includes("/src-tauri/");
-  if (unstable) return { command: "/Applications/Prevail.app/Contents/MacOS/prevail", unstable: true };
+  if (unstable) return { command: "/Applications/Glyph Studio.app/Contents/MacOS/prevail", unstable: true };
   return { command: p, unstable: false };
 }
 

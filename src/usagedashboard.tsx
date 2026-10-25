@@ -88,7 +88,7 @@ export function AllToolsPanel({ data }: { data: AiUsage }) {
           </tbody>
         </table>
       )}
-      <p className="mt-2 text-[12px] text-text-muted">API prices as of {data.price_snapshot}: what this use would cost on the API. The turns below are Prevail's own, and their tokens are estimated.</p>
+      <p className="mt-2 text-[12px] text-text-muted">API prices as of {data.price_snapshot}: what this use would cost on the API. The turns below are Glyph Studio's own, and their tokens are estimated.</p>
     </section>
   );
 }
@@ -302,7 +302,7 @@ export function UsageDashboard({ vaultPath, embedded = false, view: viewProp }: 
             {[
               { l: "Turns", v: fmtNum(totals.turns) },
               { l: "Tokens (in / out)", v: `${fmtTok(totals.inTok)} / ${fmtTok(totals.outTok)}` },
-              { l: "Est. cost (Prevail turns)", v: fmtCost(totals.cost) },
+              { l: "Est. cost (Glyph Studio turns)", v: fmtCost(totals.cost) },
               { l: "Active days", v: `${totals.days.size}` },
             ].map((t) => (
               <div key={t.l} className="min-w-0">

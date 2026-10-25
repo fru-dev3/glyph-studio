@@ -115,7 +115,7 @@ fn clean_block(out: &str) -> String {
 /// hand-authored region above the start marker.
 fn merge_managed(existing: &str, block: &str) -> String {
     let managed = format!(
-        "{AUTO_START}\n## Learned across your domains (auto)\n_Distilled by Prevail across all your domains. Edit anything ABOVE this line; this block is rewritten on each distill._\n\n{block}\n{AUTO_END}"
+        "{AUTO_START}\n## Learned across your domains (auto)\n_Distilled by Glyph Studio across all your domains. Edit anything ABOVE this line; this block is rewritten on each distill._\n\n{block}\n{AUTO_END}"
     );
     if let (Some(s), Some(e_rel)) = (existing.find(AUTO_START), existing.find(AUTO_END)) {
         let e = e_rel + AUTO_END.len();

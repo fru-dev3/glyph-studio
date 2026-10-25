@@ -1,6 +1,6 @@
 # Releasing (release rings)
 
-Prevail ships through a **beta → soak → stable** ring so a bad tag never
+Glyph Studio ships through a **beta → soak → stable** ring so a bad tag never
 auto-updates every user at once.
 
 1. **Tag** `vX.Y.Z` on `main`. CI builds, signs, notarizes, runs the smoke
@@ -19,7 +19,7 @@ auto-updates every user at once.
 
 Notes:
 - Version bumps live in `package.json` + `src-tauri/tauri.conf.json`; push the
-  CLI engine (`prevail-cli`) `main` before tagging desktop.
+  CLI engine (`glyph-engine`, formerly `prevail-cli`) `main` before tagging desktop.
 - Follow-up (not yet built): an opt-in in-app "beta channel" so testers
   auto-receive prereleases via a second updater endpoint. Today the beta ring
   is a manual prerelease install.

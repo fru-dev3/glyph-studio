@@ -1,4 +1,4 @@
-# Deploy + release — Prevail desktop
+# Deploy and release: Glyph Studio
 
 ## Build a release DMG locally
 
@@ -8,8 +8,8 @@ npm run tauri build
 ```
 
 Produces:
-- `src-tauri/target/release/bundle/macos/Prevail.app` — bare app bundle
-- `src-tauri/target/release/bundle/dmg/Prevail_<version>_aarch64.dmg` — installable DMG
+- `src-tauri/target/release/bundle/macos/Glyph Studio.app`: bare app bundle
+- `src-tauri/target/release/bundle/dmg/Glyph Studio_<version>_aarch64.dmg`: installable DMG
 
 The `aarch64` suffix means Apple Silicon only. For Intel Macs, set up cross-compile per the [Tauri docs](https://tauri.app/distribute/sign/macos/) and re-run.
 
@@ -20,10 +20,10 @@ VERSION=$(node -p "require('./package.json').version")
 gh release create "v$VERSION" \
   --title "v$VERSION" \
   --notes-file CHANGELOG.md \
-  "src-tauri/target/release/bundle/dmg/Prevail_${VERSION}_aarch64.dmg#Prevail-macOS-arm64.dmg"
+  "src-tauri/target/release/bundle/dmg/Glyph Studio_${VERSION}_aarch64.dmg#Glyph-Studio-macOS-arm64.dmg"
 ```
 
-The `#Prevail-macOS-arm64.dmg` part renames the asset on the release page to something humans can recognize.
+The `#Glyph-Studio-macOS-arm64.dmg` part renames the asset on the release page to something humans can recognize.
 
 ## Signing + notarization (v0.2+)
 

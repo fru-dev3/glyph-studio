@@ -1,7 +1,7 @@
-# Contributing to Prevail Desktop
+# Contributing to Glyph Studio
 
-Thanks for your interest! Prevail is a local-first "life-OS" — a Tauri 2 +
-React desktop app driving a bundled engine (the `prevail` CLI) over a JSON/NDJSON
+Thanks for your interest! Glyph Studio (formerly Prevail) is a local-first "life-OS", a Tauri 2 +
+React desktop app driving a bundled engine (Glyph Engine, the `prevail` CLI) over a JSON/NDJSON
 contract.
 
 ## Prerequisites
@@ -36,6 +36,6 @@ CI runs the same checks (`.github/workflows/test.yml`). Keep them green.
 Found a vulnerability? See [SECURITY.md](SECURITY.md) — please disclose privately.
 
 ## Good first issues
-Browse issues labelled [`good first issue`](https://github.com/fru-dev3/prevail-desktop/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
+Browse issues labelled [`good first issue`](https://github.com/fru-dev3/glyph-studio/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
 Recurring themes: App.tsx decomposition, lib.rs split, and broader error-boundary
 coverage — all approachable entry points.

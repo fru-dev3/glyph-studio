@@ -1,34 +1,36 @@
 <div align="center">
 
-<img src=".github/media/icon.png" alt="Prevail" width="84" />
+<img src=".github/media/icon.png" alt="Glyph Studio" width="84" />
 
-# Prevail
+# Glyph Studio
 
 ### Your private AI that learns you, and gets sharper every time you use it.
 
-A local-first **life-OS** for macOS. A native cockpit that runs AI per
-life-domain (**wealth, health, tax, career**), grounded in a markdown vault on
-*your* machine. Any model. No terminal. Nothing leaves unless you say so.
+Formerly **Prevail**. Glyph Studio is a private AI harness for your life: a
+local-first macOS app that runs AI per life domain (**wealth, health, tax,
+career**), grounded in a markdown vault on *your* machine. Any model. No
+terminal. Nothing leaves unless you say so.
+
+Part of the **Glyph** family: Glyph Studio, Glyph Dictate, Glyph Mobile, Glyph
+Record and Glyph Code. [glyph.fru.dev/studio](https://glyph.fru.dev/studio)
 
 <p>
-  <a href="https://github.com/fru-dev3/prevail-desktop/releases/latest/download/Prevail-mac-arm64.dmg"><img src="https://img.shields.io/badge/Download%20for-macOS-1f6f5c?style=for-the-badge&logo=apple&logoColor=white" alt="Download Prevail for macOS" /></a>
-  <a href="https://github.com/fru-dev3/prevail-desktop/releases/latest/download/Prevail-windows-x64-setup.exe"><img src="https://img.shields.io/badge/Download%20for-Windows-1f6f5c?style=for-the-badge&logo=windows&logoColor=white" alt="Download Prevail for Windows" /></a>
+  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-mac-arm64.dmg"><img src="https://img.shields.io/badge/Download%20for-macOS-008000?style=for-the-badge&logo=apple&logoColor=white" alt="Download Glyph Studio for macOS" /></a>
+  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-windows-x64-setup.exe"><img src="https://img.shields.io/badge/Download%20for-Windows-008000?style=for-the-badge&logo=windows&logoColor=white" alt="Download Glyph Studio for Windows" /></a>
 </p>
 
 <p>
-  <a href="https://github.com/fru-dev3/prevail-desktop/releases/latest"><img src="https://img.shields.io/github/v/release/fru-dev3/prevail-desktop?label=latest&color=1f6f5c" alt="Latest release" /></a>
-  <a href="https://github.com/fru-dev3/prevail-desktop/releases"><img src="https://img.shields.io/github/downloads/fru-dev3/prevail-desktop/total?label=downloads&color=1f6f5c" alt="Total downloads" /></a>
-  <a href="https://github.com/fru-dev3/prevail-desktop/stargazers"><img src="https://img.shields.io/github/stars/fru-dev3/prevail-desktop?label=stars&color=e3b341" alt="GitHub stars" /></a>
-  <img src="https://img.shields.io/badge/signed%20%26%20notarized-yes-1f6f5c" alt="Signed and notarized" />
+  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest"><img src="https://img.shields.io/github/v/release/fru-dev3/glyph-studio?label=latest&color=008000" alt="Latest release" /></a>
+  <a href="https://github.com/fru-dev3/glyph-studio/releases"><img src="https://img.shields.io/github/downloads/fru-dev3/glyph-studio/total?label=downloads&color=008000" alt="Total downloads" /></a>
+  <a href="https://github.com/fru-dev3/glyph-studio/stargazers"><img src="https://img.shields.io/github/stars/fru-dev3/glyph-studio?label=stars&color=008000" alt="GitHub stars" /></a>
+  <img src="https://img.shields.io/badge/signed%20%26%20notarized-yes-008000" alt="Signed and notarized" />
   <img src="https://img.shields.io/badge/license-GPL--3.0-555" alt="GPL-3.0" />
 </p>
 
-<img src=".github/media/home.png" alt="Prevail, a domain-grounded AI cockpit" width="900" />
+<img src=".github/media/home.png" alt="Glyph Studio, a domain-grounded AI cockpit" width="900" />
 
 <p>
-  <a href="https://prevail.sh/#demo"><b>Watch the 90-second demo</b></a>
-  &nbsp;·&nbsp;
-  <a href="https://github.com/fru-dev3/prevail-desktop">Star this repo</a> if it is useful. It genuinely helps others find it.
+  <a href="https://github.com/fru-dev3/glyph-studio">Star this repo</a> if it is useful. It helps others find it.
 </p>
 
 </div>
@@ -37,21 +39,17 @@ life-domain (**wealth, health, tax, career**), grounded in a markdown vault on
 
 ### macOS (Apple Silicon, macOS 13+)
 
-One line: downloads the signed DMG, installs to `/Applications`, and launches.
+**[Download the `.dmg`](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-mac-arm64.dmg)** and drag `Glyph Studio.app` to Applications. It is signed and **notarized**, so there is no Gatekeeper warning.
 
-```bash
-curl -fsSL https://prevail.sh/install-mac | bash
-```
-
-Prefer to click? **[Download the `.dmg`](https://github.com/fru-dev3/prevail-desktop/releases/latest/download/Prevail-mac-arm64.dmg)** and drag `Prevail.app` to Applications. It is signed and **notarized**, so there is no Gatekeeper warning.
+Already running Prevail? It updates itself in place: same app, same data, now called Glyph Studio.
 
 ### Windows (x64)
 
-**[Download the installer](https://github.com/fru-dev3/prevail-desktop/releases/latest/download/Prevail-windows-x64-setup.exe)** and run it.
+**[Download the installer](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-windows-x64-setup.exe)** and run it.
 
-&nbsp;·&nbsp; [prevail.sh](https://prevail.sh) &nbsp;·&nbsp; [all releases](https://github.com/fru-dev3/prevail-desktop/releases)
+&nbsp;·&nbsp; [glyph.fru.dev/studio](https://glyph.fru.dev/studio) &nbsp;·&nbsp; [all releases](https://github.com/fru-dev3/glyph-studio/releases)
 
-## Why Prevail
+## Why Glyph Studio
 
 - **It's yours.** Your vault, chats, and the durable *intent ledger* stay on your machine. Local-first by default: nothing leaves until you turn on an integration.
 - **It learns you.** Every message is captured as an *intent* the instant you send it (raw, never lost), then distilled into per-domain memory that's fed back into future chats. The more you use it, the sharper it gets.
@@ -96,7 +94,7 @@ npm run tauri dev     # hot-reload
 npm run tauri build   # signed .dmg under src-tauri/target/release/bundle/dmg/
 ```
 
-The engine **sidecar** is built from the sibling [`prevail-cli`](https://github.com/fru-dev3/prevail-cli) repo by `scripts/prepare-sidecar.sh` (wired into `beforeBuildCommand`), so the install is fully self-contained. **Stack:** Tauri 2 · React 19 · Tailwind 4; the frontend talks to the Rust backend only through `src/bridge.ts`. See [CONTRIBUTING.md](CONTRIBUTING.md).
+The engine **sidecar** (Glyph Engine, still the `prevail` command) is built from the sibling [`glyph-engine`](https://github.com/fru-dev3/glyph-engine) repo (formerly `prevail-cli`) by `scripts/prepare-sidecar.sh` (wired into `beforeBuildCommand`), so the install is fully self-contained. **Stack:** Tauri 2 · React 19 · Tailwind 4; the frontend talks to the Rust backend only through `src/bridge.ts`. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Security & privacy
 

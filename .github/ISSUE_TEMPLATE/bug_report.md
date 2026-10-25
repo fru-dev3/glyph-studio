@@ -14,7 +14,7 @@ labels: bug
 1.
 
 **Environment**
-- Prevail version (Settings → About):
+- Glyph Studio version (Settings → About):
 - macOS version:
 - Installed AI CLIs / provider:
 

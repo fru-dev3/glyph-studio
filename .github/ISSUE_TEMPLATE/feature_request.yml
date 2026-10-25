@@ -14,7 +14,7 @@ body:
     id: proposal
     attributes:
       label: Proposed solution
-      description: How would you like Prevail to handle this? Be concrete — the panel, the button, the setting, the flow.
+      description: How would you like Glyph Studio to handle this? Be concrete: the panel, the button, the setting, the flow.
     validations:
       required: true
   - type: textarea

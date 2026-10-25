@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security advisory
-    url: https://github.com/fru-dev3/prevail-desktop/security/advisories/new
+    url: https://github.com/fru-dev3/glyph-studio/security/advisories/new
     about: Found a security issue? Report it privately here, NOT a public issue. (Or email security@example.com.)
   - name: Discussions
-    url: https://github.com/fru-dev3/prevail-desktop/discussions
-    about: Have a question, an idea, or want to share how you use Prevail? Start a discussion.
+    url: https://github.com/fru-dev3/glyph-studio/discussions
+    about: Have a question, an idea, or want to share how you use Glyph Studio? Start a discussion.

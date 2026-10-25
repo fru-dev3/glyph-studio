@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-prevail (desktop app) is distributed under GPL-3.0-only.
+Glyph Studio (desktop app, formerly Prevail) is distributed under GPL-3.0-only.
 It bundles or depends on the third-party components below, each under its own
 license, reproduced/attributed here as those licenses require. This file
 satisfies the attribution obligations of the MIT/ISC/Apache-2.0 components we

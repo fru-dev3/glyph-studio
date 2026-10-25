@@ -6,7 +6,7 @@ Please **do not** open a public issue for security problems. Email
 We aim to acknowledge within 72 hours.
 
 ## Threat model & design notes
-Prevail is local-first; your vault, chats, and the intent ledger never leave your
+Glyph Studio is local-first; your vault, chats, and the intent ledger never leave your
 machine unless you enable an integration. Key considerations:
 
 - **Vault data** lives on disk in your chosen folder. It is **not encrypted at
@@ -42,7 +42,7 @@ machine unless you enable an integration. Key considerations:
 
 ## Secrets and credentials
 
-Prevail's rule: credentials live in the OS keychain where possible, on as few
+Glyph Studio's rule: credentials live in the OS keychain where possible, on as few
 disks as possible, and are never committed or synced.
 
 | Credential | Storage | At rest | Synced? |

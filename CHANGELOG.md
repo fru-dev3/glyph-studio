@@ -1,8 +1,15 @@
 # Changelog
 
-All notable changes to Prevail desktop. Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
+All notable changes to Glyph Studio (formerly Prevail desktop). Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
 
 ---
+
+## [0.4.9] 2026-10-25 · Prevail is now Glyph Studio
+
+### Changed
+- **0.4.9: Prevail is now Glyph Studio.** The app is part of the Glyph family (Glyph Studio, Glyph Dictate, Glyph Mobile, Glyph Record, Glyph Code), and the bundled engine is Glyph Engine. Window title, menu bar, tray menu, notifications, onboarding, settings and the web view now say Glyph Studio. Website: https://glyph.fru.dev/studio
+- Nothing moves on disk: same bundle id, same `~/.prevail` data, Keychain items, vault, MCP server id and `prevail` command. An installed Prevail updates in place (the app folder keeps its old name) and start on boot keeps working.
+- Release assets are named `Glyph-Studio-mac-arm64.dmg` and `Glyph-Studio-windows-x64-setup.exe`; the old `Prevail-*` names are still uploaded for existing links.
 
 ## [0.2.108] — 2026-06-30 · Ideal State + AI draft, consistent app layouts, Arena upgrades, curated apps
 

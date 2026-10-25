@@ -1,7 +1,7 @@
 {
   "name": "prevail-desktop",
-  "version": "0.4.8",
-  "description": "Prevail desktop: native macOS cockpit for AI council deliberation",
+  "version": "0.4.9",
+  "description": "Glyph Studio: a private AI harness for your life, as a native macOS app",
   "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {

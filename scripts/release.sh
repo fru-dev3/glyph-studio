@@ -177,7 +177,7 @@ step "Stamp the website version (DMG is served from GitHub Releases, NOT here)"
 # GitHub Releases; this constant is just the first-paint fallback.
 # GUARD: only touch the site repo when its tree is clean apart from the two
 # files this step owns. Otherwise we would sweep somebody else's in-progress
-# work into a release commit (or push a half-finished refactor to Netlify).
+# work into a release commit (or push a half-finished refactor).
 # Skipping is safe: the site reads the current version live from the GitHub
 # Releases API (useLiveVersion), so APP_VERSION is only a first-paint fallback.
 SITE_DIRTY="$(cd "$SITE" && git status --porcelain | grep -v -e 'src/version\.ts' -e 'public/llms\.txt' || true)"
@@ -207,9 +207,11 @@ if [ -f "$LLMS" ]; then
 fi
 ( cd "$SITE" && npm run build >/dev/null )   # sanity-build before pushing
 ( cd "$SITE" && git add src/version.ts public/llms.txt \
-  && git commit -q -m "release: Prevail $VERSION (version stamp; DMG on GitHub Releases)" \
+  && git commit -q -m "release: Glyph Studio $VERSION (version stamp; DMG on GitHub Releases)" \
   && git push )
-echo "site pushed — Netlify will deploy prevail.sh"
+# A push deploys nothing: prevail.sh is on Vercel and deploys only through the
+# site's own scripts/ship.sh, run once the release is published. Never Netlify.
+echo "site pushed; deploy prevail.sh with: (cd \"$SITE\" && ./scripts/ship.sh) once the release is out"
 fi
 
 step "Build the auto-update feed (latest.json)"

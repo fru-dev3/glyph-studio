@@ -6,7 +6,7 @@
 // keep the premium, no-emoji design language.
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
-import { PrevailLogo } from "./PrevailLogo";
+import { GlyphStudioLogo } from "./GlyphStudioLogo";
 import { LS, lsGet, lsSet } from "./storage";
 import { invoke } from "./bridge";
 import { invalidateQueries } from "./query";
@@ -124,7 +124,7 @@ export function OnboardingTour() {
     >
       <div className="flex items-start justify-between">
         {first ? (
-          <PrevailLogo size={48} />
+          <GlyphStudioLogo size={48} />
         ) : (
           <span className="font-mono text-[11px] font-semibold text-accent">{step.eyebrow}</span>
         )}

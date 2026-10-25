@@ -2,6 +2,7 @@
 // coming-soon roster), MCP (server config + the McpCard verifier), and About
 // (version, update check, changelog).
 import { useEffect, useState } from "react";
+import { GlyphStudioLogo } from "./GlyphStudioLogo";
 import { confirm as tauriConfirm, open, save } from "@tauri-apps/plugin-dialog";
 import { check as checkUpdate, type Update } from "@tauri-apps/plugin-updater";
 import { relaunch } from "@tauri-apps/plugin-process";
@@ -1272,7 +1273,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
     // uses the width and fits with far less vertical scroll.
     <div className="w-full">
       <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-surface p-4 shadow-sm">
-        <img src="/logo.png" alt="Glyph Studio" className="h-14 w-14 shrink-0 rounded-2xl shadow-md" />
+        <span className="shrink-0 overflow-hidden rounded-2xl shadow-md"><GlyphStudioLogo size={56} animated={false} /></span>
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-2xl font-extrabold tracking-tight">
             <BrandMark className="[letter-spacing:0.12em]" />

@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useState, type ReactNode } from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { Archive, Briefcase, Cloud, Folder, FolderOpen, Ghost, Heart, Home, Laptop, Receipt, Server, Shield, ShieldCheck, TrendingUp, Users, Wallet } from "lucide-react";
-import { PrevailLogo } from "./PrevailLogo";
+import { GlyphStudioLogo } from "./GlyphStudioLogo";
 import { invoke } from "./bridge";
 import { PREF, getPref } from "./storage";
 import { APP_VERSION } from "./constants";
@@ -312,7 +312,7 @@ export function VaultWizard({ onPick }: { onPick: () => void }) {
               animate={{ rotate: -360 }} transition={{ duration: 18, repeat: Infinity, ease: "linear" }}>
               <circle cx="56" cy="56" r="53" stroke="#2d7fe4" strokeOpacity="0.28" strokeWidth="1" strokeDasharray="2 10" />
             </motion.svg>
-            <PrevailLogo size={88} src="/logo-512.png" />
+            <GlyphStudioLogo size={88} src="/logo-512.png" />
           </div>
         </motion.div>
 

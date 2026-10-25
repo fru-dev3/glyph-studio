@@ -5,7 +5,7 @@ import { composerMessage, engineBuildsContext, engineKey, scopeOf, type ChatScop
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
 import { Activity, ArrowUpRight, BookOpen, Boxes, Briefcase, CalendarClock, Check, ClipboardList, Compass, FileText, Ghost, Home, Image as ImageIcon, Layers, Lightbulb, ListChecks, Loader2, MessageSquare, Paperclip, Pencil, Plug, Plus, RefreshCw, Repeat, Scale, Settings as SettingsIcon, ShieldAlert, Sparkles, Target, TrendingUp } from "lucide-react";
-import { PrevailLogo } from "./PrevailLogo";
+import { GlyphStudioLogo } from "./GlyphStudioLogo";
 import { invoke, listen } from "./bridge";
 import { addNote } from "./notesstore";
 import { toast } from "./toast";
@@ -3026,7 +3026,7 @@ export function ChatPanel({
                 Dropped on a phone: the Domains tab is one thumb away and this
                 greeting has a short screen to live on. */}
             {!phone && <div className="mb-6"><HomeAppsStrip /></div>}
-            <PrevailLogo size={phone ? 44 : 64} src="/logo-512.png" />
+            <GlyphStudioLogo size={phone ? 44 : 64} src="/logo-512.png" />
             <h2 className={`font-display font-bold tracking-tight ${phone ? "mt-3 text-2xl" : "mt-6 text-4xl sm:text-5xl"}`}>
               What should we work on?
             </h2>
@@ -3944,7 +3944,7 @@ export function ChatPanel({
                       onClick={attachDomainState}
                       className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-surface-warm"
                     >
-                      <PrevailLogo size={16} src="/logo-512.png" animated={false} />
+                      <GlyphStudioLogo size={16} src="/logo-512.png" animated={false} />
                       Attach {titleCase(domain)} state
                     </button>
                   )}

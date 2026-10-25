@@ -8,4 +8,7 @@ Nothing moves. Your vault, chats, settings, Keychain items and connections stay
 where they are, and the `prevail` command still works. This update installs
 over Prevail in place.
 
+The app has a new icon too: the Glyph Studio mark in office green, in the
+Dock, the menu bar and inside the app.
+
 More at https://glyph.fru.dev/studio

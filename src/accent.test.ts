@@ -21,6 +21,8 @@ describe("accent", () => {
       const name = p.split("/").pop()!;
       // Profile avatar colors are a user's pick, not the accent.
       if (name === "profiles.ts") continue;
+      // The Glyph Studio mark is fixed artwork in brand green, whatever the accent.
+      if (name === "GlyphStudioLogo.tsx") continue;
       readFileSync(p, "utf8").split("\n").forEach((line, i) => {
         const literal = /#008000|rgba?\(\s*0\s*,\s*128\s*,\s*0/i.test(line) && !/var\(--color-accent,\s*#008000\)/.test(line);
         if (literal) bad.push(`${name}:${i + 1}`);

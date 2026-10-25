@@ -2,6 +2,7 @@
 // (CLI, model) slots over a question, stream each panelist, then synthesize a
 // chair verdict. Renders the shared DomainStatusBar + DomainContextView.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { GlyphStudioLogo } from "./GlyphStudioLogo";
 import { ArrowRight, BookOpen, Check, ChevronRight, Crown, Folder, Ghost, Layers, MessageSquare, Plus, Scale, Sparkles, ThumbsDown, ThumbsUp } from "lucide-react";
 import { invoke, listen } from "./bridge";
 import { savePastedImages } from "./paste";
@@ -1086,7 +1087,7 @@ export function CouncilPanel({
         )}
         {councilTurns.length === 0 && phase === "idle" && (
           <div className="flex h-full flex-col items-center justify-start px-6 py-6">
-            <img src="/logo.png" alt="" className="h-10 w-10 rounded-2xl opacity-90" />
+            <span className="opacity-90" aria-hidden="true"><GlyphStudioLogo size={40} animated={false} /></span>
             <h2 className={`${DETAIL_TITLE} mt-3`}>
               <BrandMark /> Council
             </h2>

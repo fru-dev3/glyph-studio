@@ -9,7 +9,7 @@ import { entitySnapshot } from "./entitystore";
 import { useWaitingState, waitingThreadPaths } from "./waiting";
 import { Archive, Settings2, ArrowRight, Check, ChevronDown, ChevronRight, Cpu, Download, Folder, Lightbulb, Link2, Loader2, LucideIcon, Mail, MessagesSquare, PenLine, Pencil, Plus, RefreshCw, Search, Shield, Sparkles, Trash2, UserRound, Wrench, X } from "lucide-react";
 import { siWhatsapp } from "simple-icons";
-import { PrevailLogo } from "./PrevailLogo";
+import { GlyphStudioLogo } from "./GlyphStudioLogo";
 import { ProviderMark } from "./marks";
 import { invoke, setWebToken } from "./bridge";
 import { INTEGRATION_LABEL, STATUS_TINT } from "./constants";
@@ -245,7 +245,7 @@ export function LockScreen({ vault, encrypted, onUnlock }: { vault: string | nul
   const inputCls = "rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-accent-border focus:outline-none";
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-background text-text-primary">
-      <PrevailLogo size={64} src="/logo-512.png" />
+      <GlyphStudioLogo size={64} src="/logo-512.png" />
       <h1 className="mt-5 font-display text-2xl font-semibold">Locked</h1>
       {mode === "passcode" ? (
         <>
@@ -350,7 +350,7 @@ export function LockScreen({ vault, encrypted, onUnlock }: { vault: string | nul
 export function WebVaultLinking({ resolving, onRetry }: { resolving: boolean; onRetry: () => void }) {
   return (
     <div className="flex h-full flex-col items-center justify-center bg-background px-6 text-center">
-      <PrevailLogo size={64} src="/logo-512.png" animated={resolving} />
+      <GlyphStudioLogo size={64} src="/logo-512.png" animated={resolving} />
       {resolving ? (
         <>
           <h1 className="mt-5 font-display text-2xl font-semibold tracking-tight">Connecting to your Mac</h1>
@@ -376,7 +376,7 @@ export function WebVaultLinking({ resolving, onRetry }: { resolving: boolean; on
 export function PairingScreen() {
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-background px-6">
-      <PrevailLogo size={64} src="/logo-512.png" animated />
+      <GlyphStudioLogo size={64} src="/logo-512.png" animated />
       <h1 className="mt-5 font-display text-2xl font-semibold tracking-tight">Pairing your phone</h1>
       <p className="mt-1 text-sm text-text-muted">Signing in from the code you scanned.</p>
     </div>
@@ -401,7 +401,7 @@ export function WebLogin({ onAuthed }: { onAuthed: () => void }) {
   }
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-background px-6">
-      <PrevailLogo size={64} src="/logo-512.png" animated={false} />
+      <GlyphStudioLogo size={64} src="/logo-512.png" animated={false} />
       <h1 className="mt-5 font-display text-2xl font-semibold tracking-tight">Glyph Studio Web</h1>
       <p className="mt-1 text-sm text-text-muted">Sign in to your remote agent.</p>
       <div className="mt-6 w-full max-w-xs space-y-2">

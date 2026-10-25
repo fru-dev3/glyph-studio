@@ -1,7 +1,7 @@
 // Components extracted from App.tsx.
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Check, Circle, ExternalLink, Loader2, Plus, RefreshCw, Settings as SettingsIcon, Sparkles, X } from "lucide-react";
-import { PrevailLogo } from "./PrevailLogo";
+import { GlyphStudioLogo } from "./GlyphStudioLogo";
 import { invoke } from "./bridge";
 import { PALETTES, SCORE_DIMENSIONS, SETTINGS_ROW, SEVERITY_LABEL, SEVERITY_ORDER, STATUS_TINT } from "./constants";
 import { formatFreshness, relTime, scoreColor, titleCase } from "./format";
@@ -189,7 +189,7 @@ export function OnboardingModal({
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-border-subtle px-6 py-4">
           <div className="flex items-center gap-2">
-            <PrevailLogo size={22} src="/logo-512.png" />
+            <GlyphStudioLogo size={22} src="/logo-512.png" />
             <h2 className="text-[15px] font-semibold">Set up your domains</h2>
           </div>
           <button

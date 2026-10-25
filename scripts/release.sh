@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command release for the Prevail desktop app.
+# One-command release for the Glyph Studio desktop app (formerly Prevail).
 #
 #   build (self-contained, signed) -> notarize+staple app & dmg ->
 #   TEST the dmg through Gatekeeper -> publish to the website (direct
@@ -21,8 +21,12 @@ for _cand in fd-apps-prevail-web fd-apps-prevail-site; do
   if [ -d "$HERE/../$_cand" ]; then SITE="$(cd "$HERE/../$_cand" && pwd)"; break; fi
 done
 OP_ITEM="o4smftszeclcwy54c6tofu4kny"                    # "Prevail - Apple Notarization"
-REPO="fru-dev3/prevail-desktop"
+REPO="fru-dev3/glyph-studio"
 ARCH="aarch64"
+# Tauri names every artifact after productName, which has a space. Release
+# assets get hyphenated copies so their URLs stay clean.
+PRODUCT="$(python3 -c "import json;print(json.load(open('$HERE/src-tauri/tauri.conf.json'))['productName'])")"
+ASSET_BASE="${PRODUCT// /-}"
 
 step() { printf '\n\033[1;33m== %s ==\033[0m\n' "$1"; }
 die()  { printf '\033[1;31mrelease: %s\033[0m\n' "$1" >&2; exit 1; }
@@ -34,8 +38,8 @@ command -v gh >/dev/null || die "GitHub CLI (gh) not found"
 VERSION="$(python3 -c "import json;print(json.load(open('$HERE/src-tauri/tauri.conf.json'))['version'])")"
 [ -n "$VERSION" ] || die "could not read version from tauri.conf.json"
 TAG="v$VERSION"
-DMG="$HERE/src-tauri/target/release/bundle/dmg/Prevail_${VERSION}_${ARCH}.dmg"
-step "Releasing Prevail $VERSION ($TAG)"
+DMG="$HERE/src-tauri/target/release/bundle/dmg/${PRODUCT}_${VERSION}_${ARCH}.dmg"
+step "Releasing $PRODUCT $VERSION ($TAG)"
 
 step "Apple credentials (1Password)"
 # Honor pre-set env vars (so a caller can pre-fetch creds and skip op);
@@ -62,7 +66,7 @@ export APPLE_TEAM_ID="${APPLE_TEAM_ID:-$(opget team-id)}"
 echo "signing as: $APPLE_SIGNING_IDENTITY"
 
 # Updater signing key (for the in-app auto-updater feed). The build produces
-# Prevail.app.tar.gz + .sig when createUpdaterArtifacts is on; these env vars
+# <productName>.app.tar.gz + .sig when createUpdaterArtifacts is on; these env vars
 # let `tauri build` sign them. Key lives at ~/.prevail/updater.key.
 #
 # Whether that key matches the pubkey baked into the app CANNOT be answered
@@ -153,13 +157,13 @@ WORK="$(mktemp -d)"; trap 'rm -rf "$WORK"' EXIT
 cp "$DMG" "$WORK/dl.dmg"
 xattr -w com.apple.quarantine "0181;00000000;release-test;$(uuidgen)" "$WORK/dl.dmg"
 MNT="$(hdiutil attach "$WORK/dl.dmg" -nobrowse -readonly | grep -o '/Volumes/.*' | head -1)"
-ASSESS="$(spctl -a -vvv "$MNT/Prevail.app" 2>&1 || true)"
-ENGINE="$("$MNT/Prevail.app/Contents/MacOS/prevail" --version 2>&1 | head -1 || true)"
+ASSESS="$(spctl -a -vvv "$MNT/$PRODUCT.app" 2>&1 || true)"
+ENGINE="$("$MNT/$PRODUCT.app/Contents/MacOS/prevail" --version 2>&1 | head -1 || true)"
 hdiutil detach "$MNT" >/dev/null 2>&1 || true
 echo "$ASSESS"
 echo "bundled engine: $ENGINE"
 echo "$ASSESS" | grep -q "source=Notarized Developer ID" || die "Gatekeeper REJECTED the build — NOT publishing"
-echo "$ENGINE" | grep -qi "prevail" || die "bundled engine did not run — NOT publishing"
+echo "$ENGINE" | grep -qiE "prevail|glyph" || die "bundled engine did not run, NOT publishing"
 echo "Gatekeeper + self-contained engine: PASS"
 
 step "Stamp the website version (DMG is served from GitHub Releases, NOT here)"
@@ -210,7 +214,7 @@ fi
 
 step "Build the auto-update feed (latest.json)"
 MACOS_DIR="$HERE/src-tauri/target/release/bundle/macos"
-TARBALL="$MACOS_DIR/Prevail.app.tar.gz"
+TARBALL="$MACOS_DIR/$PRODUCT.app.tar.gz"
 SIGFILE="$TARBALL.sig"
 UPDATE_ASSETS=()
 # Two questions have to be answered before publishing a feed, and only the
@@ -283,28 +287,37 @@ elif [ -f "$TARBALL" ] && [ -f "$SIGFILE" ]; then
   SIG="$(cat "$SIGFILE")"
   PUB_DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   LATEST_JSON="$WORK/latest.json"
-  python3 - "$VERSION" "$SIG" "$PUB_DATE" "$REPO" "$TAG" > "$LATEST_JSON" <<'PY'
+  # Upload the tarball under a hyphenated name (GitHub rewrites spaces in asset
+  # names). The signature covers the bytes, not the file name.
+  ASSET_TARBALL="$WORK/$ASSET_BASE.app.tar.gz"
+  cp "$TARBALL" "$ASSET_TARBALL"
+  cp "$SIGFILE" "$ASSET_TARBALL.sig"
+  python3 - "$VERSION" "$SIG" "$PUB_DATE" "$REPO" "$TAG" "$ASSET_BASE.app.tar.gz" "$PRODUCT" > "$LATEST_JSON" <<'PY'
 import json, sys
-version, sig, pub_date, repo, tag = sys.argv[1:6]
-url = f"https://github.com/{repo}/releases/download/{tag}/Prevail.app.tar.gz"
+version, sig, pub_date, repo, tag, asset, product = sys.argv[1:8]
+url = f"https://github.com/{repo}/releases/download/{tag}/{asset}"
 print(json.dumps({
     "version": version,
-    "notes": f"Prevail {version}",
+    "notes": f"{product} {version}",
     "pub_date": pub_date,
     "platforms": {"darwin-aarch64": {"signature": sig, "url": url}},
 }, indent=2))
 PY
-  UPDATE_ASSETS=("$TARBALL" "$SIGFILE" "$LATEST_JSON")
+  UPDATE_ASSETS=("$ASSET_TARBALL" "$ASSET_TARBALL.sig" "$LATEST_JSON")
   echo "latest.json built for darwin-aarch64"
 else
   echo "WARN: updater artifacts not found ($TARBALL) — auto-update feed skipped this release"
 fi
 
 step "Publish GitHub release $TAG"
-# Also publish a STABLE-named copy so the site can link to a fixed URL
-# (releases/latest/download/Prevail-mac-arm64.dmg) across every version.
-STABLE_DMG="$WORK/Prevail-mac-arm64.dmg"
-cp "$DMG" "$STABLE_DMG"
+# Also publish STABLE-named copies so sites can link to a fixed URL
+# (releases/latest/download/Glyph-Studio-mac-arm64.dmg, and the older
+# Prevail-mac-arm64.dmg) across every version. The versioned DMG goes up
+# hyphenated too, since GitHub rewrites spaces in asset names.
+STABLE_DMG="$WORK/$ASSET_BASE-mac-arm64.dmg"
+LEGACY_DMG="$WORK/Prevail-mac-arm64.dmg"
+VERSIONED_DMG="$WORK/${ASSET_BASE}_${VERSION}_${ARCH}.dmg"
+cp "$DMG" "$STABLE_DMG"; cp "$DMG" "$LEGACY_DMG"; cp "$DMG" "$VERSIONED_DMG"
 # Prefer hand-written notes (RELEASE_NOTES.md at the repo root) over the
 # commit-generated ones when present, so the release reads like a changelog.
 if [ -f "$HERE/RELEASE_NOTES.md" ]; then
@@ -321,7 +334,7 @@ if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
 else
   gh release create "$TAG" --repo "$REPO" --target main --title "$TAG" "${NOTES_ARGS[@]}"
 fi
-for asset in "$DMG" "$STABLE_DMG" ${UPDATE_ASSETS[@]+"${UPDATE_ASSETS[@]}"}; do
+for asset in "$VERSIONED_DMG" "$STABLE_DMG" "$LEGACY_DMG" ${UPDATE_ASSETS[@]+"${UPDATE_ASSETS[@]}"}; do
   ok=0
   for attempt in 1 2 3 4 5; do
     if gh release upload "$TAG" "$asset" --repo "$REPO" --clobber; then ok=1; break; fi
@@ -330,6 +343,6 @@ for asset in "$DMG" "$STABLE_DMG" ${UPDATE_ASSETS[@]+"${UPDATE_ASSETS[@]}"}; do
   [ "$ok" = 1 ] || die "could not upload $(basename "$asset") after 5 attempts"
 done
 
-step "Done — Prevail $VERSION released"
-echo "  website:  https://prevail.sh/Prevail-mac-arm64.dmg  (saves as Prevail-$VERSION-arm64.dmg)"
+step "Done: $PRODUCT $VERSION released"
+echo "  download: https://github.com/$REPO/releases/latest/download/$ASSET_BASE-mac-arm64.dmg"
 echo "  release:  https://github.com/$REPO/releases/tag/$TAG"

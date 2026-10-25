@@ -46,10 +46,10 @@ jobs:
 
       # Engine sidecar: check out the CLI repo + Bun so prepare-sidecar.sh (run
       # by beforeBuildCommand) can compile the bundled `prevail` engine in CI.
-      - name: Checkout engine (prevail-cli)
+      - name: Checkout engine (glyph-engine, formerly prevail-cli)
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
-          repository: fru-dev3/prevail-cli
+          repository: fru-dev3/glyph-engine
           path: engine
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
@@ -127,23 +127,24 @@ jobs:
         with:
           args: --target aarch64-apple-darwin
           tagName: ${{ github.ref_name }}
-          releaseName: "Prevail ${{ github.ref_name }}"
+          releaseName: "Glyph Studio ${{ github.ref_name }}"
           releaseBody: "See CHANGELOG.md for details."
           releaseDraft: false
           # Release ring: a fresh tag is a PRERELEASE - the auto-updater's
           # 'latest' feed ignores it until `promote` flips it. Soak first.
           prerelease: true
 
-      # The README badge and prevail-web download links point at the
-      # version-independent releases/latest/download/Prevail-mac-arm64.dmg,
-      # so every release must also carry the DMG under that stable name.
+      # Download links point at the version-independent
+      # releases/latest/download/Glyph-Studio-mac-arm64.dmg (and older links at
+      # Prevail-mac-arm64.dmg), so every release carries the DMG under both.
       - name: Upload stable-name DMG alias
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dmg=$(ls src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/Prevail_*_aarch64.dmg)
+          dmg=$(ls src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/Glyph\ Studio_*_aarch64.dmg)
+          cp "$dmg" Glyph-Studio-mac-arm64.dmg
           cp "$dmg" Prevail-mac-arm64.dmg
-          gh release upload "${{ github.ref_name }}" Prevail-mac-arm64.dmg --clobber
+          gh release upload "${{ github.ref_name }}" Glyph-Studio-mac-arm64.dmg Prevail-mac-arm64.dmg --clobber
 
   # Windows build. Same Tauri codebase: the only platform-specific pieces are the
   # NSIS installer target and a Windows-compiled engine sidecar (handled by
@@ -186,10 +187,10 @@ jobs:
         with:
           node-version: 20
 
-      - name: Checkout engine (prevail-cli)
+      - name: Checkout engine (glyph-engine, formerly prevail-cli)
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
-          repository: fru-dev3/prevail-cli
+          repository: fru-dev3/glyph-engine
           path: engine
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
@@ -238,7 +239,7 @@ jobs:
         with:
           args: --bundles nsis
           tagName: ${{ github.ref_name }}
-          releaseName: "Prevail ${{ github.ref_name }}"
+          releaseName: "Glyph Studio ${{ github.ref_name }}"
           releaseBody: "See CHANGELOG.md for details."
           releaseDraft: false
           # Release ring: a fresh tag is a PRERELEASE - the auto-updater's
@@ -246,12 +247,14 @@ jobs:
           prerelease: true
 
       # Stable-name alias so download links can point at
-      # releases/latest/download/Prevail-windows-x64-setup.exe.
+      # releases/latest/download/Glyph-Studio-windows-x64-setup.exe (and the
+      # older Prevail-windows-x64-setup.exe name).
       - name: Upload stable-name installer alias
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          exe=$(ls src-tauri/target/release/bundle/nsis/Prevail_*_x64-setup.exe)
+          exe=$(ls src-tauri/target/release/bundle/nsis/Glyph\ Studio_*_x64-setup.exe)
+          cp "$exe" Glyph-Studio-windows-x64-setup.exe
           cp "$exe" Prevail-windows-x64-setup.exe
-          gh release upload "${{ github.ref_name }}" Prevail-windows-x64-setup.exe --clobber
+          gh release upload "${{ github.ref_name }}" Glyph-Studio-windows-x64-setup.exe Prevail-windows-x64-setup.exe --clobber

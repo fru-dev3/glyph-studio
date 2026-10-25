@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build a fully SIGNED + NOTARIZED Prevail release locally and upload it to the
+# Build a fully SIGNED + NOTARIZED Glyph Studio release locally and upload it to the
 # matching GitHub release, replacing the unsigned/un-notarized DMG.
 #
 # Why this exists: the GitHub Actions release workflow can't sign (the
@@ -21,7 +21,7 @@ HERE="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$HERE"
 
 TAG="${1:-v$(node -p "require('./package.json').version")}"
-REPO="fru-dev3/prevail-desktop"
+REPO="fru-dev3/glyph-studio"
 
 # --- Apple credentials (signing identity is in the keychain already) ---
 # Read identity + Apple ID from env (or local dotfiles), never hardcoded — keeps
@@ -52,8 +52,8 @@ export PREVAIL_CLI_DIR="${PREVAIL_CLI_DIR:-$HERE/../prevail-cli}"
 echo "==> Building signed + notarized $TAG (this takes ~10-20 min incl. Apple notarization)"
 npm run tauri build -- --target aarch64-apple-darwin
 
-DMG="$(ls src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/Prevail_*_aarch64.dmg | head -1)"
-APP="src-tauri/target/aarch64-apple-darwin/release/bundle/macos/Prevail.app"
+DMG="$(ls src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/Glyph\ Studio_*_aarch64.dmg | head -1)"
+APP="src-tauri/target/aarch64-apple-darwin/release/bundle/macos/Glyph Studio.app"
 
 echo "==> Stapling notarization ticket"
 xcrun stapler staple "$APP" || true
@@ -63,8 +63,9 @@ echo "==> Verifying Gatekeeper acceptance (want: accepted / Notarized Developer 
 spctl -a -vvv "$APP" || true
 
 echo "==> Uploading to release $TAG"
+cp -f "$DMG" /tmp/Glyph-Studio-mac-arm64.dmg
 cp -f "$DMG" /tmp/Prevail-mac-arm64.dmg
-for f in "$DMG" /tmp/Prevail-mac-arm64.dmg; do
+for f in /tmp/Glyph-Studio-mac-arm64.dmg /tmp/Prevail-mac-arm64.dmg; do
   for i in 1 2 3 4 5; do
     gh release upload "$TAG" --repo "$REPO" "$f" --clobber && break || { echo "retry $i for $(basename "$f")"; sleep 5; }
   done

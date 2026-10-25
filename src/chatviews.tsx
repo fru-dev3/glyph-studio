@@ -944,7 +944,7 @@ export function DomainStatusBar({
                         role="checkbox"
                         aria-checked={on}
                         onClick={() => toggleGAccount(p.label)}
-                        title={`${p.label}${p.email ? ` — ${p.email}` : ""}`}
+                        title={`${p.label}${p.email ? ` · ${p.email}` : ""}`}
                         className={`flex items-center gap-2 rounded-lg border px-2 py-1 text-left transition-colors ${
                           on ? "border-accent-border bg-accent-soft" : "border-border bg-surface hover:bg-surface-warm"
                         }`}

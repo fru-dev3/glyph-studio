@@ -1,12 +1,13 @@
 import { motion, MotionConfig } from "framer-motion";
 
 /**
- * GlyphStudioLogo - the Glyph Studio mark (a petroglyph figure beside a
- * spiral on an office-green tile), drawn as inline SVG so it stays crisp at
- * any size. It mirrors public/logo.svg (the family's studio-tile.svg).
+ * GlyphStudioLogo - the Glyph Studio mark (the family's stick figure on an
+ * office-green tile, its head an AI sparkle), drawn as inline SVG so it stays
+ * crisp at any size. It mirrors public/logo.svg (glyph-studio.svg); at 32 px
+ * and below it draws glyph-studio-small.svg instead.
  *
  * When animated, the whole mark does a slow float with a soft 3D tilt and
- * glow, and the spark at the spiral's heart pulses.
+ * glow, and the small sparkle pulses.
  *
  *   <GlyphStudioLogo size={84} />                    // animated
  *   <GlyphStudioLogo size={32} animated={false} />   // static mark
@@ -27,17 +28,18 @@ export function GlyphStudioLogo({
 }) {
   void _src;
 
-  const Spark = animated ? (
-    <motion.circle
-      cx="66"
-      cy="53"
-      r="5.5"
-      fill="#b9f0b0"
-      animate={{ opacity: [1, 0.55, 1], r: [5.5, 6.5, 5.5] }}
+  // At 32 px and below the small master: one bold sparkle and thicker lines.
+  const small = size <= 32;
+
+  const Spark = small ? null : animated ? (
+    <motion.path
+      d="M64 15Q64.6 19 68 19.5Q64.6 20 64 24Q63.4 20 60 19.5Q63.4 19 64 15Z"
+      fill="#fff"
+      animate={{ opacity: [1, 0.35, 1] }}
       transition={{ duration: 1.9, ease: "easeInOut", repeat: Infinity }}
     />
   ) : (
-    <circle cx="66" cy="53" r="5.5" fill="#b9f0b0" />
+    <path d="M64 15Q64.6 19 68 19.5Q64.6 20 64 24Q63.4 20 60 19.5Q63.4 19 64 15Z" fill="#fff" />
   );
 
   const svg = (
@@ -50,14 +52,21 @@ export function GlyphStudioLogo({
       aria-label="Glyph Studio"
     >
       <rect width="100" height="100" rx="22" fill="#008000" />
-      <g transform="translate(10 10) scale(.8)">
-        <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="26" cy="17" r="8" fill="#fff" stroke="none" />
-          <path d="M9 22v4a17 17 0 0 0 34 0v-4M26 43v21M26 64 15 89M26 64l11 25" strokeWidth="7" />
-          <path d="M66 53a6.25 6.25 0 0 1 12.5 0 12.5 12.5 0 0 1-25 0 18.75 18.75 0 0 1 37.5 0" strokeWidth="6.5" />
-        </g>
-        {Spark}
-      </g>
+      {small ? (
+        <>
+          <path d="M50 9Q53 28 72 31Q53 34 50 53Q47 34 28 31Q47 28 50 9Z" fill="#fff" />
+          <path d="M22 32v3a28 28 0 0 0 56 0v-3M50 63v8M50 71L38 86M50 71L62 86" fill="none" stroke="#fff" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" />
+        </>
+      ) : (
+        <>
+          <path d="M50 18Q52 32 66 34Q52 36 50 50Q48 36 34 34Q48 32 50 18Z" fill="#fff" />
+          {Spark}
+          <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M24 89H76" strokeWidth="4" />
+            <path d="M26 30v4a24 24 0 0 0 48 0v-4M50 58v11M50 69L39 84M50 69L61 84" strokeWidth="6" />
+          </g>
+        </>
+      )}
     </svg>
   );
 

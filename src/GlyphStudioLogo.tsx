@@ -61,10 +61,7 @@ export function GlyphStudioLogo({
         <>
           <path d="M50 18Q52 32 66 34Q52 36 50 50Q48 36 34 34Q48 32 50 18Z" fill="#fff" />
           {Spark}
-          <g fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M24 89H76" strokeWidth="4" />
-            <path d="M26 30v4a24 24 0 0 0 48 0v-4M50 58v11M50 69L39 84M50 69L61 84" strokeWidth="6" />
-          </g>
+          <path d="M26 30v4a24 24 0 0 0 48 0v-4M50 58v11M50 69L39 84M50 69L61 84" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
         </>
       )}
     </svg>

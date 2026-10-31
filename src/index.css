@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", "Segoe UI", -apple-system, sans-serif;
-  --font-display: "Instrument Serif", Georgia, serif;
+  /* One typeface for the whole family: the system sans, headings included. A
+     serif display face read as somebody else's software (Fru, 2026-10-31). */
+  --font-sans: -apple-system, "SF Pro Text", "Inter", system-ui, sans-serif;
+  --font-display: -apple-system, "SF Pro Display", "Inter", system-ui, sans-serif;
   --font-mono: "Geist Mono", "JetBrains Mono", "SF Mono", "Menlo", monospace;
 
   /* Default tokens — overridden by data-theme + data-palette below.
@@ -24,14 +26,12 @@
   /* Foreground for SOLID accent fills (badges/buttons). High-contrast vs accent
      in every theme — light for dark accents, dark for light accents. */
   --color-on-accent: #ffffff;
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
   --color-ok: #2e7d32;
   --color-warn: #c05621;
   --color-err: #c62828;
   --color-logo-bg: #141416;
-  --color-logo-teal: #2e9e2e;
-  --color-logo-cyan: #4ab9cc;
 }
 
 /* ═════════════════════════════════════════════════════════════════════
@@ -62,14 +62,12 @@
   --color-accent-soft: rgba(0, 128, 0, 0.10);
   --color-accent-border: rgba(0, 128, 0, 0.30);
   --color-on-accent: #ffffff;
-  --color-ai: #0e8ba8;
-  --color-ai-soft: rgba(14, 139, 168, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
   --color-ok: #2e7d32;
   --color-warn: #c05621;
   --color-err: #c62828;
   --color-logo-bg: #141416;
-  --color-logo-teal: #2e9e2e;
-  --color-logo-cyan: #3cd8ff;
 }
 :root[data-palette="prevail"][data-theme="dark"] {
   --color-background: #0a0a0c;
@@ -86,14 +84,12 @@
   --color-accent-soft: rgba(46, 158, 46, 0.14);
   --color-accent-border: rgba(46, 158, 46, 0.34);
   --color-on-accent: #141416;
-  --color-ai: #3cd8ff;
-  --color-ai-soft: rgba(60, 216, 255, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
   --color-ok: #52c41a;
   --color-warn: #f97316;
   --color-err: #ff5a5f;
   --color-logo-bg: #141416;
-  --color-logo-teal: #2e9e2e;
-  --color-logo-cyan: #3cd8ff;
 }
 
 /* ── VAULT — cream + teal ──────────────────────────────────────────── */
@@ -117,8 +113,8 @@
   --color-accent-hover: #5eead4;
   --color-accent-soft: rgba(45, 212, 191, 0.10);
   --color-accent-border: rgba(45, 212, 191, 0.22);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
   --color-ok: #52c41a;
   --color-warn: #f97316;
   --color-err: #ff4d4f;
@@ -139,8 +135,8 @@
   --color-accent-hover: #6366f1;
   --color-accent-soft: rgba(79, 70, 229, 0.08);
   --color-accent-border: rgba(79, 70, 229, 0.28);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 :root[data-palette="midnight"][data-theme="dark"] {
   --color-background: #0a0d1f;
@@ -156,8 +152,8 @@
   --color-accent-hover: #a5b0ff;
   --color-accent-soft: rgba(129, 140, 248, 0.10);
   --color-accent-border: rgba(129, 140, 248, 0.28);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 
 /* ── EMBER — warm crimson and bronze, forge vibes ──────────────────── */
@@ -175,8 +171,8 @@
   --color-accent-hover: #c0392b;
   --color-accent-soft: rgba(179, 45, 31, 0.12);
   --color-accent-border: rgba(179, 45, 31, 0.32);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 :root[data-palette="ember"][data-theme="dark"] {
   --color-background: #1a0a06;
@@ -192,8 +188,8 @@
   --color-accent-hover: #ff8762;
   --color-accent-soft: rgba(239, 108, 74, 0.12);
   --color-accent-border: rgba(239, 108, 74, 0.3);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 
 /* ── MONO — clean grayscale, minimal and focused ───────────────────── */
@@ -211,8 +207,8 @@
   --color-accent-hover: #27272a;
   --color-accent-soft: rgba(24, 24, 27, 0.08);
   --color-accent-border: rgba(24, 24, 27, 0.24);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 :root[data-palette="mono"][data-theme="dark"] {
   --color-background: #0a0a0a;
@@ -228,8 +224,8 @@
   --color-accent-hover: #ffffff;
   --color-accent-soft: rgba(250, 250, 250, 0.06);
   --color-accent-border: rgba(250, 250, 250, 0.2);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 
 /* ── CYBERPUNK — neon green on black, matrix terminal ──────────────── */
@@ -247,8 +243,8 @@
   --color-accent-hover: #16a34a;
   --color-accent-soft: rgba(21, 128, 61, 0.12);
   --color-accent-border: rgba(21, 128, 61, 0.30);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 :root[data-palette="cyberpunk"][data-theme="dark"] {
   --color-background: #030a06;
@@ -264,8 +260,8 @@
   --color-accent-hover: #3aff8c;
   --color-accent-soft: rgba(34, 255, 119, 0.10);
   --color-accent-border: rgba(34, 255, 119, 0.32);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 
 /* ── SLATE — cool slate blue, focused developer theme ─────────────── */
@@ -283,8 +279,8 @@
   --color-accent-hover: #0369a1;
   --color-accent-soft: rgba(7, 89, 133, 0.12);
   --color-accent-border: rgba(7, 89, 133, 0.30);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 :root[data-palette="slate"][data-theme="dark"] {
   --color-background: #0c1220;
@@ -300,8 +296,8 @@
   --color-accent-hover: #7dd3fc;
   --color-accent-soft: rgba(56, 189, 248, 0.10);
   --color-accent-border: rgba(56, 189, 248, 0.30);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
 }
 
 /* Backward-compat: data-theme=dark with no palette = vault dark */
@@ -319,8 +315,8 @@
   --color-accent-hover: #45b545;
   --color-accent-soft: rgba(46, 158, 46, 0.12);
   --color-accent-border: rgba(46, 158, 46, 0.30);
-  --color-ai: #60a8c0;
-  --color-ai-soft: rgba(96, 168, 192, 0.10);
+  --color-ai: var(--color-accent);
+  --color-ai-soft: var(--color-accent-soft);
   --color-ok: #52c41a;
   --color-warn: #faad14;
   --color-err: #ff4d4f;

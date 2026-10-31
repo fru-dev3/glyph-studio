@@ -4,6 +4,13 @@ All notable changes to Glyph Studio (formerly Prevail desktop). Format: [Keep a 
 
 ---
 
+## [0.4.11] 2026-10-31 · One typeface, one accent
+
+- **The family's look, carried deliberately.** Studio is Tauri, so it inherits none of the SwiftUI apps' tokens: the system sans is now the heading face as well as the body face, and `--color-ai` follows the palette's accent instead of a fixed teal. The unused `--color-logo-cyan` and `--color-logo-teal` tokens are deleted. `e2e/family-look.spec.ts` fails if a serif heading or a cyan or purple paint comes back.
+- **Dependency advisories cleared.** `npm audit` went from 12 (2 high, 3 critical) to 4 moderate: the in-range fixes, plus vitest 3 -> 5 and @sentry/vite-plugin 5 -> 11 for the three that needed a major, both test and build tooling. `cargo update` cleared all 13 Rust advisories (rustls, quinn-proto, rustls-webpki, webpki-root-certs, zip and others).
+
+---
+
 ## [0.4.10] 2026-10-25 · Arena is now Glyph Arena
 
 ### Changed

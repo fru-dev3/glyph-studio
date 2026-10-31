@@ -31,6 +31,7 @@ const ArenaHandoff = lazyPanel(loadBenchmarkPanel, (m) => m.ArenaHandoff);
 // The phone frame (bottom tab bar, big header, one full-width surface). Only
 // fetched at phone width, so the desktop bundle stays as it was.
 const PhoneShell = lazy(() => import("./phoneshell").then((m) => ({ default: m.PhoneShell })));
+import { ScrollPage } from "./sectionutil";
 import { Sidebar } from "./sidebar";
 import { ObsidianImportModal } from "./obsidianmodal";
 import { useAppearance, useFrameworkLens } from "./hooks";

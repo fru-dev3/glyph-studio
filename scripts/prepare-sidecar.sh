@@ -34,6 +34,9 @@ echo "prepare-sidecar: building prevail engine for $TRIPLE"
 ( cd "$CLI" && bun build --compile --external chromium-bidi --outfile="dist/prevail$EXT" src/index.tsx )
 
 mkdir -p "$HERE/src-tauri/binaries"
+# Remove first: copying over a binary macOS has already run replaces the bytes under
+# a cached code signature, and the next run of it is killed on the spot (exit 137).
+rm -f "$HERE/src-tauri/binaries/prevail-$TRIPLE$EXT"
 cp "$CLI/dist/prevail$EXT" "$HERE/src-tauri/binaries/prevail-$TRIPLE$EXT"
 echo "prepare-sidecar: sidecar ready -> src-tauri/binaries/prevail-$TRIPLE$EXT ($(du -h "$HERE/src-tauri/binaries/prevail-$TRIPLE$EXT" | cut -f1))"
 

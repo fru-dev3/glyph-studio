@@ -3561,7 +3561,7 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
 name = "prevail-desktop"
-version = "0.4.10"
+version = "0.4.12"
 dependencies = [
  "aes-gcm",
  "base64 0.22.1",

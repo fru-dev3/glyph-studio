@@ -4,6 +4,12 @@ All notable changes to Glyph Bot (formerly Glyph Studio, and Prevail before that
 
 ---
 
+## [0.4.12] 2026-11-12 · Glyph Studio is now Glyph Bot
+
+- **The app is now named Glyph Bot.** Existing installs keep their data and settings.
+
+---
+
 ## [0.4.11] 2026-10-31 · One typeface, one accent
 
 - **The family's look, carried deliberately.** Studio is Tauri, so it inherits none of the SwiftUI apps' tokens: the system sans is now the heading face as well as the body face, and `--color-ai` follows the palette's accent instead of a fixed teal. The unused `--color-logo-cyan` and `--color-logo-teal` tokens are deleted. `e2e/family-look.spec.ts` fails if a serif heading or a cyan or purple paint comes back.

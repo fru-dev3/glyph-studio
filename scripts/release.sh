@@ -313,13 +313,15 @@ fi
 
 step "Publish GitHub release $TAG"
 # Also publish STABLE-named copies so sites can link to a fixed URL
-# (releases/latest/download/Glyph-Studio-mac-arm64.dmg, and the older
-# Prevail-mac-arm64.dmg) across every version. The versioned DMG goes up
+# (releases/latest/download/Glyph-Bot-mac-arm64.dmg, plus the compatibility
+# names Glyph-Studio-mac-arm64.dmg and Prevail-mac-arm64.dmg that the Glyph
+# Native installer and older links still fetch; keep them for one release). The versioned DMG goes up
 # hyphenated too, since GitHub rewrites spaces in asset names.
 STABLE_DMG="$WORK/$ASSET_BASE-mac-arm64.dmg"
 LEGACY_DMG="$WORK/Prevail-mac-arm64.dmg"
+STUDIO_DMG="$WORK/Glyph-Studio-mac-arm64.dmg"   # compat, remove after one release
 VERSIONED_DMG="$WORK/${ASSET_BASE}_${VERSION}_${ARCH}.dmg"
-cp "$DMG" "$STABLE_DMG"; cp "$DMG" "$LEGACY_DMG"; cp "$DMG" "$VERSIONED_DMG"
+cp "$DMG" "$STABLE_DMG"; cp "$DMG" "$LEGACY_DMG"; cp "$DMG" "$STUDIO_DMG"; cp "$DMG" "$VERSIONED_DMG"
 # Prefer hand-written notes (RELEASE_NOTES.md at the repo root) over the
 # commit-generated ones when present, so the release reads like a changelog.
 if [ -f "$HERE/RELEASE_NOTES.md" ]; then
@@ -336,7 +338,7 @@ if gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
 else
   gh release create "$TAG" --repo "$REPO" --target main --title "$TAG" "${NOTES_ARGS[@]}"
 fi
-for asset in "$VERSIONED_DMG" "$STABLE_DMG" "$LEGACY_DMG" ${UPDATE_ASSETS[@]+"${UPDATE_ASSETS[@]}"}; do
+for asset in "$VERSIONED_DMG" "$STABLE_DMG" "$LEGACY_DMG" "$STUDIO_DMG" ${UPDATE_ASSETS[@]+"${UPDATE_ASSETS[@]}"}; do
   ok=0
   for attempt in 1 2 3 4 5; do
     if gh release upload "$TAG" "$asset" --repo "$REPO" --clobber; then ok=1; break; fi

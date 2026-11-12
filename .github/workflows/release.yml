@@ -135,16 +135,18 @@ jobs:
           prerelease: true
 
       # Download links point at the version-independent
-      # releases/latest/download/Glyph-Studio-mac-arm64.dmg (and older links at
-      # Prevail-mac-arm64.dmg), so every release carries the DMG under both.
+      # releases/latest/download/Glyph-Bot-mac-arm64.dmg. The Glyph-Studio-* and
+      # Prevail-* names are compatibility copies (the Glyph Native installer and
+      # older links fetch them by name); drop Glyph-Studio-* after one release.
       - name: Upload stable-name DMG alias
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dmg=$(ls src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/Glyph\ Studio_*_aarch64.dmg)
+          dmg=$(ls src-tauri/target/aarch64-apple-darwin/release/bundle/dmg/Glyph\ Bot_*_aarch64.dmg)
+          cp "$dmg" Glyph-Bot-mac-arm64.dmg
           cp "$dmg" Glyph-Studio-mac-arm64.dmg
           cp "$dmg" Prevail-mac-arm64.dmg
-          gh release upload "${{ github.ref_name }}" Glyph-Studio-mac-arm64.dmg Prevail-mac-arm64.dmg --clobber
+          gh release upload "${{ github.ref_name }}" Glyph-Bot-mac-arm64.dmg Glyph-Studio-mac-arm64.dmg Prevail-mac-arm64.dmg --clobber
 
   # Windows build. Same Tauri codebase: the only platform-specific pieces are the
   # NSIS installer target and a Windows-compiled engine sidecar (handled by
@@ -247,14 +249,16 @@ jobs:
           prerelease: true
 
       # Stable-name alias so download links can point at
-      # releases/latest/download/Glyph-Studio-windows-x64-setup.exe (and the
-      # older Prevail-windows-x64-setup.exe name).
+      # releases/latest/download/Glyph-Bot-windows-x64-setup.exe. The
+      # Glyph-Studio-* and Prevail-* names are compatibility copies (the docs
+      # still link Prevail-*); drop Glyph-Studio-* after one release.
       - name: Upload stable-name installer alias
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          exe=$(ls src-tauri/target/release/bundle/nsis/Glyph\ Studio_*_x64-setup.exe)
+          exe=$(ls src-tauri/target/release/bundle/nsis/Glyph\ Bot_*_x64-setup.exe)
+          cp "$exe" Glyph-Bot-windows-x64-setup.exe
           cp "$exe" Glyph-Studio-windows-x64-setup.exe
           cp "$exe" Prevail-windows-x64-setup.exe
-          gh release upload "${{ github.ref_name }}" Glyph-Studio-windows-x64-setup.exe Prevail-windows-x64-setup.exe --clobber
+          gh release upload "${{ github.ref_name }}" Glyph-Bot-windows-x64-setup.exe Glyph-Studio-windows-x64-setup.exe Prevail-windows-x64-setup.exe --clobber

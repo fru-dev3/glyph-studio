@@ -15,8 +15,8 @@ Part of the **Glyph** family: Glyph Bot, Glyph Dictate, Glyph Mobile, Glyph
 Record and Glyph Code. [glyph.fru.dev/bot](https://glyph.fru.dev/bot)
 
 <p>
-  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-mac-arm64.dmg"><img src="https://img.shields.io/badge/Download%20for-macOS-008000?style=for-the-badge&logo=apple&logoColor=white" alt="Download Glyph Bot for macOS" /></a>
-  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-windows-x64-setup.exe"><img src="https://img.shields.io/badge/Download%20for-Windows-008000?style=for-the-badge&logo=windows&logoColor=white" alt="Download Glyph Bot for Windows" /></a>
+  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Bot-mac-arm64.dmg"><img src="https://img.shields.io/badge/Download%20for-macOS-008000?style=for-the-badge&logo=apple&logoColor=white" alt="Download Glyph Bot for macOS" /></a>
+  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Bot-windows-x64-setup.exe"><img src="https://img.shields.io/badge/Download%20for-Windows-008000?style=for-the-badge&logo=windows&logoColor=white" alt="Download Glyph Bot for Windows" /></a>
 </p>
 
 <p>
@@ -39,13 +39,13 @@ Record and Glyph Code. [glyph.fru.dev/bot](https://glyph.fru.dev/bot)
 
 ### macOS (Apple Silicon, macOS 13+)
 
-**[Download the `.dmg`](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-mac-arm64.dmg)** and drag `Glyph Studio.app` to Applications. It is signed and **notarized**, so there is no Gatekeeper warning.
+**[Download the `.dmg`](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Bot-mac-arm64.dmg)** and drag `Glyph Bot.app` to Applications. It is signed and **notarized**, so there is no Gatekeeper warning.
 
 Already running Prevail? It updates itself in place: same app, same data, now called Glyph Bot.
 
 ### Windows (x64)
 
-**[Download the installer](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-windows-x64-setup.exe)** and run it.
+**[Download the installer](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Bot-windows-x64-setup.exe)** and run it.
 
 &nbsp;·&nbsp; [glyph.fru.dev/bot](https://glyph.fru.dev/bot) &nbsp;·&nbsp; [all releases](https://github.com/fru-dev3/glyph-studio/releases)
 

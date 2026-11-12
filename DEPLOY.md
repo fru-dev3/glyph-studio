@@ -1,4 +1,4 @@
-# Deploy and release: Glyph Studio
+# Deploy and release: Glyph Bot
 
 ## Build a release DMG locally
 
@@ -8,8 +8,8 @@ npm run tauri build
 ```
 
 Produces:
-- `src-tauri/target/release/bundle/macos/Glyph Studio.app`: bare app bundle
-- `src-tauri/target/release/bundle/dmg/Glyph Studio_<version>_aarch64.dmg`: installable DMG
+- `src-tauri/target/release/bundle/macos/Glyph Bot.app`: bare app bundle
+- `src-tauri/target/release/bundle/dmg/Glyph Bot_<version>_aarch64.dmg`: installable DMG
 
 The `aarch64` suffix means Apple Silicon only. For Intel Macs, set up cross-compile per the [Tauri docs](https://tauri.app/distribute/sign/macos/) and re-run.
 
@@ -20,10 +20,10 @@ VERSION=$(node -p "require('./package.json').version")
 gh release create "v$VERSION" \
   --title "v$VERSION" \
   --notes-file CHANGELOG.md \
-  "src-tauri/target/release/bundle/dmg/Glyph Studio_${VERSION}_aarch64.dmg#Glyph-Studio-macOS-arm64.dmg"
+  "src-tauri/target/release/bundle/dmg/Glyph Bot_${VERSION}_aarch64.dmg#Glyph-Bot-macOS-arm64.dmg"
 ```
 
-The `#Glyph-Studio-macOS-arm64.dmg` part renames the asset on the release page to something humans can recognize.
+The `#Glyph-Bot-macOS-arm64.dmg` part renames the asset on the release page to something humans can recognize.
 
 ## Signing + notarization (v0.2+)
 
@@ -57,3 +57,12 @@ Defer until enough user feedback to justify the maintenance burden.
 ## Future: Windows + Linux
 
 `npm run tauri build` on those platforms produces native installers. CI matrix recommended (GitHub Actions has runners for both).
+
+## Compatibility asset names (one release after the Glyph Bot rename)
+
+Every release also uploads the DMG and the Windows installer under the old
+`Glyph-Studio-*` and `Prevail-*` names, because the Glyph Native installer and
+older links download by name. Drop the `Glyph-Studio-*` copies from
+`release.yml`, `release.sh` and `notarize-release.sh` one release later. An
+existing `Glyph Studio.app` that auto-updates keeps its file name (the updater
+swaps the contents in place); only the name shown by the app changes.

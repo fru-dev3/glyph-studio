@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Glyph Studio (formerly Prevail desktop). Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
+All notable changes to Glyph Bot (formerly Glyph Studio, and Prevail before that). Format: [Keep a Changelog](https://keepachangelog.com/). Versioning: [SemVer](https://semver.org/).
 
 ---
 

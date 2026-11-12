@@ -1,7 +1,7 @@
 import { motion, MotionConfig } from "framer-motion";
 
 /**
- * GlyphStudioLogo - the Glyph Studio mark (the family's stick figure on an
+ * GlyphStudioLogo - the Glyph Bot mark (the family's stick figure on an
  * office-green tile, its head an AI sparkle), drawn as inline SVG so it stays
  * crisp at any size. It mirrors public/logo.svg (glyph-studio.svg); at 32 px
  * and below it draws glyph-studio-small.svg instead.
@@ -49,7 +49,7 @@ export function GlyphStudioLogo({
       height={size}
       style={{ width: size, height: size, display: "block" }}
       role="img"
-      aria-label="Glyph Studio"
+      aria-label="Glyph Bot"
     >
       <rect width="100" height="100" rx="22" fill="#008000" />
       {small ? (

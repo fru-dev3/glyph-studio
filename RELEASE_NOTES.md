@@ -1,4 +1,4 @@
-# Glyph Studio 0.4.11
+# Glyph Bot 0.4.11
 
 One typeface and one accent, so every Glyph app reads as the same software.
 

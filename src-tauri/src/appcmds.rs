@@ -345,7 +345,7 @@ pub(crate) async fn open_in_finder(app: tauri::AppHandle, path: String) -> Resul
 
 // Copy the running .app bundle to /Applications/ under its own name (an
 // install updated from Prevail keeps the Prevail.app folder name; a fresh
-// install is "Glyph Studio.app"). Tries a plain `cp -R` first; if that fails
+// install is "Glyph Bot.app"). Tries a plain `cp -R` first; if that fails
 // (permissions), falls back to `osascript` which can prompt for admin.
 // The source path must end in ".app".
 #[tauri::command]
@@ -360,7 +360,7 @@ pub(crate) async fn move_to_applications(app: tauri::AppHandle, source: String) 
         .file_name()
         .map(|n| n.to_string_lossy().into_owned())
         .filter(|n| n.ends_with(".app"))
-        .unwrap_or_else(|| "Glyph Studio.app".into());
+        .unwrap_or_else(|| "Glyph Bot.app".into());
     let dest = format!("/Applications/{bundle}");
     let dest = dest.as_str();
     // Remove existing copy first so cp -R succeeds cleanly.
@@ -639,9 +639,10 @@ pub(crate) fn app_uninstall(app: tauri::AppHandle, scope: String) -> Result<(), 
         script.push_str("security delete-generic-password -s prevail.providers >/dev/null 2>&1\n");
         script.push_str("security delete-generic-password -s prevail.ingestion >/dev/null 2>&1\n");
     }
-    // The bundle is "Glyph Studio.app" on a fresh install and stays "Prevail.app"
-    // on one updated in place from Prevail (same bundle id, same app).
-    script.push_str("rm -rf \"/Applications/Glyph Studio.app\" \"/Applications/Prevail.app\"\n");
+    // The bundle is "Glyph Bot.app" on a fresh install. An install updated in
+    // place keeps the name it had ("Glyph Studio.app", or "Prevail.app" before
+    // that): the updater swaps the contents at the running bundle's path.
+    script.push_str("rm -rf \"/Applications/Glyph Bot.app\" \"/Applications/Glyph Studio.app\" \"/Applications/Prevail.app\"\n");
     let tmp = std::env::temp_dir().join("prevail-uninstall.sh");
     fs::write(&tmp, &script).map_err(|e| format!("write uninstaller: {e}"))?;
     std::process::Command::new("bash")

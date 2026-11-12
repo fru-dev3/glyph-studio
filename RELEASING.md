@@ -1,6 +1,6 @@
 # Releasing (release rings)
 
-Glyph Studio ships through a **beta → soak → stable** ring so a bad tag never
+Glyph Bot ships through a **beta → soak → stable** ring so a bad tag never
 auto-updates every user at once.
 
 1. **Tag** `vX.Y.Z` on `main`. CI builds, signs, notarizes, runs the smoke

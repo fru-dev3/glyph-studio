@@ -1,22 +1,22 @@
 <div align="center">
 
-<img src=".github/media/icon.png" alt="Glyph Studio" width="84" />
+<img src=".github/media/icon.png" alt="Glyph Bot" width="84" />
 
-# Glyph Studio
+# Glyph Bot
 
 ### Your private AI that learns you, and gets sharper every time you use it.
 
-Formerly **Prevail**. Glyph Studio is a private AI harness for your life: a
+Formerly **Prevail**. Glyph Bot is a private AI harness for your life: a
 local-first macOS app that runs AI per life domain (**wealth, health, tax,
 career**), grounded in a markdown vault on *your* machine. Any model. No
 terminal. Nothing leaves unless you say so.
 
-Part of the **Glyph** family: Glyph Studio, Glyph Dictate, Glyph Mobile, Glyph
-Record and Glyph Code. [glyph.fru.dev/studio](https://glyph.fru.dev/studio)
+Part of the **Glyph** family: Glyph Bot, Glyph Dictate, Glyph Mobile, Glyph
+Record and Glyph Code. [glyph.fru.dev/bot](https://glyph.fru.dev/bot)
 
 <p>
-  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-mac-arm64.dmg"><img src="https://img.shields.io/badge/Download%20for-macOS-008000?style=for-the-badge&logo=apple&logoColor=white" alt="Download Glyph Studio for macOS" /></a>
-  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-windows-x64-setup.exe"><img src="https://img.shields.io/badge/Download%20for-Windows-008000?style=for-the-badge&logo=windows&logoColor=white" alt="Download Glyph Studio for Windows" /></a>
+  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Bot-mac-arm64.dmg"><img src="https://img.shields.io/badge/Download%20for-macOS-008000?style=for-the-badge&logo=apple&logoColor=white" alt="Download Glyph Bot for macOS" /></a>
+  <a href="https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Bot-windows-x64-setup.exe"><img src="https://img.shields.io/badge/Download%20for-Windows-008000?style=for-the-badge&logo=windows&logoColor=white" alt="Download Glyph Bot for Windows" /></a>
 </p>
 
 <p>
@@ -27,7 +27,7 @@ Record and Glyph Code. [glyph.fru.dev/studio](https://glyph.fru.dev/studio)
   <img src="https://img.shields.io/badge/license-GPL--3.0-555" alt="GPL-3.0" />
 </p>
 
-<img src=".github/media/home.png" alt="Glyph Studio, a domain-grounded AI cockpit" width="900" />
+<img src=".github/media/home.png" alt="Glyph Bot, a domain-grounded AI cockpit" width="900" />
 
 <p>
   <a href="https://github.com/fru-dev3/glyph-studio">Star this repo</a> if it is useful. It helps others find it.
@@ -39,17 +39,17 @@ Record and Glyph Code. [glyph.fru.dev/studio](https://glyph.fru.dev/studio)
 
 ### macOS (Apple Silicon, macOS 13+)
 
-**[Download the `.dmg`](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-mac-arm64.dmg)** and drag `Glyph Studio.app` to Applications. It is signed and **notarized**, so there is no Gatekeeper warning.
+**[Download the `.dmg`](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Bot-mac-arm64.dmg)** and drag `Glyph Bot.app` to Applications. It is signed and **notarized**, so there is no Gatekeeper warning.
 
-Already running Prevail? It updates itself in place: same app, same data, now called Glyph Studio.
+Already running Prevail? It updates itself in place: same app, same data, now called Glyph Bot.
 
 ### Windows (x64)
 
-**[Download the installer](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Studio-windows-x64-setup.exe)** and run it.
+**[Download the installer](https://github.com/fru-dev3/glyph-studio/releases/latest/download/Glyph-Bot-windows-x64-setup.exe)** and run it.
 
-&nbsp;·&nbsp; [glyph.fru.dev/studio](https://glyph.fru.dev/studio) &nbsp;·&nbsp; [all releases](https://github.com/fru-dev3/glyph-studio/releases)
+&nbsp;·&nbsp; [glyph.fru.dev/bot](https://glyph.fru.dev/bot) &nbsp;·&nbsp; [all releases](https://github.com/fru-dev3/glyph-studio/releases)
 
-## Why Glyph Studio
+## Why Glyph Bot
 
 - **It's yours.** Your vault, chats, and the durable *intent ledger* stay on your machine. Local-first by default: nothing leaves until you turn on an integration.
 - **It learns you.** Every message is captured as an *intent* the instant you send it (raw, never lost), then distilled into per-domain memory that's fed back into future chats. The more you use it, the sharper it gets.

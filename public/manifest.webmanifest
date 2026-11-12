@@ -1,7 +1,7 @@
 {
-  "name": "Glyph Studio",
-  "short_name": "Glyph Studio",
-  "description": "Your private AI that learns your life. This is the same Glyph Studio app, served from your own Mac.",
+  "name": "Glyph Bot",
+  "short_name": "Glyph Bot",
+  "description": "Your private AI that learns your life. This is the same Glyph Bot app, served from your own Mac.",
   "id": "/",
   "start_url": "/",
   "scope": "/",

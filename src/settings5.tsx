@@ -270,7 +270,7 @@ export function TelegramCard() {
     setStatus({ kind: "idle", msg: "sending…" });
     try {
       const r = await invoke<{ ok: boolean; description?: string }>("telegram_send", {
-        token: "", chatId, text: "◆ Glyph Studio · test message ✓",
+        token: "", chatId, text: "◆ Glyph Bot · test message ✓",
       });
       if (r.ok) {
         setStatus({ kind: "ok", msg: "delivered ✓" });
@@ -889,16 +889,16 @@ export function McpSection({ vaultPath }: { vaultPath: string }) {
     <>
       <SettingsHeader title="MCP" icon={Wrench} subtitle="Drive your vault from another AI tool, with no UI." />
       <div className="mb-5">
-        <div className="mb-2 text-[14px] font-semibold text-text-primary">Connected servers (Glyph Studio consumes)</div>
+        <div className="mb-2 text-[14px] font-semibold text-text-primary">Connected servers (Glyph Bot consumes)</div>
         <McpCard />
       </div>
       <div className="border-t border-border-subtle pt-4">
-        <div className="mb-1 text-[14px] font-semibold text-text-primary">Expose Glyph Studio to your agent</div>
+        <div className="mb-1 text-[14px] font-semibold text-text-primary">Expose Glyph Bot to your agent</div>
         <div className="mb-3 text-xs text-text-secondary">Copy the config into your tool and restart it, then test the handshake.</div>
         {mcpPathUnstable && (
           <div className="mb-3 rounded-md border border-warn/40 bg-warn/10 px-3 py-2 text-[12px] text-warn">
-            <div className="mb-2 font-medium">Glyph Studio is not in your Applications folder.</div>
-            <div className="mb-2">MCP requires a stable path. Move Glyph Studio to /Applications/ once and this resolves permanently.</div>
+            <div className="mb-2 font-medium">Glyph Bot is not in your Applications folder.</div>
+            <div className="mb-2">MCP requires a stable path. Move Glyph Bot to /Applications/ once and this resolves permanently.</div>
             <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={async () => {
@@ -985,7 +985,7 @@ function StarOnGitHubCard() {
         <Star className="h-5 w-5" />
       </span>
       <div className="min-w-0 flex-1">
-        <div className="text-sm font-semibold text-text-primary">Enjoying Glyph Studio? Star it on GitHub.</div>
+        <div className="text-sm font-semibold text-text-primary">Enjoying Glyph Bot? Star it on GitHub.</div>
         <div className="mt-0.5 text-xs text-text-secondary">
           Open source, GPL-3.0. A star helps other people find it.
           {hasStats && (
@@ -1105,7 +1105,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
   }
 
   function diagText(): string {
-    const head = `Glyph Studio v${APP_VERSION}`;
+    const head = `Glyph Bot v${APP_VERSION}`;
     const lines = (checks ?? []).map((c) => `[${c.status.toUpperCase()}] ${c.label}: ${c.detail}`);
     return [head, ...lines].join("\n");
   }
@@ -1145,7 +1145,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
   }
 
   async function resetConfig() {
-    const ok = await tauriConfirm("Reset all Glyph Studio preferences to defaults? Your vault, chats, and stored secrets are not affected.", { title: "Reset to defaults", kind: "warning" });
+    const ok = await tauriConfirm("Reset all Glyph Bot preferences to defaults? Your vault, chats, and stored secrets are not affected.", { title: "Reset to defaults", kind: "warning" });
     if (!ok) return;
     const keys: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -1159,9 +1159,9 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
 
   async function uninstall(scope: "app" | "data") {
     const msg = scope === "app"
-      ? "Remove Glyph Studio from Applications? Your config, chats, and secrets stay so you can reinstall later."
+      ? "Remove Glyph Bot from Applications? Your config, chats, and secrets stay so you can reinstall later."
       : "Remove the app, all app data, caches, and stored secrets? Your vault folder is NOT deleted. This cannot be undone.";
-    const ok = await tauriConfirm(msg, { title: "Uninstall Glyph Studio", kind: "warning" });
+    const ok = await tauriConfirm(msg, { title: "Uninstall Glyph Bot", kind: "warning" });
     if (!ok) return;
     try { await invoke("app_uninstall", { scope }); } catch (e) { console.error("uninstall", e); }
   }
@@ -1332,14 +1332,14 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
         <Row label="Update log" href="https://github.com/fru-dev3/glyph-studio/releases" />
         <Row label="Report an issue" href="https://github.com/fru-dev3/glyph-studio/issues/new" />
         <Row label="Glyph Engine" href="https://github.com/fru-dev3/glyph-engine" />
-        <Row label="Official website" href="https://glyph.fru.dev/studio" />
+        <Row label="Official website" href="https://glyph.fru.dev/bot" />
       </div>
 
       {/* Beta / liability disclaimer */}
       <div className="mt-3 border-t border-border-subtle pt-3">
         <div className="mb-1.5 text-[14px] font-semibold text-text-primary">Beta software</div>
         <p className="text-xs leading-relaxed text-text-secondary">
-          Glyph Studio is a beta release. It is provided "as is",
+          Glyph Bot is a beta release. It is provided "as is",
           without warranty of any kind, express or implied, and you use it at your own risk. The authors are not liable
           for any data loss, costs, or damages arising from its use. It runs third-party AI tools and, unless Bunker
           Mode is on, may send data to cloud providers. Always review anything important yourself. Feedback and bug
@@ -1382,7 +1382,7 @@ export function AboutSection({ vaultPath }: { vaultPath: string }) {
             )}
           </div>
         </div>
-        <p className="mb-3 text-xs text-text-muted">Verifies everything Glyph Studio depends on is healthy. Copy the report when filing an issue.</p>
+        <p className="mb-3 text-xs text-text-muted">Verifies everything Glyph Bot depends on is healthy. Copy the report when filing an issue.</p>
         {checks && (
           <div className="flex flex-col gap-1.5">
             {checks.map((c) => (

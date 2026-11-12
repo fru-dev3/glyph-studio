@@ -489,7 +489,7 @@ export function DomainAppsTab({ domain, vaultPath }: { domain: string; vaultPath
         </div>
         {visibleSuggestions.length === 0 ? (
           <div className="px-1 py-2 text-[12px] text-text-muted">
-            {suggesting ? "Learning from your activity in this domain…" : "No suggestions yet. They appear automatically as Glyph Studio learns from your activity here, or hit refresh."}
+            {suggesting ? "Learning from your activity in this domain…" : "No suggestions yet. They appear automatically as Glyph Bot learns from your activity here, or hit refresh."}
           </div>
         ) : (
           <div className="space-y-1.5">

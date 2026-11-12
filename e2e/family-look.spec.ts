@@ -1,4 +1,4 @@
-// The family's look, held in place: one typeface and one accent. Glyph Studio is
+// The family's look, held in place: one typeface and one accent. Glyph Bot is
 // not SwiftUI, so nothing enforces this but a test (Fru, 2026-10-31: a serif and a
 // second hue made the app read as somebody else's software).
 import { test, expect } from "@playwright/test";

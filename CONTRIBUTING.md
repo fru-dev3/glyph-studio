@@ -1,6 +1,6 @@
-# Contributing to Glyph Studio
+# Contributing to Glyph Bot
 
-Thanks for your interest! Glyph Studio (formerly Prevail) is a local-first "life-OS", a Tauri 2 +
+Thanks for your interest! Glyph Bot (formerly Prevail) is a local-first "life-OS", a Tauri 2 +
 React desktop app driving a bundled engine (Glyph Engine, the `prevail` CLI) over a JSON/NDJSON
 contract.
 

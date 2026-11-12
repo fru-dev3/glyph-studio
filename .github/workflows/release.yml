@@ -127,7 +127,7 @@ jobs:
         with:
           args: --target aarch64-apple-darwin
           tagName: ${{ github.ref_name }}
-          releaseName: "Glyph Studio ${{ github.ref_name }}"
+          releaseName: "Glyph Bot ${{ github.ref_name }}"
           releaseBody: "See CHANGELOG.md for details."
           releaseDraft: false
           # Release ring: a fresh tag is a PRERELEASE - the auto-updater's
@@ -239,7 +239,7 @@ jobs:
         with:
           args: --bundles nsis
           tagName: ${{ github.ref_name }}
-          releaseName: "Glyph Studio ${{ github.ref_name }}"
+          releaseName: "Glyph Bot ${{ github.ref_name }}"
           releaseBody: "See CHANGELOG.md for details."
           releaseDraft: false
           # Release ring: a fresh tag is a PRERELEASE - the auto-updater's

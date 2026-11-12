@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build a fully SIGNED + NOTARIZED Glyph Studio release locally and upload it to the
+# Build a fully SIGNED + NOTARIZED Glyph Bot release locally and upload it to the
 # matching GitHub release, replacing the unsigned/un-notarized DMG.
 #
 # Why this exists: the GitHub Actions release workflow can't sign (the

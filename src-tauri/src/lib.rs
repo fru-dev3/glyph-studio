@@ -238,7 +238,7 @@ pub fn run() {
         // Start-on-boot (LaunchAgent). The frontend toggles it via the
         // autostart plugin's enable/disable in Settings → General.
         // The LaunchAgent is named after the app. Pinned to "Prevail" so an
-        // install that enabled start-on-boot before the Glyph Studio rename keeps
+        // install that enabled start-on-boot before the Glyph Bot rename keeps
         // the same agent (no duplicate, and the toggle still reads it as on).
         .plugin({
             let b = tauri_plugin_autostart::Builder::new();
@@ -284,8 +284,8 @@ pub fn run() {
             let briefing = MenuItemBuilder::with_id("briefing", "Today's briefing").build(app)?;
             let incognito = MenuItemBuilder::with_id("incognito", "Toggle incognito").build(app)?;
             let sep1 = PredefinedMenuItem::separator(app)?;
-            let show = MenuItemBuilder::with_id("show", "Show Glyph Studio").build(app)?;
-            let quit = MenuItemBuilder::with_id("quit", "Quit Glyph Studio").build(app)?;
+            let show = MenuItemBuilder::with_id("show", "Show Glyph Bot").build(app)?;
+            let quit = MenuItemBuilder::with_id("quit", "Quit Glyph Bot").build(app)?;
             let menu = MenuBuilder::new(app)
                 .items(&[&new_chat, &council, &briefing, &incognito, &sep1, &show, &quit])
                 .build()?;

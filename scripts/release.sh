@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command release for the Glyph Studio desktop app (formerly Prevail).
+# One-command release for the Glyph Bot desktop app (formerly Prevail).
 #
 #   build (self-contained, signed) -> notarize+staple app & dmg ->
 #   TEST the dmg through Gatekeeper -> publish to the website (direct
@@ -207,7 +207,7 @@ if [ -f "$LLMS" ]; then
 fi
 ( cd "$SITE" && npm run build >/dev/null )   # sanity-build before pushing
 ( cd "$SITE" && git add src/version.ts public/llms.txt \
-  && git commit -q -m "release: Glyph Studio $VERSION (version stamp; DMG on GitHub Releases)" \
+  && git commit -q -m "release: Glyph Bot $VERSION (version stamp; DMG on GitHub Releases)" \
   && git push )
 # A push deploys nothing: prevail.sh is on Vercel and deploys only through the
 # site's own scripts/ship.sh, run once the release is published. Never Netlify.

@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Glyph Studio",
+        "title": "Glyph Bot",
         "width": 1280,
         "height": 820,
         "minWidth": 880,

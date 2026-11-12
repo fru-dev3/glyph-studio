@@ -14,7 +14,7 @@ labels: bug
 1.
 
 **Environment**
-- Glyph Studio version (Settings → About):
+- Glyph Bot version (Settings → About):
 - macOS version:
 - Installed AI CLIs / provider:
 

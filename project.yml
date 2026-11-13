@@ -11,7 +11,7 @@ settings:
   base:
     CODE_SIGN_STYLE: Automatic
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: "0.5.0"
+    MARKETING_VERSION: "1.0.0"
     CURRENT_PROJECT_VERSION: "2"
 targets:
   Studio: # Glyph Bot on the Mac: the agentic harness over the vault and the Glyph apps

@@ -40,11 +40,11 @@ or pass `DEVELOPMENT_TEAM=<id>`). Agents need the Glyph Engine: copy a `glyph-bo
 
 Glyph Bot 0.4.x was a Tauri app. It is retired; its source stays on the
 [`tauri` branch](https://github.com/fru-dev3/glyph-studio/tree/tauri) (tag `tauri-final`). Its
-Windows installer is attached to the 0.5.0 release as it was and gets no further updates.
+Windows installer is attached to the 1.0.0 release as it was and gets no further updates.
 
 ## Versions
 
-- **0.5.0** Glyph Bot is now a native Mac app, built with Swift and SwiftUI. The earlier app (0.4.x) is retired and its source is kept on the tauri branch. Windows: the last build of the earlier app is attached to this release and gets no further updates.
+- **1.0.0** Glyph Bot is now a native Mac app, built with Swift and SwiftUI. The earlier app (0.4.x) is retired and its source is kept on the tauri branch. Windows: the last build of the earlier app is attached to this release and gets no further updates.
 
 ## License
 

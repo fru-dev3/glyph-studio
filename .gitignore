@@ -7,3 +7,4 @@
 .vercel
 .unlazy/
 .unlazy-archive/
+.swiftpm/

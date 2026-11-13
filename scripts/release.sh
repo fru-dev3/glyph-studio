@@ -34,6 +34,15 @@ main="$app/Contents/MacOS/Glyph Bot"
 
 # The Glyph Engine rides inside, where the app looks for it.
 cp "$GLYPH_ENGINE" "$app/Contents/MacOS/prevail"
+# An engine built in a scratch folder bakes that folder's path in (/private/tmp/<session>/...): blank
+# any such path, same length, so the program's layout in the file is unchanged.
+python3 - "$app/Contents/MacOS/prevail" <<'PY'
+import re, sys
+p = sys.argv[1]; b = open(p, "rb").read()
+b = re.sub(rb'/private/(?:tmp|var)/[^"\s\x00]*', lambda m: (b"/nonexistent" + b"/" * len(m.group(0)))[:len(m.group(0))], b)
+open(p, "wb").write(b)
+PY
+if grep -aqE '/private/(tmp|var)/|/Use[r]s-' "$app/Contents/MacOS/prevail"; then echo "scratch paths left in the engine"; exit 1; fi
 # The linker's debug map and SwiftPM's baked resource-bundle path carry the build machine's user name
 # and home folder. Strip the app's symbols and blank that path (same length). The engine is a compiled
 # runtime with its program appended, so it is never stripped.

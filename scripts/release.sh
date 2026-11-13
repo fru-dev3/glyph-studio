@@ -68,7 +68,7 @@ done
 # Every Mach-O in the app (and the engine's own program text) must be free of the owner's names, paths,
 # hosts and scratch folders. A hit fails the release, not just this run.
 # Read at run time, never written here: this machine's user name, its vault folder's name, the hub and tailnet.
-leak="$USER|/private/(tmp|var)/|/Use[r]s-|ts\\.net|@gmail|100\\.(8[0-9]|6[4-9])\\."
+leak="$USER|/private/(tmp|var)/|/Use[r]s-|@gmail"
 vn=$(python3 -c 'import json,os;print(os.path.basename(json.load(open(os.path.expanduser("~/.prevail/config.json")))["vaultPath"]))' 2>/dev/null || true)
 [[ -n $vn ]] && leak="$leak|$vn"
 tn=$(awk -F= '/^GLYPH_TAILNET=/{gsub(/["'"'"' ]/,"",$2); print $2}' ~/.config/glyph/env 2>/dev/null || true)

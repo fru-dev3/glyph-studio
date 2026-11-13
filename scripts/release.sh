@@ -65,6 +65,19 @@ codesign --verify --strict --deep "$app"
 for f in "$app/Contents/MacOS/prevail" "$app"; do
   [[ $(codesign -dvv "$f" 2>&1) == *"Developer ID Application"* ]] || { echo "$f is not Developer ID signed"; exit 1; }
 done
+# Every Mach-O in the app (and the engine's own program text) must be free of the owner's names, paths,
+# hosts and scratch folders. A hit fails the release, not just this run.
+# Read at run time, never written here: this machine's user name, its vault folder's name, the hub and tailnet.
+leak="$USER|/private/(tmp|var)/|/Use[r]s-|ts\\.net|@gmail|100\\.(8[0-9]|6[4-9])\\."
+vn=$(python3 -c 'import json,os;print(os.path.basename(json.load(open(os.path.expanduser("~/.prevail/config.json")))["vaultPath"]))' 2>/dev/null || true)
+[[ -n $vn ]] && leak="$leak|$vn"
+tn=$(awk -F= '/^GLYPH_TAILNET=/{gsub(/["'"'"' ]/,"",$2); print $2}' ~/.config/glyph/env 2>/dev/null || true)
+[[ -n $tn ]] && leak="$leak|${tn//./\\.}"
+while IFS= read -r f; do
+  # The signature's certificate names the signer (TeamIdentifier, "Developer ID Application: ..."): expected.
+  hits=$(strings -a "$f" | grep -iE "$leak" | grep -v 'Developer ID Application' || true)
+  if [[ -n $hits ]]; then echo "personal detail in $f:"; print -r -- "$hits" | head -5 | cut -c1-120; exit 1; fi
+done < <(find "$app" -type f)
 "$app/Contents/MacOS/prevail" --version >/dev/null || { echo "the signed engine does not run"; exit 1; }
 
 echo "making the disk image"
@@ -100,6 +113,7 @@ spctl --assess --type open --context context:primary-signature -v dist/check.dmg
 rm dist/check.dmg
 cp "$dmg" dist/Glyph-Bot.dmg
 
+[[ -z ${HOLD:-} ]] || { echo "HOLD: stopped before uploading; the notarized image is $dmg"; exit 0; }
 # The version's whole entry in the README (its first line and the indented lines under it).
 notes=$(awk -v v="**$version**" 'index($0, "- " v) == 1 {sub(/^- /, ""); out=$0; on=1; next} on && /^  /{sub(/^ +/, ""); out=out " " $0; next} on{exit} END{print out}' README.md)
 # A draft first, so the release is never live with half its files; then published as the latest.

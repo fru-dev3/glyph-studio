@@ -1,7 +1,9 @@
-build/
-dist/
-Studio.xcodeproj/
-Mac/Info.plist
+/build/
+/dist/
+/Studio.xcodeproj/
+/Mac/Info.plist
 .DS_Store
 .env*
 .vercel
+.unlazy/
+.unlazy-archive/

@@ -1,0 +1,26 @@
+{
+  "id": "statement-arrives",
+  "name": "When a statement arrives",
+  "goal": "Read a new statement and update the numbers.",
+  "domain": "wealth",
+  "when": "Event \u00b7 reads it, updates the numbers",
+  "schedule": {
+    "space": "wealth",
+    "loop": "pb-statement-arrives",
+    "cadence": "monthly",
+    "enabled": true,
+    "status": "active",
+    "autonomy": "tasks",
+    "lastRunTs": null,
+    "createdTs": 1792987080000,
+    "on": "admin:statement"
+  },
+  "steps": [
+    {
+      "kind": "agent",
+      "goal": "Read the new statement and update this month's numbers.",
+      "domain": "wealth",
+      "label": "Read the statement"
+    }
+  ]
+}

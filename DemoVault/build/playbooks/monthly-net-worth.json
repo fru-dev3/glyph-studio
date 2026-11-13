@@ -1,0 +1,27 @@
+{
+  "id": "monthly-net-worth",
+  "name": "Monthly net worth",
+  "goal": "Read every account and write the month's net worth page.",
+  "domain": "wealth",
+  "when": "1st of every month, 8:00 \u00b7 writes a page",
+  "cron": "0 8 1 * *",
+  "schedule": {
+    "space": "wealth",
+    "loop": "pb-monthly-net-worth",
+    "cadence": "monthly",
+    "enabled": true,
+    "status": "active",
+    "autonomy": "tasks",
+    "lastRunTs": null,
+    "createdTs": 1792987080000
+  },
+  "steps": [
+    {
+      "kind": "synthesize",
+      "domain": "wealth",
+      "output": "memory/briefs/{date}-net-worth.md",
+      "instruction": "Read Plaid balances and the Chase statement, find the Fidelity balance, write the month's net worth page, and ask about anything over 5% off.",
+      "label": "Write the net worth page"
+    }
+  ]
+}

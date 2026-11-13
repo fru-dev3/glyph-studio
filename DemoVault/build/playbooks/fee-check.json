@@ -1,0 +1,27 @@
+{
+  "id": "fee-check",
+  "name": "Fee check",
+  "goal": "Check advisory fees and fund expenses; propose changes, never make them.",
+  "domain": "wealth",
+  "when": "Every quarter \u00b7 asks before any change",
+  "cron": "0 8 1 1,4,7,10 *",
+  "schedule": {
+    "space": "wealth",
+    "loop": "pb-fee-check",
+    "cadence": "monthly",
+    "enabled": true,
+    "status": "active",
+    "autonomy": "ask",
+    "lastRunTs": null,
+    "createdTs": 1792987080000
+  },
+  "steps": [
+    {
+      "kind": "synthesize",
+      "domain": "wealth",
+      "output": "memory/briefs/{date}-fee-check.md",
+      "instruction": "Total the fees across accounts and compare with index funds. Propose changes only.",
+      "label": "Check the fees"
+    }
+  ]
+}

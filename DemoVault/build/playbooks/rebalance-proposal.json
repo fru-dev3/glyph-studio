@@ -1,0 +1,26 @@
+{
+  "id": "rebalance-proposal",
+  "name": "Rebalance proposal",
+  "goal": "Draft a rebalance proposal against the target mix. Draft only.",
+  "domain": "wealth",
+  "when": "Draft only \u00b7 off",
+  "schedule": {
+    "space": "wealth",
+    "loop": "pb-rebalance-proposal",
+    "cadence": "monthly",
+    "enabled": false,
+    "status": "paused",
+    "autonomy": "suggest",
+    "lastRunTs": null,
+    "createdTs": 1792987080000
+  },
+  "steps": [
+    {
+      "kind": "synthesize",
+      "domain": "wealth",
+      "output": "memory/briefs/{date}-rebalance.md",
+      "instruction": "Draft a rebalance proposal against the target mix. Never place a trade.",
+      "label": "Draft the proposal"
+    }
+  ]
+}

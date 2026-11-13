@@ -1,0 +1,27 @@
+{
+  "identity": {
+    "name": "family",
+    "label": "Family",
+    "emoji": "family",
+    "summary": "Kids, Mom, home life"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": false
+  },
+  "routing": {
+    "keywords": [
+      "kids",
+      "family calendar"
+    ],
+    "channels": [],
+    "default": false
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": false
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "language": "en",
+  "model": "apple-speech",
+  "speakers": {
+    "S1": "Me",
+    "S2": "Ken Lee"
+  },
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 19.0,
+      "speaker": "S1",
+      "text": "Thanks for joining, Kenny. How are things at Acme?"
+    },
+    {
+      "start": 20.0,
+      "end": 39.0,
+      "speaker": "S2",
+      "text": "Good. We want to talk about pricing for the renewal next quarter."
+    },
+    {
+      "start": 40.0,
+      "end": 59.0,
+      "speaker": "S1",
+      "text": "We agreed to hold the price at last year's level."
+    },
+    {
+      "start": 60.0,
+      "end": 79.0,
+      "speaker": "S2",
+      "text": "Ken will send the signed order form by Friday."
+    }
+  ]
+}

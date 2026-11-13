@@ -1,0 +1,28 @@
+{
+  "identity": {
+    "name": "tax",
+    "label": "Tax",
+    "emoji": "tax",
+    "summary": "Estimates, returns, income records"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": false
+  },
+  "routing": {
+    "keywords": [
+      "estimated tax",
+      "returns",
+      "income records"
+    ],
+    "channels": [],
+    "default": false
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": false
+  }
+}

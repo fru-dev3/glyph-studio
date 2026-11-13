@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-exec bash "$(git rev-parse --show-toplevel)/scripts/content-check.sh" --msg "$1"

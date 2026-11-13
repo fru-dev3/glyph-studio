@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "Work/Acme/2026-10-20-weekly-sync",
+  "title": "Weekly sync with Acme",
+  "created": "2026-10-20T15:00:00Z",
+  "duration_sec": 80,
+  "people": [
+    "Ken Lee"
+  ],
+  "accounts": [],
+  "tags": [
+    "pricing",
+    "renewal"
+  ],
+  "source": "recording",
+  "audio": "audio.m4a",
+  "suggested": {
+    "people": [
+      "Kim Park"
+    ],
+    "accounts": [],
+    "tags": [
+      "q4"
+    ],
+    "dismissed": [
+      "Globex"
+    ]
+  }
+}

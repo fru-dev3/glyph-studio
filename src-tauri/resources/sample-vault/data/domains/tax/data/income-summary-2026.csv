@@ -1,9 +1,0 @@
-source,recipient,form,gross_usd,withheld_federal,withheld_state,notes
-Frontera Bank,Jordan Smith,W-2,90000,14850,0,Base salary; supplemental RSU withholding separate
-Frontera Bank,Jordan Smith,W-2 (supplemental),6180,2163,0,RSU vest 2026-08-15 est (22% supp rate)
-Austin Physical Therapy,Sam Smith,W-2,78000,11310,0,Texas — no state income tax
-Ally Bank,Household,1099-INT,420,0,0,HYSA interest at 4.1% APY
-Frontera Bank,Jordan Smith,1099-INT,192,0,0,Checking account interest
-BCP Peru,Jordan Smith,1099-INT (foreign),330,0,0,FBAR-required; reportable as US income
-Fidelity,Household,1099-B/DIV,380,0,0,Dividends and realized gains; VTI/BND/VXUS
-Rocket Mortgage,Household,1098,19400,0,0,Mortgage interest deduction (est)

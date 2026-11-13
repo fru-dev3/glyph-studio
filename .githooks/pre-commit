@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-# Enable: git config core.hooksPath .githooks
-exec bash "$(git rev-parse --show-toplevel)/scripts/content-check.sh" --staged

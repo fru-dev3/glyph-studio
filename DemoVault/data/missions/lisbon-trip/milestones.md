@@ -1,0 +1,2 @@
+- [ ] Flights booked ~id:ms-flights ~due:2026-12-15 ~weight:2
+- [ ] Apartment booked ~id:ms-stay ~due:2027-01-15 ~weight:2

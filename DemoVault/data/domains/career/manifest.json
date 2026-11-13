@@ -1,0 +1,27 @@
+{
+  "identity": {
+    "name": "career",
+    "label": "Career",
+    "emoji": "career",
+    "summary": "The next path, offers, growth"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": false
+  },
+  "routing": {
+    "keywords": [
+      "job search",
+      "offers"
+    ],
+    "channels": [],
+    "default": false
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": false
+  }
+}

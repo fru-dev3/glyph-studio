@@ -1,0 +1,26 @@
+{
+  "identity": {
+    "name": "inbox",
+    "label": "Inbox",
+    "emoji": "inbox",
+    "summary": "Email triage across accounts"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": false
+  },
+  "routing": {
+    "keywords": [
+      "email triage"
+    ],
+    "channels": [],
+    "default": false
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": false
+  }
+}

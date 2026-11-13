@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "Home/2026-10-24-contractor-call",
+  "title": "Kitchen contractor call",
+  "created": "2026-10-24T18:00:00Z",
+  "duration_sec": 40,
+  "people": [],
+  "accounts": [],
+  "tags": [],
+  "source": "recording",
+  "audio": "audio.m4a"
+}

@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "language": "en",
+  "model": "apple-speech",
+  "speakers": {
+    "S1": "Me",
+    "S2": "Ken Lee"
+  },
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 4.25,
+      "speaker": "S1",
+      "text": "Thanks for joining, Kenny. Café prices / \"tiers\"?"
+    },
+    {
+      "start": 65.5,
+      "end": 70.0,
+      "speaker": "S2",
+      "text": "Hold the price\tat last year's level."
+    },
+    {
+      "start": 3601.0,
+      "end": 3602.0,
+      "speaker": "",
+      "text": "Bye."
+    }
+  ]
+}

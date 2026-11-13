@@ -1,0 +1,29 @@
+{
+  "identity": {
+    "name": "estate",
+    "label": "Estate",
+    "emoji": "estate",
+    "summary": "Wills, guardians, trusts, beneficiaries"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": true
+  },
+  "routing": {
+    "keywords": [
+      "will",
+      "trust",
+      "guardians",
+      "beneficiaries"
+    ],
+    "channels": [],
+    "default": false
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": false
+  }
+}

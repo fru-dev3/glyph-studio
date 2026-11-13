@@ -1,0 +1,27 @@
+{
+  "identity": {
+    "name": "business",
+    "label": "Business",
+    "emoji": "business",
+    "summary": "The shop: books, filings, customers"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": false
+  },
+  "routing": {
+    "keywords": [
+      "shop books",
+      "shop filings"
+    ],
+    "channels": [],
+    "default": false
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": false
+  }
+}

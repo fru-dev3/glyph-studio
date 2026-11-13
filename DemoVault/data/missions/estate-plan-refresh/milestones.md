@@ -1,0 +1,3 @@
+- [ ] Intake call with Dana ~id:ms-intake ~due:2026-11-06 ~weight:1
+- [ ] Guardians chosen ~id:ms-guardians ~due:2026-11-20 ~weight:2
+- [ ] Will signed ~id:ms-signed ~due:2026-12-20 ~weight:3

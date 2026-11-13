@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "id": "Work/2026-10-22-hiring-chat",
+  "title": "Hiring chat",
+  "created": "2026-10-22T16:00:00Z",
+  "duration_sec": 40,
+  "people": [
+    "Kim Park"
+  ],
+  "accounts": [
+    "Globex"
+  ],
+  "tags": [
+    "hiring"
+  ],
+  "source": "recording",
+  "audio": "audio.m4a"
+}

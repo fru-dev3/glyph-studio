@@ -1,3 +1,0 @@
-Prevail v4 canonical data layout marker.
-Domains live under data/domains/<d> and apps under data/apps/<id>.
-Presence of this file + the data/ and build/ dirs switches resolvers to canonical mode.

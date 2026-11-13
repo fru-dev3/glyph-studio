@@ -1,0 +1,13 @@
+{
+  "id": "gmail",
+  "name": "Gmail",
+  "description": "Read statements and bills \u00b7 draft only",
+  "integration": "oauth",
+  "domains": [
+    "wealth",
+    "tax",
+    "inbox"
+  ],
+  "autonomy": "read-only",
+  "enabled": true
+}

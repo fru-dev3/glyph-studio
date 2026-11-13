@@ -1,0 +1,8 @@
+{"event": "start", "host": "laptop", "project": "estate-plan", "source": "manual", "ts": "2026-10-26T08:30:00-05:00"}
+{"event": "stop", "host": "laptop", "ts": "2026-10-26T10:15:00-05:00"}
+{"event": "start", "host": "laptop", "project": "tax-q4", "source": "manual", "ts": "2026-10-26T13:00:00-05:00"}
+{"event": "stop", "host": "laptop", "ts": "2026-10-26T14:20:00-05:00"}
+{"event": "start", "host": "laptop", "project": "estate-plan", "source": "manual", "ts": "2026-10-25T09:00:00-05:00"}
+{"event": "stop", "host": "laptop", "ts": "2026-10-25T11:30:00-05:00"}
+{"event": "start", "host": "laptop", "project": "reading", "source": "manual", "ts": "2026-10-24T19:00:00-05:00"}
+{"event": "stop", "host": "laptop", "ts": "2026-10-24T19:45:00-05:00"}

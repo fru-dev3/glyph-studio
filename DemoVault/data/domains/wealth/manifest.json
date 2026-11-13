@@ -1,0 +1,28 @@
+{
+  "identity": {
+    "name": "wealth",
+    "label": "Wealth",
+    "emoji": "wealth",
+    "summary": "Net worth, accounts, fees"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": true
+  },
+  "routing": {
+    "keywords": [
+      "net worth",
+      "accounts",
+      "fees"
+    ],
+    "channels": [],
+    "default": false
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": false
+  }
+}

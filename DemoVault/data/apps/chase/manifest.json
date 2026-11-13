@@ -1,0 +1,11 @@
+{
+  "id": "chase",
+  "name": "Chase",
+  "description": "Statement exports from your folder",
+  "integration": "manual",
+  "domains": [
+    "wealth"
+  ],
+  "autonomy": "read-only",
+  "enabled": true
+}

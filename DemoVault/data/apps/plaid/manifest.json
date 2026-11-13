@@ -1,0 +1,11 @@
+{
+  "id": "plaid",
+  "name": "Plaid",
+  "description": "Bank and card balances \u00b7 read only",
+  "integration": "api",
+  "domains": [
+    "wealth"
+  ],
+  "autonomy": "read-only",
+  "enabled": true
+}

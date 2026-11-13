@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "id": "Recordings/2026-10-25-recording",
+  "title": "Recording Oct 25",
+  "created": "2026-10-25T09:00:00Z",
+  "duration_sec": 0,
+  "people": [],
+  "accounts": [],
+  "tags": [],
+  "source": "recording",
+  "audio": "audio.m4a"
+}

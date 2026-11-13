@@ -1,7 +1,0 @@
-vest_date,shares_est,price_per_share_est,gross_usd,status,notes
-2025-08-15,120,51.50,6180,vested,Aug 2025 tranche — taxes withheld
-2026-02-15,120,51.50,6180,vested,Feb 2026 tranche — taxes withheld
-2026-08-15,120,51.50,6180,upcoming,Next vest — mark on calendar
-2027-02-15,120,51.50,6180,unvested,
-2027-08-15,120,51.50,6180,unvested,
-2028-02-15,120,51.50,6180,unvested,Final tranche of $50k grant

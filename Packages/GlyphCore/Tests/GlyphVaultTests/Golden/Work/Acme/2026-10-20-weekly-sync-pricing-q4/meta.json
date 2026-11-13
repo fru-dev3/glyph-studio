@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "id": "Work/Acme/2026-10-20-weekly-sync-pricing-q4",
+  "title": "Weekly sync: pricing \"Q4\"",
+  "created": "2026-10-20T15:00:00Z",
+  "duration_sec": 0,
+  "people": [
+    "Ken Lee",
+    "Kim Park"
+  ],
+  "accounts": [
+    "Acme Corp"
+  ],
+  "tags": [
+    "q4-renewal",
+    "pricing"
+  ],
+  "suggested": {
+    "people": [],
+    "accounts": [],
+    "tags": [],
+    "dismissed": [
+      "budget"
+    ]
+  },
+  "source": "recording",
+  "device": "laptop",
+  "audio": "audio.m4a",
+  "updated": "2026-10-14T17:46:40Z"
+}

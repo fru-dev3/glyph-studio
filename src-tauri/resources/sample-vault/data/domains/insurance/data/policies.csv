@@ -1,8 +1,0 @@
-type,carrier,policy_number,coverage_usd,premium_amount,premium_period,renewal_date,notes
-Homeowner's,Texas Farm Bureau,HO-2024-8841,322000,2180,annual,2026-09-01,Aging HVAC may affect renewal quote
-Auto (2 vehicles),Geico,GA-44-8872901,300000,1140,semi-annual,2026-07-02,22 days away
-Health (HDHP + HSA),Frontera Bank plan (BCBS),EMP-FRB-22041,,0,employer-sponsored,,Jordan employee; Sam on own plan
-Term life — Jordan,Haven Life,TL-JOR-20240318,500000,31,monthly,2044-03-18,20-yr term; Maya + Sam as beneficiaries
-Term life — Sam,Haven Life,TL-SAM-20240318,350000,24,monthly,2044-03-18,20-yr term; Jordan + Maya as beneficiaries
-LTD — Jordan,Frontera Bank (employer),LTD-FRB-2024,54000,0,employer-sponsored,,60% of salary; 90-day elimination
-Umbrella,NONE,,0,0,,,GAP — $1M umbrella not yet added (~$180/yr)

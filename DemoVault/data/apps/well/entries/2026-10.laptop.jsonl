@@ -1,0 +1,9 @@
+{"at": "2026-10-26T07:40:00-05:00", "event": "log", "host": "laptop", "id": "W0", "kind": "sleep", "level": 5, "name": "Slept", "ts": "2026-10-26T07:40:00-05:00", "unit": "h", "value": 6.2, "via": "typed"}
+{"area": "Head", "at": "2026-10-26T08:15:00-05:00", "event": "log", "host": "laptop", "id": "W1", "kind": "symptom", "level": 4, "name": "Headache", "ts": "2026-10-26T08:15:00-05:00", "via": "typed"}
+{"at": "2026-10-26T12:30:00-05:00", "event": "log", "host": "laptop", "id": "W2", "kind": "food", "name": "Lentil soup", "ts": "2026-10-26T12:30:00-05:00", "via": "typed"}
+{"at": "2026-10-26T15:00:00-05:00", "event": "log", "host": "laptop", "id": "W3", "kind": "mood", "level": 7, "name": "Mood", "ts": "2026-10-26T15:00:00-05:00", "via": "typed"}
+{"at": "2026-10-25T07:30:00-05:00", "event": "log", "host": "laptop", "id": "W4", "kind": "sleep", "level": 8, "name": "Slept", "ts": "2026-10-25T07:30:00-05:00", "unit": "h", "value": 7.6, "via": "typed"}
+{"at": "2026-10-25T18:10:00-05:00", "event": "log", "host": "laptop", "id": "W5", "kind": "activity", "name": "Walk", "note": "35 minutes by the river", "ts": "2026-10-25T18:10:00-05:00", "via": "typed"}
+{"at": "2026-10-24T09:00:00-05:00", "event": "log", "high": 100, "host": "laptop", "id": "W6", "kind": "lab", "low": 30, "name": "Vitamin D", "ts": "2026-10-24T09:00:00-05:00", "unit": "ng/mL", "value": 24, "via": "typed"}
+{"at": "2026-10-24T22:00:00-05:00", "event": "log", "host": "laptop", "id": "W7", "kind": "stress", "level": 6, "name": "Stress", "note": "Estate paperwork", "ts": "2026-10-24T22:00:00-05:00", "via": "typed"}
+{"date": "2026-10-26", "event": "day", "host": "phone", "hrv": 44, "rhr": 61, "sleep": 6.2, "source": "apple-health", "steps": 6120, "ts": "2026-10-26T23:00:00-05:00"}

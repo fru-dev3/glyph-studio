@@ -1,0 +1,27 @@
+{
+  "identity": {
+    "name": "general",
+    "label": "Ben",
+    "emoji": "ben",
+    "summary": "Chief of staff"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": true
+  },
+  "routing": {
+    "keywords": [
+      "weekly note",
+      "today"
+    ],
+    "channels": [],
+    "default": true
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": false
+  }
+}

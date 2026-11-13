@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "language": "en",
+  "model": "apple-speech",
+  "speakers": {},
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 19.0,
+      "speaker": "",
+      "text": "The cabinets arrive on the third, install takes two days."
+    },
+    {
+      "start": 20.0,
+      "end": 39.0,
+      "speaker": "",
+      "text": "Deposit is due before they order the countertop."
+    }
+  ]
+}

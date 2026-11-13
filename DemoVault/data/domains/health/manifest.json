@@ -1,0 +1,28 @@
+{
+  "identity": {
+    "name": "health",
+    "label": "Health",
+    "emoji": "health",
+    "summary": "Checkups, sleep, movement"
+  },
+  "config": {
+    "autoState": false,
+    "pinned": false
+  },
+  "routing": {
+    "keywords": [
+      "checkups",
+      "sleep",
+      "workouts"
+    ],
+    "channels": [],
+    "default": false
+  },
+  "heartbeat": {
+    "enabled": false,
+    "routines": []
+  },
+  "privacy": {
+    "localOnly": true
+  }
+}

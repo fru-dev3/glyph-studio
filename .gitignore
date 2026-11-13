@@ -1,55 +1,7 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+build/
+dist/
+Studio.xcodeproj/
+Mac/Info.plist
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Rust / Tauri build artifacts
-src-tauri/target/
-src-tauri/gen/
-
-# Lock file kept (npm + cargo)
-# but tauri's generated schemas can drift
-
-# Bundled engine sidecar — built by scripts/prepare-sidecar.sh
-src-tauri/binaries/
-src-tauri/binaries
-# Default skill packs, copied from the engine repo by scripts/prepare-sidecar.sh
-# (the engine is the source of truth; never edit or commit a copy here)
-src-tauri/resources/skill-packs/
-
-# Private planning + launch material — local only, never publish
-docs/
-launch/
-
-test-results/
-playwright-report/
-bun.lock
-
-# Local env overrides may hold real secrets - never commit them.
-# (The tracked .env holds only publishable client keys; see its comments.)
-.env.local
-.env.*.local
-.env.production.local
-
-# Real build keys: official build injects from CI secrets; never commit.
-.env
+.env*
+.vercel

@@ -2,8 +2,14 @@ import GlyphVault
 import SwiftUI
 
 /// Past chats, the same on every Glyph Chat screen: a clock button top left opens a sheet of the
-/// chats this app kept (GlyphVault `ChatLog`), newest first, one line each (when, and the first few
-/// words said). A tap reopens one to carry on; a swipe archives it (moved, never deleted).
+/// chats this app kept (GlyphVault `ChatLog`), newest first, one line each (when, and its name, or
+/// the first few words said). A tap reopens one to carry on; a swipe archives it (moved, never
+/// deleted) or names it.
+///
+/// A chat can be given a name and come back to under it (Fru, 2026-11-14: "I want to give a
+/// different name to the different chat sessions and come back to them so that the chat sessions
+/// don't just disappear"). The name is a line in the chat's own file, so it is in the vault with
+/// everything else and the same on every device that reads it.
 ///
 ///     ChatHistoryButton { showHistory = true }
 ///     .sheet(isPresented: $showHistory) { ChatHistorySheet(log: log, current: chatID, tint: .green) { chat in reopen(chat) } }
@@ -27,6 +33,9 @@ public struct ChatHistorySheet: View {
     let tint: Color
     let open: (Chat) -> Void
     @State private var chats: [Chat] = []
+    /// The chat being named, and the name being typed into the alert.
+    @State private var naming: Chat?
+    @State private var typed = ""
     @Environment(\.dismiss) private var dismiss
 
     public init(log: ChatLog, current: String? = nil, tint: Color, open: @escaping (Chat) -> Void) {
@@ -48,7 +57,16 @@ public struct ChatHistorySheet: View {
                         Button { open(c); dismiss() } label: { row(c) }
                             .accessibilityIdentifier("history-row")
                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                // Archive is the full swipe because it is the common one; naming is
+                                // deliberate, so it is a tap on the shorter swipe or a long press.
                                 Button { archive(c) } label: { Label("Archive", systemImage: "archivebox") }.tint(tint)
+                                Button { startNaming(c) } label: { Label("Name", systemImage: "pencil") }
+                                    .tint(.gray)
+                                    .accessibilityIdentifier("history-name")
+                            }
+                            .contextMenu {
+                                Button("Name this chat", systemImage: "pencil") { startNaming(c) }
+                                Button("Archive", systemImage: "archivebox", role: .destructive) { archive(c) }
                             }
                     }
                     .listStyle(.plain)
@@ -58,18 +76,50 @@ public struct ChatHistorySheet: View {
         }
         .tint(tint)
         .presentationDragIndicator(.visible)
-        .onAppear { chats = log.chats().filter { $0.id != current } }
+        // The chat you are in is in the list too, marked, because naming the one you are in is the
+        // common case: you give it a name once it is about something.
+        .onAppear { chats = log.chats() }
+        .alert("Name this chat", isPresented: Binding(get: { naming != nil }, set: { if !$0 { naming = nil } })) {
+            TextField("What is it about?", text: $typed).accessibilityIdentifier("history-name-field")
+            Button("Save") { saveName() }.accessibilityIdentifier("history-name-save")
+            Button("Cancel", role: .cancel) { naming = nil }
+        } message: {
+            Text("It keeps this name wherever you read it. Leave it empty to go back to its first words.")
+        }
     }
 
     private func row(_ c: Chat) -> some View {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
+        let named = c.name?.isEmpty == false
+        return HStack(alignment: .firstTextBaseline, spacing: 12) {
             Text(Self.when(c.started)).font(.subheadline.monospacedDigit()).foregroundStyle(.secondary)
                 .lineLimit(1).fixedSize()
-            Text(Self.words(c.title)).font(.body).foregroundStyle(.primary).lineLimit(1).truncationMode(.tail)
+            // A name is shown whole and in the app's own weight: it was chosen, so it is not cut
+            // to six words the way an opening line is.
+            Text(named ? c.title : Self.words(c.title))
+                .font(named ? .body.weight(.semibold) : .body)
+                .foregroundStyle(.primary).lineLimit(1).truncationMode(.tail)
             Spacer(minLength: 0)
+            if c.id == current {
+                Text("This chat").font(.caption2.weight(.medium)).foregroundStyle(.tertiary)
+                    .accessibilityIdentifier("history-current")
+            }
         }
         .padding(.vertical, 6).contentShape(Rectangle())
         .accessibilityElement(children: .combine)
+    }
+
+    private func startNaming(_ c: Chat) {
+        typed = c.name ?? ""
+        naming = c
+    }
+
+    private func saveName() {
+        guard let c = naming else { return }
+        let name = typed.trimmingCharacters(in: .whitespacesAndNewlines)
+        try? log.rename(c.id, to: name)
+        naming = nil
+        typed = ""
+        withAnimation { chats = log.chats() }
     }
 
     private func archive(_ c: Chat) {

@@ -28,16 +28,24 @@ public struct ChatEntry: Identifiable {
     /// Still going once shown (waiting on another app): ChatModel runs it, the first line it returns takes this
     /// one's place and the rest follow.
     public var then: (@MainActor () async -> [ChatEntry])?
+    /// Who answered: "Claude", "Gemini", a council. Shown under the line so it is never a guess
+    /// which engine spoke (Fru, 2026-11-14: "you're not showing me what model is answering the
+    /// chat. Is it Claude? Because in the future I can maybe change to Gemini or Codex"). Nil for
+    /// a line the app wrote itself, which has no engine behind it to name.
+    public var who: String?
 
     public init(mine: Bool = false, text: String, kind: Kind = .card, detail: String? = nil, done: Bool = false, working: Bool = false,
                 mood: FaceMood? = nil, undo: (@MainActor () -> Void)? = nil, link: URL? = nil, save: (@MainActor () async -> ChatEntry)? = nil,
-                agent: String? = nil, then: (@MainActor () async -> [ChatEntry])? = nil) {
+                agent: String? = nil, then: (@MainActor () async -> [ChatEntry])? = nil, who: String? = nil) {
         self.mine = mine; self.text = text; self.kind = kind; self.detail = detail; self.done = done; self.working = working
         self.mood = mood ?? (kind == .ask ? .asking : done ? .happy : .rest)
         self.undo = undo; self.link = link; self.save = save; self.agent = agent; self.then = then
+        self.who = who
     }
-    /// An answer to show in full.
-    public static func answer(_ text: String) -> ChatEntry { ChatEntry(text: text, kind: .answer) }
+    /// An answer to show in full, and who answered it.
+    public static func answer(_ text: String, who: String? = nil) -> ChatEntry {
+        ChatEntry(text: text, kind: .answer, who: who)
+    }
     /// A question back.
     public static func ask(_ text: String) -> ChatEntry { ChatEntry(text: text, kind: .ask) }
 }
@@ -170,6 +178,15 @@ public struct GlyphChat: View {
     /// Fru, 2026-11-09, looking at Glyph CRM's chat on his phone: "I should'nt have any design like
     /// this". An app that wants the mascot still passes a colour and is unchanged.
     let face: Color?
+    /// The app's SF Symbol, for the one line at the top that says which app this is. Fru,
+    /// 2026-11-15, looking at Glyph X's chat: "Which app is this? ... it should be obvious with
+    /// the logo and the text up on the top of the screen, right? The way all the other apps do
+    /// it." nil for an app that draws that line itself (Glyph Omega, Glyph Time, Glyph Native,
+    /// and Glyph Wealth with its own bar).
+    let mark: String?
+    /// The app as the family names it ("Glyph X"), for that line. `name` is the short one the
+    /// face carries underneath ("Travel"), which is not what the top line says.
+    let appName: String?
     let tint: Color
     let agent: String
     let name: String
@@ -201,6 +218,7 @@ public struct GlyphChat: View {
     /// - face: the agent's tile colour; tint: bubbles, buttons, dots; agent: its id (the face's seed);
     ///   name: under the face ("Time"); title and examples: the welcome; placeholder: the text field's.
     public init(model: ChatModel, face: Color?, tint: Color, agent: String, name: String, title: String,
+                mark: String? = nil, appName: String? = nil,
                 subtitle: String? = nil, examples: [String] = [],
                 placeholder: String, caption: String = "Tap to talk",
                 align: HorizontalAlignment = .center,
@@ -208,7 +226,8 @@ public struct GlyphChat: View {
                 attach: (() -> Void)? = nil,
                 attachLabel: String = "Attach",
                 bottom: ((@escaping (String) -> Void, @escaping () -> Void) -> AnyView)? = nil) {
-        self.model = model; self.face = face; self.tint = tint; self.agent = agent; self.name = name
+        self.model = model; self.face = face; self.mark = mark; self.appName = appName
+        self.tint = tint; self.agent = agent; self.name = name
         self.title = title; self.subtitle = subtitle
         self.examples = examples; self.placeholder = placeholder; self.caption = caption
         self.align = align; self.top = top; self.bottom = bottom
@@ -217,9 +236,34 @@ public struct GlyphChat: View {
 
     public var body: some View {
         NavigationStack {
+            VStack(spacing: 0) {
+            // Which app this is, on the family's one top line. A chat screen is the same shape in
+            // every Glyph app -- a face, a question and a composer -- so without this line there
+            // is nothing on it that says which one you are in.
+            if let mark {
+                GlyphAppHeader(name: appName ?? name, mark: mark, tint: tint, page: "Chat") {
+                    GlyphDrawerButton()
+                } trailing: {
+                    GlyphDrawerButton().hidden().accessibilityHidden(true)
+                }
+                .padding(.bottom, 2)
+            }
             ScrollViewReader { scroll in
                 ScrollView {
                     VStack(spacing: 14) {
+                        // Past chats and New chat, at the head of the thread. They used to sit in
+                        // the bottom bar under the composer, and 7d4d97a took that whole row out
+                        // along with the selectors Fru asked to be rid of ("you're using the trio
+                        // as well as selectors behind, below. That doesn't make any sense"). He
+                        // asked for the selectors; these two went with them, and `newChat` was
+                        // left defined and never drawn, so on every Glyph app there has since been
+                        // no way to reach a past conversation or deliberately start a new one.
+                        // Here they are out of the composer's way, and they scroll off as the
+                        // conversation grows, which suits two things you reach for at its start.
+                        if model.log != nil || !model.entries.isEmpty {
+                            HStack(spacing: 24) { newChat }.font(.subheadline).tint(tint)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
                         if model.entries.isEmpty { welcome } else {
                             ForEach(model.entries) { l in bubble(l).id(l.id) }
                             if composing { fruDots.id("fru-dots") }
@@ -244,6 +288,8 @@ public struct GlyphChat: View {
             .sheet(isPresented: $showHistory) {
                 if let log = model.log { ChatHistorySheet(log: log, current: model.chatID, tint: tint) { model.reopen($0) } }
             }
+            }
+            .background(Color(uiColor: .systemBackground))
         }
     }
 
@@ -313,6 +359,20 @@ public struct GlyphChat: View {
         }
     }
 
+    /// The engine's name as a person reads it. The hub answers with its own ids ("claude",
+    /// "gemini", "ollama/llama3"); a council answers with several, joined.
+    public static func engineName(_ raw: String) -> String {
+        let pretty = ["claude": "Claude", "gemini": "Gemini", "codex": "Codex", "ollama": "Ollama",
+                      "openai": "OpenAI", "antigravity": "Antigravity", "apple": "Apple Intelligence",
+                      "on-device": "On this iPhone", "rules": "No engine"]
+        let parts = raw.split(whereSeparator: { ",+".contains($0) }).map { p -> String in
+            let one = p.trimmingCharacters(in: .whitespaces)
+            let base = one.split(separator: "/").first.map(String.init) ?? one
+            return pretty[base.lowercased()] ?? base.prefix(1).uppercased() + base.dropFirst()
+        }
+        return parts.count > 1 ? parts.joined(separator: " and ") : (parts.first ?? raw)
+    }
+
     private func reply(_ l: ChatEntry) -> some View {
         HStack(alignment: .center, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
@@ -322,12 +382,27 @@ public struct GlyphChat: View {
                         .lineLimit(1).truncationMode(.tail).minimumScaleFactor(0.85)
                         .accessibilityIdentifier("chat-reply")
                 } else {
-                    Text(l.text).font(.body).fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
+                    // The answer's own characters, with the entities it names underlined and
+                    // tappable. Nothing is added or reworded; a name that is not in the register
+                    // is left as plain text.
+                    Text(EntityLinks.attributed(l.text, scan: EntityScan.shared, tint: tint))
+                        .font(.body).fixedSize(horizontal: false, vertical: true).textSelection(.enabled)
                         .accessibilityIdentifier(l.kind == .ask ? "chat-ask" : "chat-answer")
                 }
                 if let d = l.detail, opened.contains(l.id) {
                     Text(d).font(.footnote).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
                         .accessibilityIdentifier("chat-detail")
+                }
+                // Who answered, under the answer it belongs to. Fru, 2026-11-14: "you're not
+                // showing me what model is answering the chat. Is it Claude? Because in the future
+                // I can maybe change to Gemini or Codex." Quiet and small: it is a fact about the
+                // answer, not part of it, and a line the app wrote itself names nobody.
+                if let who = l.who, !who.isEmpty {
+                    Text(GlyphChat.engineName(who))
+                        .font(.caption2.weight(.medium))
+                        .foregroundStyle(.tertiary)
+                        .accessibilityLabel("Answered by \(GlyphChat.engineName(who))")
+                        .accessibilityIdentifier("chat-answered-by")
                 }
             }
             .contentShape(Rectangle())

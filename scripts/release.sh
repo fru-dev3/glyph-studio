@@ -19,6 +19,9 @@ identity=$(security find-identity -v -p codesigning | awk -F'"' '/Developer ID A
 team=${identity##*\(}; team=${team%\)}
 version=$(awk '/MARKETING_VERSION: "/{gsub(/"/,"",$2); print $2; exit}' project.yml)
 repo=fru-dev3/glyph-studio
+# The shared personal-data scan: scripts/public-scan.sh in a mirror, the repo's own beside this folder.
+scan=./scripts/public-scan.sh
+[[ -x $scan ]] || { echo "no public-scan.sh"; exit 1; }
 # Released from committed and pushed code only.
 [[ -z $(git status --porcelain) ]] || { echo "uncommitted changes: commit and push first"; exit 1; }
 git fetch -q origin && [[ $(git rev-parse HEAD) == $(git rev-parse origin/main) ]] || { echo "HEAD is not origin/main: push first"; exit 1; }
@@ -68,7 +71,7 @@ done
 # Every Mach-O in the app (and the engine's own program text) must be free of the owner's names, paths,
 # hosts and scratch folders. A hit fails the release, not just this run.
 # Read at run time, never written here: this machine's user name, its vault folder's name, the hub and tailnet.
-leak="$USER|/private/(tmp|var)/|/Use[r]s-|@gmail"
+leak="$USER|/private/(tmp|var)/|/Use[r]s-|@gm[a]il"
 vn=$(python3 -c 'import json,os;print(os.path.basename(json.load(open(os.path.expanduser("~/.prevail/config.json")))["vaultPath"]))' 2>/dev/null || true)
 [[ -n $vn ]] && leak="$leak|$vn"
 tn=$(awk -F= '/^GLYPH_TAILNET=/{gsub(/["'"'"' ]/,"",$2); print $2}' ~/.config/glyph/env 2>/dev/null || true)
@@ -78,6 +81,7 @@ while IFS= read -r f; do
   hits=$(strings -a "$f" | grep -iE "$leak" | grep -v 'Developer ID Application' || true)
   if [[ -n $hits ]]; then echo "personal detail in $f:"; print -r -- "$hits" | head -5 | cut -c1-120; exit 1; fi
 done < <(find "$app" -type f)
+"$scan" "$app" || { echo "personal detail in the app: nothing was uploaded"; exit 1; }
 "$app/Contents/MacOS/prevail" --version >/dev/null || { echo "the signed engine does not run"; exit 1; }
 
 echo "making the disk image"
@@ -112,6 +116,7 @@ xattr -w com.apple.quarantine "0081;00000000;Safari;" dist/check.dmg
 spctl --assess --type open --context context:primary-signature -v dist/check.dmg
 rm dist/check.dmg
 cp "$dmg" dist/Glyph-Bot.dmg
+"$scan" dist/Glyph-Bot.dmg || { echo "personal detail in the final disk image: nothing was uploaded"; exit 1; }
 
 [[ -z ${HOLD:-} ]] || { echo "HOLD: stopped before uploading; the notarized image is $dmg"; exit 0; }
 # The version's whole entry in the README (its first line and the indented lines under it).

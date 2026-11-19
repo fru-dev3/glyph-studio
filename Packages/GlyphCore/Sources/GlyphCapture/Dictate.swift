@@ -1,4 +1,7 @@
 @preconcurrency import AVFoundation
+#if canImport(UIKit)
+import UIKit
+#endif
 import Foundation
 import Observation
 import Speech
@@ -34,6 +37,11 @@ public final class LiveDictation {
     public private(set) var problem: String?
     /// 0...1, the loudness right now, for level bars.
     public private(set) var level: Double = 0
+    /// The loudest thing the microphone heard in this take. A take that comes back with no words
+    /// is two different faults wearing the same face: the microphone heard nothing at all, or it
+    /// heard plenty and the model made nothing of it. Measured 2026-11-15, chasing a 90-second
+    /// take that returned zero words, where the two could not be told apart from the outside.
+    private var loudest: Double = 0
     /// Which way the words are being heard, for diagnosis ("SpeechTranscriber en_US", "SFSpeechRecognizer").
     public private(set) var route = ""
     /// When this run started, for an app that shows how long it has been listening.
@@ -52,10 +60,25 @@ public final class LiveDictation {
     /// The words from the recognizers this take has already used up, so a take that outlives one
     /// of them reads as one piece of speech.
     private var carry = ""
+    /// One slot per legacy request, in the order they listened. A request's results replace only
+    /// its own slot, so a final result that arrives late cannot overwrite what came before it, and
+    /// the take reads in the order it was said. Measured 2026-11-14: with the whole take on one
+    /// request and each result taken as the whole transcript, 40 numbered sentences came back as
+    /// the last 12 and the first 28 were gone -- not a cut tail but a lost beginning, which is what
+    /// Fru saw twice ("only a short part of it got transcribed").
+    private var parts: [String] = []
+    /// How long one legacy request is allowed to listen before handing over. Apple's older
+    /// recognizer stops reporting earlier speech long before it says it is finished (it ran 388
+    /// seconds here without once reporting a final result), so the handover is on a clock rather
+    /// than on its word. Inside its own roughly one-minute cap.
+    private static let legacySegment: TimeInterval = 40
     /// The results stream ended while the microphone is still on.
     private var segmentEnded = false
     /// How many recognizers this take went through, in `route`, so a short take says why.
     private var segments = 0
+    /// The app stopped being the one on screen while this take was running, and the take carried
+    /// on anyway. Kept because the case that used to lose everything is exactly this one.
+    private var leftForeground = false
 
     public init() {}
 
@@ -86,6 +109,11 @@ public final class LiveDictation {
         startedAt = .now
         paused = false
         finished = false
+        // Per take, not per launch: left unreset, the second take of a session inherited the
+        // first one's "yes" and the record would say a take went off screen when it never did.
+        // A diagnostic that lies is worse than none, since it is what the next cause is read from.
+        leftForeground = false
+        loudest = 0
         // Read once, for the whole take: the default behind `injected` is global, so a later
         // read can return someone else's words or none at all.
         taking = Self.injected
@@ -105,6 +133,7 @@ public final class LiveDictation {
             return
         }
         carry = ""
+        parts = []
         segments = 0
         task = Task { await run() }
     }
@@ -149,13 +178,129 @@ public final class LiveDictation {
     /// This take's injected words, read once in `start()`.
     private var taking: String?
 
+    #if os(iOS)
+    /// A call, Siri, or another app taking the microphone ends the take instead of leaving a lit
+    /// button over a deaf engine. Background audio keeps a take alive when the screen locks or Fru
+    /// switches apps; it does NOT survive an interruption, and before this nothing did: the engine
+    /// stopped, the words stopped, and the view said nothing was wrong. What was heard up to that
+    /// moment is finished and saved, which is the part that was being thrown away.
+    private func watchInterruptions() {
+        guard interruptions == nil else { return }
+        rehearseInterruption()
+        if leaving == nil {
+            leaving = NotificationCenter.default.addObserver(
+                forName: UIApplication.didEnterBackgroundNotification,
+                object: nil, queue: .main) { [weak self] _ in
+                    Task { @MainActor [weak self] in
+                        guard let self, self.on else { return }
+                        self.leftForeground = true
+                        print("GLYPH-DICTATION left the foreground \(Int(Date.now.timeIntervalSince(self.startedAt ?? .now)))s in"); fflush(stdout)
+                    }
+                }
+        }
+        interruptions = NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance(), queue: .main) { [weak self] n in
+                let raw = n.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+                guard raw == AVAudioSession.InterruptionType.began.rawValue else { return }
+                Task { @MainActor [weak self] in
+                    guard let self, self.on else { return }
+                    self.problem = self.text.isEmpty
+                        ? "Something else took the microphone. Nothing was heard; tap to start again."
+                        : "Something else took the microphone, so this stops here. What you said is kept."
+                    self.stop()
+                }
+            }
+    }
+
+    private var interruptions: (any NSObjectProtocol)?
+    private var leaving: (any NSObjectProtocol)?
+
+    /// `GLYPH_DICTATION_INTERRUPT=<seconds>` in an app's launch environment: that many seconds
+    /// into a take, post the notification iOS posts when a call or Siri takes the microphone, so
+    /// what happens next can be watched on a real phone instead of argued about. The notification
+    /// and the handling are the real ones; only the call is staged. Prints GLYPH-INTERRUPT, and
+    /// the take's record keeps the reason it ended, so `devicectl device copy from` can read it
+    /// back afterwards.
+    private func rehearseInterruption() {
+        guard let s = ProcessInfo.processInfo.environment["GLYPH_DICTATION_INTERRUPT"],
+              let secs = Double(s) else { return }
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(secs))
+            guard let self, self.on else { return }
+            let heard = self.text.split(whereSeparator: \.isWhitespace).count
+            print("GLYPH-INTERRUPT staging one after \(Int(secs))s, with \(heard) words heard"); fflush(stdout)
+            NotificationCenter.default.post(
+                name: AVAudioSession.interruptionNotification,
+                object: AVAudioSession.sharedInstance(),
+                userInfo: [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.began.rawValue])
+        }
+    }
+    #endif
+
     /// The final words, once per take.
     private func finish() {
+        #if os(iOS)
+        if let o = interruptions { NotificationCenter.default.removeObserver(o); interruptions = nil }
+        if let o = leaving { NotificationCenter.default.removeObserver(o); leaving = nil }
+        #endif
         finishing = false
         task = nil
         guard !finished else { return }
         finished = true
+        // A take that heard nothing at all, for seconds on end, and said nothing was wrong. Twice
+        // on 2026-11-15 a 90 and a 30 second take came back empty with `problem` unset, which on
+        // screen is a button that was lit the whole time over an engine that was deaf. The engine
+        // knew: the microphone never gave it one sample above silence. Say it, rather than hand
+        // back an empty take and let him wonder which of his words went missing.
+        if text.isEmpty, loudest == 0, problem == nil, taking == nil,
+           let began = startedAt, Date.now.timeIntervalSince(began) > 3 {
+            problem = "The microphone gave nothing at all. If the phone was locked when you "
+                    + "started, unlock it and tap again."
+        }
+        Self.note(take: self)
         if !text.isEmpty { onFinal?(text) }
+    }
+
+    /// What the last takes did, kept so a short transcript can be explained instead of guessed at.
+    ///
+    /// Fru has reported a cut-off take twice (2026-11-08, and again 2026-11-14 after a hike). The
+    /// engine already knew what happened each time -- which recognizer ran, how many times it had
+    /// to hand over to the next one, and any failure -- and threw all of it away when the take
+    /// ended, so both reports had to be answered by reading the source and guessing. These stay.
+    ///
+    /// Read them with:
+    ///     xcrun devicectl device info files --device <id> --domain-type appDataContainer ...
+    /// or in the Simulator from the app container's Library/Preferences plist.
+    public static let takesKey = "glyphDictationTakes"
+
+    static func note(take d: LiveDictation) {
+        let seconds = d.startedAt.map { Int(Date.now.timeIntervalSince($0)) } ?? 0
+        let words = d.text.split(whereSeparator: \.isWhitespace).count
+        let one = [
+            "at": ISO8601DateFormatter().string(from: .now),
+            "seconds": "\(seconds)",
+            "words": "\(words)",
+            "characters": "\(d.text.count)",
+            "handovers": "\(d.segments)",
+            // Whether the take carried on while the app was not on screen -- the screen locked,
+            // or he switched away. That is the case that used to lose everything, and it cannot be
+            // staged from a Mac: locking the phone needs it on a cable, and a call cannot be
+            // placed to it from here. So the take says it itself, and his next real dictation
+            // through a lock is the measurement.
+            "background": d.leftForeground ? "yes, and it kept hearing" : "no",
+            // Loud enough to be speech is about 0.02 and up; a dead or denied microphone sits at
+            // 0.000. So a take with no words says which of the two it was.
+            "loudest": String(format: "%.3f", d.loudest),
+            "route": d.route,
+            "problem": d.problem ?? "",
+            // The words themselves are NOT kept: a take is whatever he happened to say, and this
+            // is a diagnostic, not a second copy of his notes.
+        ]
+        var all = UserDefaults.standard.array(forKey: takesKey) as? [[String: String]] ?? []
+        all.append(one)
+        UserDefaults.standard.set(Array(all.suffix(20)), forKey: takesKey)
+        print("GLYPH-DICTATION \(one["seconds"]!)s words=\(words) handovers=\(d.segments) loudest=\(one["loudest"]!) offscreen=\(d.leftForeground) route=\(d.route) problem=\(d.problem ?? "none")")
     }
 
     /// Stops with a message; always ends the take (never left "finishing").
@@ -165,9 +310,22 @@ public final class LiveDictation {
         finish()
     }
 
+    /// What the microphone is hearing right now, and the loudest it has heard this take.
+    private func heard(_ rms: Double) {
+        level = rms
+        if rms > loudest { loudest = rms }
+    }
+
     private func set(_ words: String) {
         text = words
         onText?(words)
+    }
+
+    /// One legacy request's words, in its own slot, and the take read out in order.
+    private func put(_ words: String, at i: Int) {
+        guard i < parts.count else { return }
+        parts[i] = words.trimmingCharacters(in: .whitespacesAndNewlines)
+        set(parts.filter { !$0.isEmpty }.joined(separator: " "))
     }
 
     // MARK: The model
@@ -179,6 +337,10 @@ public final class LiveDictation {
     /// Glyph Jot's choice: the long-form SpeechTranscriber when the device has it (its model is
     /// shared by every app, so it is usually already there), else DictationTranscriber.
     private func module() async -> (any SpeechModule, AsyncThrowingStream<(String, Bool), Error>)? {
+        // `GLYPH_DICTATION_LEGACY=1`: take Apple's older recognizer even where the new models run,
+        // so the route a phone only falls back to can be exercised deliberately. The new models
+        // are checked by every other run; this one was never checked at all.
+        if ProcessInfo.processInfo.environment["GLYPH_DICTATION_LEGACY"] == "1" { return nil }
         func pieces<S: AsyncSequence & Sendable>(_ results: S, _ map: @escaping @Sendable (S.Element) -> (String, Bool)) -> AsyncThrowingStream<(String, Bool), Error> {
             AsyncThrowingStream { c in
                 let t = Task { do { for try await r in results { c.yield(map(r)) }; c.finish() } catch { c.finish(throwing: error) } }
@@ -258,6 +420,7 @@ public final class LiveDictation {
             // Glyph Jot's session: alongside other audio, so a song or another app's session doesn't make it "busy".
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .default, options: [.mixWithOthers, .defaultToSpeaker])
             try AVAudioSession.sharedInstance().setActive(true)
+            watchInterruptions()
         } catch {
             let e = error as NSError
             return fail("The microphone is busy (\(e.domain) \(e.code)).")
@@ -317,7 +480,7 @@ public final class LiveDictation {
             while on, let buf = AVAudioPCMBuffer(pcmFormat: source.processingFormat, frameCapacity: frames), (try? source.read(into: buf)) != nil, buf.frameLength > 0 {
                 while paused && on { try? await Task.sleep(for: .milliseconds(50)) }
                 if let out = Self.convert(buf, converter, format) { feed.yield(AnalyzerInput(buffer: out)) }
-                level = Self.rms(buf)
+                heard(Self.rms(buf))
                 try? await Task.sleep(for: .milliseconds(100))
             }
         } else {
@@ -325,11 +488,21 @@ public final class LiveDictation {
             // would be, and Swift's isolation check traps on the first buffer on a real iPhone; the Simulator's
             // injected words never reach it). Built in a nonisolated function, as Glyph Jot does.
             engine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: input,
-                                        block: Self.tap(feed, converter, format) { [weak self] rms in Task { @MainActor in self?.level = rms } })
+                                        block: Self.tap(feed, converter, format) { [weak self] rms in Task { @MainActor in self?.heard(rms) } })
             engine.prepare()
             do { try engine.start() } catch { fail("The microphone couldn't start."); return true }
         }
         while on && !segmentEnded { try? await Task.sleep(for: .milliseconds(100)) }
+        // This WAS the suspect for a take that comes back short (Fru, 2026-11-08 and 2026-11-14):
+        // the microphone is not read between the tap coming off here and the next recognizer's
+        // tap going on. Measured on 2026-11-14 and it is not the fault, at least not on this
+        // route: 173 seconds of speech fed through SpeechAnalyzer, 560 words in and 558 back, 39
+        // of 40 numbered sentences, nothing missing in the middle
+        // (Tests/GlyphCaptureTests/LongTakeCheck.swift, which replays a recording through the
+        // real model). So a long take is not lost here, and whatever cut Fru's take is elsewhere:
+        // the older recognizer's own route, something the Simulator and a Mac do not reproduce,
+        // or the take ending earlier than he thought. `note(take:)` records the route and the
+        // handovers of every take, which is what will say which.
         if segmentEnded, on { engine.inputNode.removeTap(onBus: 0) }  // the next recognizer installs its own
         feed.finish()
         self.feed = nil
@@ -347,39 +520,94 @@ public final class LiveDictation {
               r.supportsOnDeviceRecognition else {
             return fail("Speech recognition on this device isn't ready. Open Settings, General, Keyboard, and turn on Dictation, then try again.")
         }
+        // A recording instead of the microphone, the same way `analyze` takes one. This route had
+        // no such path, so it could only ever be exercised by speaking at a device, and the one
+        // remaining suspect for a take that comes back short sat here untestable.
+        //
+        // ONE reader for the whole take, outside the loop, feeding whichever request is current.
+        // Opening the file per request replayed it from the top at every handover, so the take
+        // never ended: 90 minutes on 173 seconds of audio. The microphone does not rewind, and
+        // neither does this. Chunks read while no request is current are dropped, which is the
+        // handover gap this is here to measure.
+        var reading: Task<Void, Never>?
+        if let source = Self.audioFile.flatMap({ try? AVAudioFile(forReading: $0) }) {
+            let frames = AVAudioFrameCount(source.processingFormat.sampleRate / 10)
+            reading = Task { @MainActor [weak self] in
+                while self?.on == true,
+                      let buf = AVAudioPCMBuffer(pcmFormat: source.processingFormat, frameCapacity: frames),
+                      (try? source.read(into: buf)) != nil, buf.frameLength > 0 {
+                    while self?.paused == true && self?.on == true { try? await Task.sleep(for: .milliseconds(50)) }
+                    self?.legacy?.append(buf)
+                    self?.heard(Self.rms(buf))
+                    try? await Task.sleep(for: .milliseconds(100))
+                }
+                self?.stop()   // the file ran out: end the take the way a person would
+            }
+        }
+        defer { reading?.cancel() }
         // One request at a time, and as many as the take needs. This recognizer stops on its own
         // after about a minute of audio; the tap went on feeding the dead one and the words simply
         // stopped growing, with the microphone still lit. A take is allowed to be longer than a
         // minute, so each request hands over to the next and the words carry across.
+        //
+        // One at a time means ONE: this recognizer runs a single task, so a second opened while
+        // the first is still finishing fails at once. Overlapping them to close the changeover gap
+        // was tried and measured on 2026-11-14: every new task errored instantly, `done` fired,
+        // and the loop span 101 handovers in 61 seconds. So the old one is closed first and the
+        // gap is accepted, about a tenth of a second every forty.
+        var duds = 0
         while on {
             let request = SFSpeechAudioBufferRecognitionRequest()
             request.requiresOnDeviceRecognition = true
             request.shouldReportPartialResults = true
             legacy = request
             legacyDone = false
-            let carried = carry
+            parts.append("")
+            let slot = parts.count - 1
             // Both blocks run off the main thread: made outside the main actor (as the analyzer's tap).
             legacyTask = r.recognitionTask(with: request, resultHandler: Self.legacyHandler(
-                words: { [weak self] w in Task { @MainActor in self?.set(carried.isEmpty ? w : carried + " " + w) } },
+                words: { [weak self] w in Task { @MainActor in self?.put(w, at: slot) } },
                 done: { [weak self] in Task { @MainActor in self?.legacyDone = true } }))
-            engine.inputNode.removeTap(onBus: 0)
-            let input = engine.inputNode.outputFormat(forBus: 0)
-            engine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: input,
-                                        block: Self.legacyTap(request) { [weak self] rms in Task { @MainActor in self?.level = rms } })
-            engine.prepare()
-            if !engine.isRunning {
-                do { try engine.start() } catch { return fail("The microphone couldn't start.") }
+            if reading == nil {
+                engine.inputNode.removeTap(onBus: 0)
+                let input = engine.inputNode.outputFormat(forBus: 0)
+                engine.inputNode.installTap(onBus: 0, bufferSize: 4096, format: input,
+                                            block: Self.legacyTap(request) { [weak self] rms in Task { @MainActor in self?.heard(rms) } })
+                engine.prepare()
+                if !engine.isRunning {
+                    do { try engine.start() } catch { return fail("The microphone couldn't start.") }
+                }
             }
             problem = nil
-            while on && !legacyDone { try? await Task.sleep(for: .milliseconds(100)) }
+            // Hand over on a clock as well as on the recognizer's word: it reports earlier speech
+            // for only part of a long request and never says it is done, so waiting for `isFinal`
+            // alone is waiting for something that does not come.
+            let began = Date()
+            let until = began.addingTimeInterval(Self.legacySegment)
+            while on, !legacyDone, Date() < until { try? await Task.sleep(for: .milliseconds(100)) }
             guard on else { break }
+            // Closed, and given a moment for its last words, which land in its own slot. The
+            // audio of that moment reaches nobody: that is the changeover, and it is why a
+            // segment is forty seconds and not four. Measured on the same recording: 168 words
+            // and 12 of 40 sentences before this, 551 words and 38 of 40 after, the two losses
+            // sitting on changeovers. Nine gaps of about a tenth of a second each is the price of
+            // a recognizer that runs one task at a time.
             request.endAudio()
             legacyTask?.finish()
-            carry = text
+            for _ in 0..<30 where !legacyDone { try? await Task.sleep(for: .milliseconds(100)) }
+            // A request that ended at once with nothing to show is not a handover, it is a
+            // failure; three of them and the take says so instead of spinning silently.
+            if Date().timeIntervalSince(began) < 2, parts[slot].isEmpty {
+                duds += 1
+                if duds >= 3 { return fail("Speech recognition stopped. Try again in a moment.") }
+            } else {
+                duds = 0
+            }
             segments += 1
             route += ", again (\(segments))"
         }
         // endAudio() was sent on stop; wait a little for the final words.
+        legacy?.endAudio()
         for _ in 0..<30 where !legacyDone { try? await Task.sleep(for: .milliseconds(100)) }
         legacyTask?.finish()
         legacy = nil

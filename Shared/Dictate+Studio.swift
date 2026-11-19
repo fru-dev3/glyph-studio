@@ -4,7 +4,7 @@ import GlyphCapture
 /// Studio's one line onto Glyph's shared mic (GlyphCapture's DictateButton and `.dictatable`): the
 /// words land in the field as you talk, in office green. Nothing here records; GlyphCapture does.
 enum StudioMic {
-    static let green = Color(red: 0, green: 128 / 255, blue: 0)
+    static let green = Color.officeGreen
 }
 
 extension View {

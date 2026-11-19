@@ -18,6 +18,7 @@ final class AppModel {
         case role(String)               // a teammate's routines and tools
         case watch(String)              // watch a teammate work
         case decisions
+        case tags                       // this app's subset of the vault's tag register
         case settings
     }
     enum RailTab: String, CaseIterable { case all = "All", needsYou = "Needs you", sources = "Sources" }
@@ -105,6 +106,7 @@ final class AppModel {
         case "role": return .role(p.count > 1 ? p[1] : "wealth")
         case "watch": return .watch(p.count > 1 ? p[1] : "wealth")
         case "decisions": return .decisions
+        case "tags": return .tags
         case "settings": return .settings
         default: return .chat(chiefID)
         }

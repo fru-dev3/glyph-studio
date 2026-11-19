@@ -60,6 +60,11 @@ public struct GlyphComposer: View {
     /// The colour the row's own ground blends into, so a grouped page does not show a lighter band
     /// behind it. `.clear` for a composer drawn inline, inside something that already has a ground.
     let page: Color
+    /// Every change to the field, for a screen that answers while the words are still being
+    /// typed: Glyph Native's Apps page filters the family under the bar (Fru, 2026-11-15: "it
+    /// should be search. I can type in there and chat"). nil for every other screen, which reads
+    /// the words only when they are sent.
+    let onEdit: ((String) -> Void)?
     let onSend: (String, Bool) async -> Void
 
     @State private var draft = ""
@@ -113,11 +118,16 @@ public struct GlyphComposer: View {
                 micIdentifier: String = "chat-mic",
                 page: Color = .talkPage,
                 mic: (() -> Void)? = nil,
+                onEdit: ((String) -> Void)? = nil,
                 onSend: @escaping @MainActor (String, Bool) async -> Void) {
         self.tint = tint; self.placeholder = placeholder
         self.attach = attach; self.attachLabel = attachLabel; self.micIdentifier = micIdentifier
-        self.page = page; self.mic = mic; self.onSend = onSend
+        self.page = page; self.mic = mic; self.onEdit = onEdit; self.onSend = onSend
     }
+
+    #if os(iOS)
+    @Environment(\.glyphDrawerOpen) private var openDrawer
+    #endif
 
     public var body: some View {
         VStack(spacing: 6) {
@@ -150,6 +160,33 @@ public struct GlyphComposer: View {
         .padding(.top, GlyphComposer.air - 3).padding(.bottom, 6 + room)
         .frame(maxWidth: .infinity)
         .background(page.opacity(0.96).ignoresSafeArea())
+    }
+
+    /// The way into the drawer, at the bottom left where a thumb already is (Fru, 2026-11-14).
+    ///
+    /// Here and nowhere else. The tab bar carried it for a day, which put it in the bar in the
+    /// apps that have one and in this row in the apps that do not -- the inconsistency Fru named:
+    /// "in some cases like wealth, you have it below and then in some other ones, you don't have
+    /// it there". Every app draws this composer, including the ones that reach it through
+    /// `talkButton`, so this row is the one place that exists everywhere.
+    ///
+    /// Drawn whenever the screen has a drawer to open, and nothing otherwise. Quiet and hollow
+    /// beside the filled green plus, so the two do not read alike.
+    @ViewBuilder private var drawerWay: some View {
+        #if os(iOS)
+        if let openDrawer {
+            Button(action: openDrawer) {
+                Image(systemName: "line.3.horizontal")
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundStyle(.secondary)
+                    .frame(width: Self.touch, height: Self.touch)
+                    .contentShape(Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Open the drawer")
+            .accessibilityIdentifier("chrome.drawer.bar")
+        }
+        #endif
     }
 
     /// The plus. A screen with its own action gets a plain button; otherwise a menu: take a photo
@@ -187,6 +224,7 @@ public struct GlyphComposer: View {
     private var bar: some View {
         HStack(spacing: 10) {
             if !recording {
+                drawerWay
                 plus
             }
             // The field grows with what is in it, to five lines, then scrolls (Fru, 2026-11-12:
@@ -204,6 +242,7 @@ public struct GlyphComposer: View {
                 .textFieldStyle(.plain)
                 .focused($field).submitLabel(.send)
                 .onSubmit { send() }
+                .onChange(of: draft) { _, words in onEdit?(words) }
                 .accessibilityIdentifier("chat-field")
                 // A way out of the keyboard, drawn once for the family. Send is the only other
                 // key that dismisses it, and send is not what someone who typed nothing wants, so
@@ -330,6 +369,42 @@ public struct GlyphComposer: View {
 public extension Color {
     /// #008000, the brand's office green, in both appearances. The artboards draw it on black.
     static let officeGreen = Color(red: 0, green: 128 / 255, blue: 0)
+
+    /// #2eae2e: the office green lifted enough to read as green type on black.
+    ///
+    /// One value, because it was seven. The same brand green was being brightened by hand in each
+    /// app and arrived at (0.16, 0.66, 0.16), (0.18, 0.68, 0.18), (0.2, 0.72, 0.2),
+    /// (0.3, 0.8, 0.3), (0.1, 0.68, 0.14), (0.2, 0.85, 0.4) and #3FA34D -- seven greens for one
+    /// colour, which is exactly what a person notices moving between two of the apps. The shared
+    /// token was the #3FA34D one and it sat inside a macOS-only file, so no iPhone screen could
+    /// reach it. #2eae2e wins because it keeps the brand's hue: #008000 is a pure green, and
+    /// #3FA34D is a desaturated one.
+    ///
+    /// It is a lift for TYPE, not a ground: white on #2eae2e falls to about 3:1 where white on
+    /// #008000 holds about 5.2:1, so anything with white on it uses `officeGreen` at both
+    /// appearances (see `omegaPicked`).
+    static let officeGreenLit = Color(red: 0.18, green: 0.68, blue: 0.18)
+
+    /// The brand green that reads at both appearances: #008000 on white, #2eae2e on black. The one
+    /// the apps should ask for when they want "our green" as type or as a line.
+    static let glyphGreen: Color = {
+        #if os(iOS)
+        return Color(UIColor { $0.userInterfaceStyle == .dark
+            ? UIColor(red: 0.18, green: 0.68, blue: 0.18, alpha: 1)
+            : UIColor(red: 0, green: 128 / 255, blue: 0, alpha: 1) })
+        #elseif os(macOS)
+        return Color(NSColor(name: nil) { $0.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
+            ? NSColor(red: 0.18, green: 0.68, blue: 0.18, alpha: 1)
+            : NSColor(red: 0, green: 128 / 255, blue: 0, alpha: 1) })
+        #else
+        return .officeGreen
+        #endif
+    }()
+
+    /// The family's warm colour: the one thing on a screen that means "not safe yet", such as
+    /// entries that have not reached the vault. Each app had its own amber for this; this is the
+    /// one the shared furniture uses.
+    static let glyphWarm = Color(red: 0.85, green: 0.58, blue: 0.16)
 }
 
 /// How much of an app's own furniture sits below the composer, such as Glyph CRM's footer bar. An

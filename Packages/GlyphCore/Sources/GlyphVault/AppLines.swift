@@ -21,7 +21,14 @@ func sortedJSON(_ o: [String: Any]) -> String {
 
 /// Glyph Well's entry lines (WellKit's WellLog): `data/apps/well/entries/<YYYY-MM>.<host>.jsonl`.
 public enum WellLine {
-    public static let kinds = ["symptom", "mood", "energy", "sleep", "food", "med", "stress", "activity", "event", "note"]
+    /// Every kind Glyph Well knows, which is `WellEvent.Kind` in WellKit and must stay equal to it:
+    /// the apps repo's `scripts/check-shared.sh` fails if the two drift. Well reads a line with
+    /// `try? decoder.decode`, so a kind missing from this list was coerced to "note" and the real
+    /// one was gone from the file for good -- a lab result, a stool entry or a doctor visit written
+    /// by an agent showed in the timeline and never in Labs. Passing an unknown kind straight
+    /// through is worse still: the line fails to decode and is dropped whole.
+    public static let kinds = ["symptom", "mood", "energy", "sleep", "food", "med", "stress", "activity",
+                               "event", "note", "lab", "stool", "visit"]
 
     /// A `log` line: what happened (`name`, 1 to 4 words), its kind, the words it came from, when.
     public static func log(id: String, kind: String, name: String, said: String, at: Date, host: String, device: String, now: Date = .now) -> String {
@@ -49,12 +56,18 @@ public enum JotMemo {
 /// Glyph CRM's suggestion lines (CRMKit's Proposal): `data/apps/crm/proposals/<YYYY-MM>.jsonl`. A suggestion
 /// waits in CRM for a yes before anything reaches an entity page.
 public enum CRMProposalLine {
-    /// CRMKit's id (Proposal.init): the same thing said twice is the same suggestion.
+    /// The one id for a suggestion, wherever it came from: the same thing said twice is the same
+    /// suggestion, so an agent's line and CRM's own pass over the same note collapse to one.
+    /// `CRMKit.Proposal.init` calls this; it held a second copy of the formula until 2026-11-14.
     /// `note` only for a "Which Ken?" (`choices`): two of them about different things are two questions.
     public static func id(kind: String, name: String, key: String? = nil, value: String? = nil, linkAs: String? = nil,
                           toKind: String? = nil, toName: String? = nil, path: String? = nil, note: String? = nil) -> String {
-        let key = [kind, name.lowercased(), key?.lowercased() ?? "", value ?? "", linkAs?.lowercased() ?? "", toKind ?? "",
-                   toName?.lowercased() ?? "", path ?? ""].joined(separator: "|") + (note.map { "|" + $0 } ?? "")
+        // Page.oneLine first, as CRM stores these: a name that arrived with a newline in it must not
+        // hash differently from the same name on the page.
+        func flat(_ s: String?) -> String { s.map { CRMPage.oneLine($0) } ?? "" }
+        let parts: [String] = [kind, flat(name).lowercased(), flat(key).lowercased(), flat(value),
+                               flat(linkAs).lowercased(), toKind ?? "", flat(toName).lowercased(), path ?? ""]
+        let key = parts.joined(separator: "|") + (note.map { "|" + $0 } ?? "")
         return String(SHA256.hash(data: Data(key.utf8)).map { String(format: "%02x", $0) }.joined().prefix(16))
     }
 

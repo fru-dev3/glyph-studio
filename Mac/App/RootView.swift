@@ -50,6 +50,7 @@ struct RootView: View {
         case .role(let d): TeammateRoleScreen(domain: d)
         case .watch(let d): WatchWorkScreen(domain: d)
         case .decisions: DecisionsScreen()
+        case .tags: TagsScreen()
         case .settings: SettingsScreen()
         }
     }

@@ -342,15 +342,71 @@ public struct VaultTask: Equatable, Sendable {
     public var item: ActionItem
 }
 
-/// This machine's name as its owner set it (System Settings > General > Sharing), e.g.
-/// "Studio Laptop": stamped on every capture so its source is never lost.
+/// This machine: the name its owner gave it, and the `host` slug that names its month files.
+///
+/// Every app in the family writes `<YYYY-MM>.<host>.jsonl`, and the hub merges one host's file
+/// with the vault's copy of that same file. So two apps that disagree about `host` write the
+/// same device's lines into two files that never meet: a `delete` line in one never cancels a
+/// `log` line in the other, and a deleted entry comes back on the next pull. This is the one
+/// definition. Never derive a host slug anywhere else.
+///
+/// On a Mac the slug comes from the **computer** name, not the local host name. The local host
+/// name is reassigned by whatever claims the network, so one laptop was found writing under four
+/// names in a vault: `laptop.local`, a short earlier name, the computer name, and once the name a
+/// VPN had given it. The computer name is set by hand in System Settings and does not drift.
 public enum ThisDevice {
+    /// The name its owner set (System Settings > General > Sharing), e.g. "Studio Laptop" or
+    /// "iPhone 17 Pro": stamped on every capture so its source is never lost.
     public static var name: String {
         #if os(macOS)
         // Not Host.current(): it can wait on the network for seconds.
         (SCDynamicStoreCopyComputerName(nil, nil) as String?) ?? ProcessInfo.processInfo.hostName
         #else
-        ProcessInfo.processInfo.hostName
+        model
         #endif
     }
+
+    /// The slug in this device's month files: `laptop`, `iphone-15-pro`. `GLYPH_HOST`
+    /// overrides it, so a test can write under a host of its own.
+    public static var host: String {
+        if let t = ProcessInfo.processInfo.environment["GLYPH_HOST"], !t.isEmpty { return t }
+        #if os(macOS)
+        let s = StudioDirectory.slug(name)
+        return s.isEmpty ? "mac" : String(s.prefix(40))
+        #else
+        // From the identifier, not from `model`: an unknown iPhone keeps its own slug
+        // ("iphone-19-1") instead of colliding with every other unknown iPhone under "iphone".
+        let s = StudioDirectory.slug(names[identifier] ?? identifier)
+        return s.hasPrefix("iphone") ? s : "iphone-" + s
+        #endif
+    }
+
+    /// This phone's model identifier, e.g. "iPhone17,1". The Simulator reports the one it stands in for.
+    public static var identifier: String {
+        if let sim = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"] { return sim }
+        var info = utsname()
+        uname(&info)
+        return withUnsafeBytes(of: &info.machine) { String(decoding: $0.prefix { $0 != 0 }, as: UTF8.self) }
+    }
+
+    /// This phone as a person reads it: "iPhone 17 Pro". A model this table has not met yet shows
+    /// a plain "iPhone" rather than its raw identifier, which is never shown on screen.
+    public static var model: String { names[identifier] ?? "iPhone" }
+
+    /// Every iPhone the family has shipped to, as one table. It was five tables with five
+    /// different sets of phones in them, so the same device read as "iPhone SE" in three apps
+    /// and "iPhone14,6" in the other two.
+    static let names = [
+        "iPhone12,8": "iPhone SE", "iPhone14,6": "iPhone SE",
+        "iPhone14,2": "iPhone 13 Pro", "iPhone14,3": "iPhone 13 Pro Max",
+        "iPhone14,4": "iPhone 13 mini", "iPhone14,5": "iPhone 13",
+        "iPhone14,7": "iPhone 14", "iPhone14,8": "iPhone 14 Plus",
+        "iPhone15,2": "iPhone 14 Pro", "iPhone15,3": "iPhone 14 Pro Max",
+        "iPhone15,4": "iPhone 15", "iPhone15,5": "iPhone 15 Plus",
+        "iPhone16,1": "iPhone 15 Pro", "iPhone16,2": "iPhone 15 Pro Max",
+        "iPhone17,1": "iPhone 16 Pro", "iPhone17,2": "iPhone 16 Pro Max",
+        "iPhone17,3": "iPhone 16", "iPhone17,4": "iPhone 16 Plus", "iPhone17,5": "iPhone 16e",
+        "iPhone18,1": "iPhone 17 Pro", "iPhone18,2": "iPhone 17 Pro Max",
+        "iPhone18,3": "iPhone 17", "iPhone18,4": "iPhone Air",
+    ]
 }

@@ -17,22 +17,24 @@ public struct GlyphTagHash: View {
         self.name = name; self.size = size; self.known = color
     }
 
-    public static let palette: [Color] = [.officeGreen, .blue, .indigo, .purple, .pink, .teal, .red, .brown, .cyan, .mint]
+    nonisolated public static let palette: [Color] = [.officeGreen, .blue, .indigo, .purple, .pink, .teal, .red, .brown, .cyan, .mint]
 
     /// djb2 over the lowercased name, which is what Glyph Jot has used since its tags began. The
     /// same name must land on the same colour in every app, so the algorithm is the shared thing
     /// here, not a table someone has to keep in step.
-    public static func index(_ name: String, of count: Int) -> Int {
+    nonisolated public static func index(_ name: String, of count: Int) -> Int {
         let hash = name.lowercased().unicodeScalars.reduce(5381) { ($0 &* 33 &+ Int($1.value)) & 0x7fffffff }
         return hash % max(count, 1)
     }
 
-    public static func color(_ name: String) -> Color { palette[index(name, of: palette.count)] }
+    nonisolated public static func color(_ name: String) -> Color { palette[index(name, of: palette.count)] }
 
     public var body: some View {
+        // The register's colour first, so a tag is the same colour in every app; then one an app
+        // passed in; then the hash, for a tag made a second ago that the vault has not seen yet.
         Text("#")
             .font(.system(size: size, weight: .bold))
-            .foregroundStyle(known ?? Self.color(name))
+            .foregroundStyle(known ?? GlyphTags.shared.color(name))
             .frame(width: 16)
             .accessibilityHidden(true)
     }

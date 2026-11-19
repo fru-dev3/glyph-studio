@@ -302,12 +302,17 @@ struct MacHub {
     }
 
     func omegaBundle() -> [String: Any] {
-        var files: [String: String] = [:], labels: [String: String] = [:]
+        var files: [String: String] = [:], labels: [String: String] = [:], shas: [String: String] = [:]
         func take(_ rel: String) {
             var d: ObjCBool = false
             let url = vault.appending(path: rel)
             if FileManager.default.fileExists(atPath: url.path, isDirectory: &d), !d.boolValue, let data = try? Data(contentsOf: url) {
                 files[rel] = String(decoding: data, as: UTF8.self)
+                // The hash of the BYTES, which is what omegaWrite checks a save against. The text
+                // above has been through a decode that replaces anything it cannot read, so a
+                // client hashing that instead gets an answer this will never agree with and the
+                // file becomes unsaveable, saying only "conflict".
+                shas[rel] = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
             }
         }
         take("build/compass.md")
@@ -324,7 +329,7 @@ struct MacHub {
                 .filter { $0.hasSuffix(ext) }.sorted()
             for n in dir == "captures" ? Array(names.suffix(300)) : names { take("data/apps/omega/\(dir)/\(n)") }   // the latest 300 said
         }
-        return ["files": files, "labels": labels]
+        return ["files": files, "labels": labels, "shas": shas]
     }
 
     nonisolated(unsafe) static let omegaWritable = /(build\/compass\.md|data\/domains\/[a-z0-9][a-z0-9-]{0,60}\/(source\/goals\.md|memory\/tasks\.md|_tasks\.md)|data\/apps\/omega\/reviews\/\d{4}-\d{2}\.[a-z0-9-]{1,60}\.jsonl|data\/apps\/omega\/captures\/\d{4}-\d{2}-\d{2}-\d{4,6}(-[a-z0-9-]{1,40})?\.md)/
@@ -353,7 +358,10 @@ struct MacHub {
 
     func crmNames() -> [[String: Any]] {
         var out: [[String: Any]] = []
-        for (d, prefix) in [("people", "person"), ("places", "place"), ("orgs", "org"), ("things", "thing")] {
+        // Tags are entities too (2026-11-14), so they come back here with the rest and every app
+        // can offer the tags that exist instead of keeping a list of its own. A kind missing from
+        // this list is a kind no app can ever see.
+        for (d, prefix) in [("people", "person"), ("places", "place"), ("orgs", "org"), ("things", "thing"), ("tags", "tag")] {
             let dir = vault.appending(path: "data/entities/\(d)")
             let slugs = ((try? FileManager.default.contentsOfDirectory(atPath: dir.path)) ?? [])
                 .filter { !$0.hasPrefix("_") && !$0.hasPrefix(".") && isDir(dir.appending(path: $0)) }.sorted()

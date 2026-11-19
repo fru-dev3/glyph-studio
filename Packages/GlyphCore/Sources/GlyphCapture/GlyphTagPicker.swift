@@ -24,16 +24,30 @@ public struct GlyphTagPicker: View {
         }
     }
 
+    /// What the rows are: tags, which carry the family's `#`, or something else that borrowed
+    /// this picker and must not pretend to be one. Glyph Omega picks life domains with it, and a
+    /// domain drawn with a hash is a fourth meaning for the same mark (Fru, 2026-11-15, on tags
+    /// being consistent across the apps).
+    public enum Mark: Sendable { case tag, domain }
+
     private let tags: [Tag]
     @Binding private var on: Set<String>
     private let tint: Color
     /// Naming one that does not exist yet. nil means this screen's tags are a fixed list, and the
     /// field only narrows it.
     private let add: ((String) -> Void)?
+    private let mark: Mark
     @State private var typed = ""
 
-    public init(_ tags: [Tag], on: Binding<Set<String>>, tint: Color, add: ((String) -> Void)? = nil) {
-        self.tags = tags; self._on = on; self.tint = tint; self.add = add
+    public init(_ tags: [Tag], on: Binding<Set<String>>, tint: Color, mark: Mark = .tag, add: ((String) -> Void)? = nil) {
+        self.tags = tags; self._on = on; self.tint = tint; self.mark = mark; self.add = add
+    }
+
+    /// The register's own tags, which is what every screen in the family should be passing
+    /// (Fru, 2026-11-15: "the CRM is the source of truth"). The id is the slug, so what a screen
+    /// stores is the vault's spelling and not whatever case it was typed in.
+    public init(_ tags: [GlyphTag], on: Binding<Set<String>>, tint: Color, add: ((String) -> Void)? = nil) {
+        self.init(tags.map { Tag(id: $0.name, name: $0.name, covers: $0.covers) }, on: on, tint: tint, mark: .tag, add: add)
     }
 
     private var matching: [Tag] {
@@ -50,8 +64,9 @@ public struct GlyphTagPicker: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
-                GlyphTagHash(name: "tag", size: 15)
-                TextField(add == nil ? "Search your tags" : "Search or add a tag", text: $typed)
+                leadingMark("tag")
+                TextField(add == nil ? (mark == .domain ? "Search your domains" : "Search your tags")
+                                     : "Search or add a tag", text: $typed)
                     .textFieldStyle(.plain).autocorrectionDisabled()
                     .accessibilityIdentifier("tag.search")
                 if !typed.isEmpty {
@@ -88,11 +103,25 @@ public struct GlyphTagPicker: View {
         }
     }
 
+    /// The family's `#` for a tag, and a plain mark for rows that are not tags: the hash means
+    /// one thing across the apps or it means nothing.
+    @ViewBuilder private func leadingMark(_ name: String) -> some View {
+        switch mark {
+        case .tag: GlyphTagHash(name: name, size: 15)
+        case .domain:
+            Image(systemName: "circle.grid.2x2.fill")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(tint)
+                .frame(width: 16)
+                .accessibilityHidden(true)
+        }
+    }
+
     private func row(_ t: Tag) -> some View {
         let here = on.contains(t.id)
         return Button { if here { on.remove(t.id) } else { on.insert(t.id) } } label: {
             HStack(alignment: .top, spacing: 10) {
-                GlyphTagHash(name: t.name, size: 15)
+                leadingMark(t.name)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(t.name).font(.system(size: 15, weight: .semibold)).foregroundStyle(.primary)
                     if let covers = t.covers, !covers.isEmpty {

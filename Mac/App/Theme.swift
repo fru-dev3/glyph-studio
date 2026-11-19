@@ -35,7 +35,9 @@ enum Ink {
     static let canvas = Color(hex: 0xF5F5F3, dark: Dark.ground)
     static let dot = Color(hex: 0xDCDEDB, dark: Dark.raised)
     /// The accent is a fill, never a word: #008000 fails as text on near-black.
-    static let green = Color(hex: 0x008000, dark: 0x008000)
+    /// GlyphCapture's `officeGreen`, the brand's #008000 at both appearances, which this spelled
+    /// out as a hex twice.
+    static let green = Color.officeGreen
     /// Green as words (family accent light): headings, ticks, chip labels.
     static let greenText = Color(hex: 0x0B6B16, dark: 0x4AA96C)
     static let greenSoft = Color(hex: 0xE8F3E8, dark: 0x10240F)

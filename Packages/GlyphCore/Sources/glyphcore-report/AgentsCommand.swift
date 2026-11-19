@@ -47,12 +47,13 @@ enum AgentsCommand {
         } catch { return fail("\(error)") }
     }
 
-    /// This Mac as a writer: Glyph Well's host naming (its month files), its computer name as the device.
+    /// This Mac as a writer: the family's host naming (`ThisDevice.host`, which names its month
+    /// files) and its computer name as the device.
     static func macHub(_ vault: URL) -> Hub {
-        let host = ((SCDynamicStoreCopyLocalHostName(nil) as String? ?? "mac") + ".local").lowercased().replacingOccurrences(of: ".", with: "-")
+        let host = ThisDevice.host
         let requests = vault.appending(path: "data/apps/time/requests.\(host).jsonl")
         try? FileManager.default.createDirectory(at: requests.deletingLastPathComponent(), withIntermediateDirectories: true)
-        var hub = Hub(base: nil, model: SCDynamicStoreCopyComputerName(nil, nil) as String? ?? "Mac", app: "Glyph agents", timeQueue: requests)
+        var hub = Hub(base: nil, model: ThisDevice.name, app: "Glyph agents", timeQueue: requests)
         hub.vault = vault
         hub.hostName = host
         return hub

@@ -567,10 +567,9 @@ public struct Filing: Sendable {
         try write(rel, lines.joined(separator: "\n"))
     }
 
-    public static var host: String {
-        let s = StudioDirectory.slug(ThisDevice.name)
-        return s.isEmpty ? "mac" : String(s.prefix(40))
-    }
+    /// `ThisDevice.host`: one definition for the whole family, so Filing's log files carry the
+    /// same host name as every other app's.
+    public static var host: String { ThisDevice.host }
 
     /// One JSON line in `log/<YYYY-MM>.<host>.jsonl`.
     public func log(_ object: [String: Any], now: Date = .now) throws {

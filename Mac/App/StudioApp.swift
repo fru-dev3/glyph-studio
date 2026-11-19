@@ -1,4 +1,5 @@
 import AppKit
+import GlyphCapture
 import SwiftUI
 
 /// Glyph Bot: the agentic harness. Your agents on the left (a team you message), what each read
@@ -13,7 +14,10 @@ struct StudioApp: App {
             RootView()
                 .environment(model)
                 .frame(minWidth: 1100, minHeight: 700)
-                .task { await model.refresh(); TestDriver.startIfScripted() }
+                // The vault's tag register, read once at launch as Glyph Jot does. GlyphTagsScreen
+                // asks GlyphTags for this app's subset while it draws and is not watching it, so a
+                // register that arrives later would leave an open Tags place empty.
+                .task { _ = GlyphTags.shared.readVault(Vault.root); await model.refresh(); TestDriver.startIfScripted() }
         }
         .defaultSize(width: Self.windowSize.width, height: Self.windowSize.height)
         .windowStyle(.hiddenTitleBar)

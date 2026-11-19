@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import FoundationModels
 import Testing
@@ -48,7 +49,11 @@ private func text(_ vault: URL, _ rel: String) -> String? { try? String(contents
     let props = try #require(args["properties"] as? [String: Any])
     #expect(Set(props.keys) == ["text", "kind", "minutesAgo"])
     #expect(Set(args["required"] as? [String] ?? []) == ["text", "kind", "minutesAgo"])
-    #expect(((props["kind"] as? [String: Any])?["enum"] as? [String]) == ["food", "symptom", "mood", "sleep"])
+    // Every kind WellEvent.Kind has. It was four of the thirteen, so a supplement, a walk, a lab
+    // result and a visit could not be logged by voice at all; this is what keeps it honest.
+    #expect(((props["kind"] as? [String: Any])?["enum"] as? [String])
+            == ["symptom", "mood", "energy", "sleep", "food", "med", "stress",
+                "activity", "event", "note", "lab", "stool", "visit"])
 }
 
 @Test func jotNoteIsTheHubsMemoByteForByte() async throws {
@@ -316,4 +321,108 @@ private func sha(_ s: String) -> String { Filing.sha256(Data(s.utf8)) }
     #expect(text(vault, note)?.contains("links: [person/ken-lee]\n") == true)
     // An unknown place files nothing.
     #expect(try await GlyphAgent.jot.call("file_note", json: #"{"note":"","place":"Nowhere Inc"}"#, hub: hub).first?.ok == false)
+}
+
+@Test func aCompassWithAByteTheDecodeCannotReadIsStillSaveable() throws {
+    // The fault this guards: the bundle hands out TEXT, and the text has been through a decode
+    // that replaces any byte it cannot read. A client that hashed that text got an answer the
+    // vault could never agree with, so every save came back 409 and the only thing the person was
+    // told was "conflict" -- for ever, on that file.
+    let vault = try tempVault()
+    defer { try? FileManager.default.removeItem(at: vault) }
+    try FileManager.default.createDirectory(at: vault.appending(path: "build"), withIntermediateDirectories: true)
+
+    // Valid UTF-8, then a lone 0xFF, which no decode can read back.
+    var bytes = Data("# Compass\n\nVision: ".utf8)
+    bytes.append(0xFF)
+    bytes.append(contentsOf: Data("\n".utf8))
+    let file = vault.appending(path: "build/compass.md")
+    try bytes.write(to: file)
+
+    let m = MacHub(vault: vault)
+    let bundle = try #require(m.omegaBundle() as [String: Any]?)
+    let shas = try #require(bundle["shas"] as? [String: String])
+    let files = try #require(bundle["files"] as? [String: String])
+    let text = try #require(files["build/compass.md"])
+
+    // What the client used to send: the hash of the text it was given.
+    let ofText = SHA256.hash(data: Data(text.utf8)).map { String(format: "%02x", $0) }.joined()
+    let ofBytes = try #require(shas["build/compass.md"])
+    #expect(ofText != ofBytes, "the decode changed the bytes, which is the whole problem")
+
+    let newText = Data("# Compass\n\nVision: clear\n".utf8)
+    // The old way is refused, and would stay refused however many times it were tried.
+    #expect(m.handle("PUT", "omega/build/compass.md", query: [:], body: newText,
+                     headers: ["X-Base-SHA256": ofText])?.0 == 409)
+    // The vault's own hash, which the bundle now carries, is accepted.
+    #expect(m.handle("PUT", "omega/build/compass.md", query: [:], body: newText,
+                     headers: ["X-Base-SHA256": ofBytes])?.0 == 204)
+    #expect(try String(contentsOf: file, encoding: .utf8) == "# Compass\n\nVision: clear\n")
+}
+
+@Test func theRegisterHandsBackTagsBesideThePeopleAndTheOrgs() throws {
+    // A kind missing from the hub's own list is a kind no app can ever see, however well the
+    // pages are written: tags were entities for a day before this route was taught about them.
+    let vault = try tempVault()
+    defer { try? FileManager.default.removeItem(at: vault) }
+    func page(_ dir: String, _ slug: String, _ name: String, _ kind: String, extra: String = "") throws {
+        let at = vault.appending(path: "data/entities/\(dir)/\(slug)")
+        try FileManager.default.createDirectory(at: at, withIntermediateDirectories: true)
+        try """
+        ---
+        name: \(name)
+        kind: \(kind)
+        aliases: []
+        id: \(dir)/\(slug)
+        \(extra)
+        ---
+
+        """.write(to: at.appending(path: "entity.md"), atomically: true, encoding: .utf8)
+    }
+    try page("people", "ken-lee", "Ken Lee", "person")
+    try page("orgs", "acme", "Acme", "org")
+    try page("tags", "deep-work", "deep work", "tag", extra: "domains: [\"growth\"]\ndomain: growth")
+
+    let rows = MacHub(vault: vault).crmNames()
+    let kinds = Set(rows.compactMap { $0["kind"] as? String })
+    #expect(kinds == ["person", "org", "tag"])
+
+    let tag = try #require(rows.first { $0["kind"] as? String == "tag" })
+    #expect(tag["name"] as? String == "deep work")
+    #expect(tag["id"] as? String == "tags/deep-work")
+
+    // And the scanner builds from exactly these rows, so a tag in the vault is a tag an app offers.
+    let known: [EntityScan.Known] = rows.compactMap { r in
+        guard let id = r["id"] as? String, let name = r["name"] as? String,
+              let kind = (r["kind"] as? String).flatMap(CRMKind.init(prefix:)) else { return nil }
+        return EntityScan.Known(id: id, kind: kind, name: name, aliases: r["aliases"] as? [String] ?? [])
+    }
+    #expect(EntityScan(known).names(of: .tag) == ["deep work"])
+}
+
+@Test func travelKeepsADayOutWithNoTrip() async throws {
+    // Fru, 2026-11-14, after a hike: he said "save that in the vault" and nothing was kept.
+    // Travel's three tools were all scoped to a trip, so for a walk there was none that fitted.
+    // This is the half that must work once the model does call it: no trip, and still kept.
+    let vault = try tempVault()
+    defer { try? FileManager.default.removeItem(at: vault) }
+    let hub = macHub(vault)
+
+    let done = await hub.travelNote("Walked the bluffs looking for the cave and never found it.", trip: "")
+    #expect(done.ok, "a note with no trip is kept")
+    #expect(done.line.hasPrefix("Noted in Travel"))
+
+    let dir = vault.appending(path: "data/apps/travel/trips")
+    let names = try FileManager.default.contentsOfDirectory(atPath: dir.path).filter { $0.hasSuffix(".jsonl") }
+    let text = try names.map { try String(contentsOf: dir.appending(path: $0), encoding: .utf8) }.joined()
+    let line = try #require(text.split(separator: "\n").first.map(String.init))
+    let o = try #require((try? JSONSerialization.jsonObject(with: Data(line.utf8))) as? [String: Any])
+    #expect(o["event"] as? String == "note")
+    #expect(o["note"] as? String == "Walked the bluffs looking for the cave and never found it.")
+    // No trip named, so nothing claims it: TravelFold.loose is what shows it.
+    #expect(o["said"] == nil, "a day out names no trip")
+
+    // Empty words are still refused, so a mis-heard take does not write a blank note.
+    let nothing = await hub.travelNote("   ", trip: "")
+    #expect(!nothing.ok)
 }

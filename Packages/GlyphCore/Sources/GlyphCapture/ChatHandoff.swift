@@ -25,7 +25,8 @@ extension ChatModel {
     public static func lines(for plan: ChatPlan, hub: Hub, app: String) async -> [ChatEntry] {
         let nothing = [ChatEntry(text: plan.reply.isEmpty ? "Nothing to do" : plan.reply)]
         switch plan.kind {
-        case "answer": return [.answer(plan.reply)]
+        // The engine that answered rides with the line, so the chat can say so underneath it.
+        case "answer": return [.answer(plan.reply, who: plan.answeredBy)]
         case "ask": return [.ask(plan.question.isEmpty ? plan.reply : plan.question)]
         case "act": break
         default: return nothing

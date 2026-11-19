@@ -10,17 +10,32 @@ extension GlyphAgent {
         // as alien and sat a shade away from the one red this family keeps for a running mic.
         // An agent's face is its app's face; Well's is a leaf on green.
         id: "well", name: "Well", color: "008000",
-        instructions: "You are Glyph Well's agent. Log each food or drink, symptom, mood or sleep in the job with log_entry, one call each, named in 1 to 4 of the person's words.",
+        instructions: """
+        You are Glyph Well's agent. Log each thing in the job with log_entry, one call each, named in 1 \
+        to 4 of the person's words. Everything Glyph Well keeps is yours, not only what they ate: a \
+        symptom, a mood, energy, sleep, food or drink, a medicine or supplement, stress, something they \
+        did (a walk, a workout), something that happened, a lab or test result, a stool, a visit to a \
+        doctor, or a plain note about how they are. Pick the kind that fits what they said; use note when \
+        none of the others does, and never drop it for want of a kind. When they say to log, save or keep \
+        something, call log_entry -- never answer that it sounds good and keep nothing.
+        """,
         tools: { hub, ledger in [WellLogEntry(hub: hub, ledger: ledger)] },
         fallback: { job, hub in await hub.logWell(kind: job.kind, name: job.name.isEmpty ? job.instruction : job.name, said: job.instruction, at: hub.now()) })
 }
 
 public struct WellLogEntry: Tool {
     public let name = "log_entry"
-    public let description = "Log something in Glyph Well: food or drink, a symptom, mood or sleep."
+    public let description = """
+    Log something in Glyph Well: a symptom, a mood, energy, sleep, food or drink, a medicine, stress, \
+    something they did, something that happened, a lab result, a stool, a doctor's visit, or a note.
+    """
     @Generable public struct Arguments {
         @Guide(description: "1 to 4 words naming it, like Rice and beans, Headache.") public var text: String
-        @Guide(description: "What kind", .anyOf(["food", "symptom", "mood", "sleep"])) public var kind: String
+        // Every kind WellEvent.Kind has. It offered four, so nine of the app's own kinds could not be
+        // logged by voice at all: a supplement, a walk, a lab result, a visit. `note` is the catch-all,
+        // and the writer coerces anything unknown to it rather than losing the line.
+        @Guide(description: "What kind", .anyOf(["symptom", "mood", "energy", "sleep", "food", "med", "stress",
+                                                 "activity", "event", "note", "lab", "stool", "visit"])) public var kind: String
         @Guide(description: "When, if said: minutes before now (0 for now).", .range(0...1440)) public var minutesAgo: Int
     }
     let hub: Hub, ledger: Ledger

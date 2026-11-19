@@ -172,12 +172,30 @@ public extension EnvironmentValues {
     }
 }
 
-/// The corner control that opens the drawer, drawn only where there is one to open.
+/// Whether the bottom bar is on screen and carrying the drawer button. An app sets it with the
+/// same condition it draws its bar under, so the top corner gives the control up while the bar
+/// has it and takes it back when the bar steps aside (for the keyboard, or on a screen with no
+/// bar). Default false, so a screen that says nothing keeps the corner control it always had.
+public struct GlyphDrawerAtBottomKey: EnvironmentKey {
+    public static let defaultValue = false
+}
+
+public extension EnvironmentValues {
+    var glyphDrawerAtBottom: Bool {
+        get { self[GlyphDrawerAtBottomKey.self] }
+        set { self[GlyphDrawerAtBottomKey.self] = newValue }
+    }
+}
+
+/// The corner control that opens the drawer, drawn only where there is one to open and the bottom
+/// bar is not already offering it. Fru, 2026-11-14: the way in belongs at the bottom left, where a
+/// thumb is, not in the one corner it cannot reach. Two hamburgers on one screen is not the answer.
 public struct GlyphDrawerButton: View {
     @Environment(\.glyphDrawerOpen) private var open
+    @Environment(\.glyphDrawerAtBottom) private var atBottom
     public init() {}
     public var body: some View {
-        if let open {
+        if let open, !atBottom {
             GlyphDisc("line.3.horizontal", label: "Open the drawer", id: "chrome.drawer", action: open)
         }
     }

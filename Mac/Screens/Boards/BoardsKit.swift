@@ -301,8 +301,9 @@ struct Greedy: View {
 extension NSFont {
     static func ui(_ size: CGFloat, _ weight: NSFont.Weight = .regular) -> NSFont { .systemFont(ofSize: size, weight: weight) }
     static func board(_ size: CGFloat, bold: Bool = false) -> NSFont {
-        let base = NSFont.systemFont(ofSize: size, weight: bold ? .semibold : .regular)
-        return base.fontDescriptor.withDesign(.serif).flatMap { NSFont(descriptor: $0, size: size) } ?? base
+        // The system face, as the SwiftUI twin above. A serif came back here on 2026-11-07 and
+        // FamilyLookTests caught it: no serif anywhere in the family.
+        NSFont.systemFont(ofSize: size, weight: bold ? .semibold : .regular)
     }
 }
 

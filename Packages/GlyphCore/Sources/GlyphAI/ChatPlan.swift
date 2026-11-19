@@ -47,9 +47,11 @@ public struct ChatPlan: Decodable, Equatable, Sendable {
     public var jobs: [Job]
     /// `act` only, optional: one proactive offer once the jobs are done ("Want me to log the walk in Well when you're back?").
     public var suggest: String
+    /// Who wrote the answer, as the hub says it ("claude", "council(claude,codex)"); empty from an older hub.
+    public var answeredBy: String
 
-    public init(kind: String, reply: String = "", question: String = "", jobs: [Job] = [], suggest: String = "") {
-        self.kind = kind; self.reply = reply; self.question = question; self.jobs = jobs; self.suggest = suggest
+    public init(kind: String, reply: String = "", question: String = "", jobs: [Job] = [], suggest: String = "", answeredBy: String = "") {
+        self.kind = kind; self.reply = reply; self.question = question; self.jobs = jobs; self.suggest = suggest; self.answeredBy = answeredBy
     }
     public init(from d: Decoder) throws {
         let c = try d.container(keyedBy: CodingKeys.self)
@@ -58,8 +60,9 @@ public struct ChatPlan: Decodable, Equatable, Sendable {
         question = try c.decodeIfPresent(String.self, forKey: .question) ?? ""
         jobs = try c.decodeIfPresent([Job].self, forKey: .jobs) ?? []
         suggest = try c.decodeIfPresent(String.self, forKey: .suggest) ?? ""
+        answeredBy = try c.decodeIfPresent(String.self, forKey: .answeredBy) ?? ""
     }
-    enum CodingKeys: String, CodingKey { case kind, reply, question, jobs, suggest }
+    enum CodingKeys: String, CodingKey { case kind, reply, question, jobs, suggest; case answeredBy = "answered_by" }
 
     /// Time's armed answer as the confirmed card: "Alarm set · 3:32 PM · Take a walk". The time is Time's own
     /// (from its answer, "Alarm: Take a walk, today at 3:32 PM"), the hub's `at` only when Time's has none.
@@ -110,8 +113,34 @@ extension Hub {
     /// One chat turn to Glyph Core Intelligence: `surface` is the app ("time", "well", "jot", "crm", "omega",
     /// "studio", "native"), `history` the turns before (the last 6 are sent), `period` "today" or "week" when the
     /// app has one. Nil when the hub or Claude can't be reached (503): return nil from `respond` and GlyphChat says so and keeps the words.
+    /// Reads `GET /crm/names` into `EntityScan.shared`, once. The hub answers with every entity
+    /// page's id, name, kind and aliases, which is exactly what the scanner needs, so there is no
+    /// second route and no second idea of what an entity is called.
+    public func readRegister() async {
+        if await MainActor.run(body: { EntityScan.shared != nil }) { return }
+        guard let (code, data) = await send("GET", "crm/names"), code == 200,
+              let rows = (try? JSONSerialization.jsonObject(with: data)) as? [[String: Any]] else { return }
+        let known: [EntityScan.Known] = rows.compactMap { r in
+            guard let id = r["id"] as? String, let name = r["name"] as? String,
+                  let kind = (r["kind"] as? String).flatMap(CRMKind.init(prefix:)) else { return nil }
+            return EntityScan.Known(id: id, kind: kind, name: name, aliases: r["aliases"] as? [String] ?? [])
+        }
+        guard !known.isEmpty else { return }
+        let scan = EntityScan(known)
+        await MainActor.run { EntityScan.shared = scan }
+    }
+
     public func understand(surface: String, text: String, history: [ChatTurn] = [], period: String? = nil, preferences: String? = nil,
                            now: Date = .now, timeZone: TimeZone = .current) async -> ChatPlan? {
+        // Anything a write kept while the hub was away goes first. `flush()` says "call on launch and
+        // before each turn", and four of the eleven apps did: Glyph Jot, Well, Wealth, Omega, CRM and
+        // Time told Fru "Kept on this iPhone, sends when the hub is back" and then never sent it,
+        // because the outbox is each app's own UserDefaults and no other app can drain it. Every turn
+        // in every app begins here, so no app has to remember any more.
+        await flush()
+        // And the register, once a session, so an answer can link the people, places, orgs, things
+        // and tags it names. Every app's turn comes through here, so none of them has to ask.
+        await readRegister()
         let f = ISO8601DateFormatter(); f.timeZone = timeZone; f.formatOptions = [.withInternetDateTime]
         var body: [String: Any] = ["surface": surface, "text": text, "now": f.string(from: now), "tz": timeZone.identifier,
                                    "history": history.suffix(6).map { ["role": $0.mine ? "user" : "app", "text": $0.text] }]
@@ -119,7 +148,11 @@ extension Hub {
         if preferences == nil { prefs = await preferenceText(for: surface) }
         if !prefs.isEmpty { body["preferences"] = prefs }
         if let period { body["period"] = period }
-        guard let (code, data) = await send("POST", "understand", body: json(body)), code == 200 else { return nil }
+        // A council takes minutes where one engine takes seconds: wait as long as this app's choice needs (the last
+        // settings this phone read), and look at the settings again in the background when they are old.
+        let wait = AnswerSettings.timeout(for: AnswerSettings.cached?.choice(for: surface) ?? ["auto"])
+        if AnswerSettings.stale { Task { _ = await fetchAnswers() } }
+        guard let (code, data) = await send("POST", "understand", body: json(body), timeout: wait), code == 200 else { return nil }
         return try? JSONDecoder().decode(ChatPlan.self, from: data)
     }
 

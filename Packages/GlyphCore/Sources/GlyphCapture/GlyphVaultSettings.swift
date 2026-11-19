@@ -159,12 +159,7 @@ public struct GlyphVaultSettings: View {
     }
 }
 
-public extension Color {
-    /// #008000 office green, #3FA34D in the dark so it reads on black. The one accent in every Glyph app.
-    static let glyphGreen: Color = Color(nsColor: NSColor(name: nil) { a in
-        a.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua
-            ? NSColor(red: 0x3F / 255, green: 0xA3 / 255, blue: 0x4D / 255, alpha: 1)
-            : NSColor(red: 0, green: 128 / 255, blue: 0, alpha: 1)
-    })
-}
+// `Color.glyphGreen` moved to Composer.swift, beside `officeGreen`: it lived here, inside this
+// file's `#if os(macOS)`, so no iPhone screen could reach it and each one brightened the brand
+// green by hand instead. Its dark value was a seventh of those greens.
 #endif

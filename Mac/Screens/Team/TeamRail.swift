@@ -41,6 +41,7 @@ struct TeamRail: View {
                         Text("Record").font(.ui(12, .semibold)).foregroundStyle(Ink.tertiary)
                             .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 22).padding(.top, 14).padding(.bottom, 4)
                         decisionsRow
+                        tagsRow
                     } else {
                         let rows = teammates(waitingOn: waitingOn, anyWaiting: !asks.isEmpty)
                         ForEach(rows) { t in row(t, unread: t.id == AppModel.chiefID ? !asks.isEmpty : waitingOn.contains(t.id)) }
@@ -128,6 +129,7 @@ struct TeamRail: View {
         case .weekly, .newTeammate, .settings, .team: return AppModel.chiefID
         case .sources(let s): return "source:\(s ?? "vault")"
         case .decisions: return "decisions"
+        case .tags: return "tags"
         }
     }
 
@@ -174,6 +176,16 @@ struct TeamRail: View {
     private var decisionsRow: some View {
         placeRow(id: "decisions", title: "Decisions", line: boards.decisions, action: { model.go(.decisions) }) {
             Image(systemName: "arrow.triangle.branch").font(.system(size: 16, weight: .semibold)).foregroundStyle(Ink.text)
+                .frame(width: 42, height: 42)
+                .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Ink.chip))
+        }
+    }
+
+    /// Every Glyph app has a Tags place, holding its own subset of the one register
+    /// (the owner, 2026-11-18: tags are how he finds things again).
+    private var tagsRow: some View {
+        placeRow(id: "tags", title: "Tags", line: TagsScreen.note, action: { model.go(.tags) }) {
+            Image(systemName: "number").font(.system(size: 16, weight: .semibold)).foregroundStyle(Ink.text)
                 .frame(width: 42, height: 42)
                 .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Ink.chip))
         }

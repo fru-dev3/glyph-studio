@@ -82,3 +82,32 @@ private func log() -> ChatLog {
     try log.save([], to: ChatLog.newID(), device: nil)
     #expect(log.chats().count == 1, "an empty screen writes nothing")
 }
+
+@Test func aChatCanBeGivenAName() throws {
+    let log = log(), id = ChatLog.newID()
+    try log.save([ChatLine(n: 0, mine: true, text: "What did I say about the Cameroon trip")], to: id, device: nil)
+    #expect(log.chat(id)?.name == nil)
+    #expect(log.chat(id)?.title == "What did I say about the Cameroon trip", "until it is named, the first thing said")
+
+    try log.rename(id, to: "Cameroon trip")
+    #expect(log.chat(id)?.name == "Cameroon trip")
+    #expect(log.chat(id)?.title == "Cameroon trip", "the name wins over the first thing said")
+    #expect(log.chat(id)?.said == "What did I say about the Cameroon trip", "and what was said is still there")
+
+    try log.rename(id, to: "  Cameroon  ")
+    #expect(log.chat(id)?.title == "Cameroon", "renaming again wins, and the name is trimmed")
+    try log.rename(id, to: "")
+    #expect(log.chat(id)?.title == "What did I say about the Cameroon trip", "an empty name hands it back to what was said")
+
+    // The point of writing a name as a line: the file is only ever appended to, so the vault takes
+    // a rename exactly as it takes a reply, and nothing already written is touched.
+    let lines = try String(contentsOf: log.url(id), encoding: .utf8).split(separator: "\n")
+    #expect(lines.count == 5, "start, what was said, and one line per naming")
+    #expect(lines[1].contains("What did I say"), "the first line said is where it always was")
+
+    // A name given to a chat with nothing said in it still folds: rename starts the file.
+    let empty = ChatLog.newID()
+    try log.rename(empty, to: "Later")
+    #expect(log.chat(empty)?.name == "Later")
+    #expect(log.chats().map(\.id) == [id], "but a chat with nothing said in it is not a past chat")
+}

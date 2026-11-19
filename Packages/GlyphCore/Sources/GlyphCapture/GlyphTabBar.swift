@@ -8,6 +8,13 @@ import SwiftUI
 ///
 /// Glyph Well drew this first and its own `WellTabBar` is now this view with Well's places and
 /// colours; Glyph Wealth draws the same bar with its own.
+///
+/// The bar does NOT carry the drawer button. It did for a day, and that made the way in sit in the
+/// bar in the apps that have one and in the composer's row in the apps that do not (Fru,
+/// 2026-11-14: "There really has to be consistency where you're placing a hamburger... in some
+/// cases like wealth, you have it below and then in some other ones, you don't have it there").
+/// Every app draws the family's composer, including the ones that reach it through `talkButton`,
+/// so the composer's row is the one place that exists everywhere, and it is the only home.
 public struct GlyphTabBar: View {
     public struct Place: Identifiable, Equatable, Sendable {
         public let id: String
@@ -41,9 +48,16 @@ public struct GlyphTabBar: View {
                     VStack(spacing: 3) {
                         Image(systemName: item.symbol).font(.system(size: 19, weight: .medium))
                         Text(item.name).font(.system(size: 11, weight: .semibold))
-                            .lineLimit(1).minimumScaleFactor(0.8)
+                            .lineLimit(1).minimumScaleFactor(0.72)
                     }
                     .foregroundStyle(here ? on : Color.secondary)
+                    // The inset goes here, before the stretch, which is the whole point: it is
+                    // what narrows the width PROPOSED to the name, so a long one shrinks a little
+                    // instead of filling its share and sitting against its neighbour. Padding the
+                    // name itself does nothing, because the padding lands outside the box the name
+                    // is measured in and it still comes out full size. Six places and the drawer
+                    // button had Glyph Well's "Workout" and "Feelings" running together.
+                    .padding(.horizontal, 4)
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
                     // The place you are on sits in a filled chip, as the system draws a chosen

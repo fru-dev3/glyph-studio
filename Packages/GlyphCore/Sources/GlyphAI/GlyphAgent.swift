@@ -113,20 +113,22 @@ public struct Hub: Sendable {
         self.base = base; self.model = model; self.app = app; self.timeQueue = timeQueue
     }
     public var device: String { "\(app), \(model)" }
-    public var host: String {
-        if let hostName { return hostName }
-        let slug = model.lowercased().map { $0.isLetter || $0.isNumber ? String($0) : "-" }.joined().split(separator: "-").joined(separator: "-")
-        return slug.hasPrefix("iphone") ? slug : "iphone-" + slug
-    }
+    /// The month files' host part: `hostName` on a Mac, else this device's own.
+    ///
+    /// It used to slug `model`, which made the host depend on how each app happened to name the
+    /// phone: "iPhone 15 Pro" gave `iphone-15-pro`, a raw "iPhone16,1" gave `iphone16-1`, and
+    /// Glyph Travel's "iPhone-iPhone16,1" gave `iphone-iphone16-1`. All three were the same phone,
+    /// and the vault held its lines in files that never met.
+    public var host: String { hostName ?? ThisDevice.host }
 
     /// Status and body, or nil when the hub can't be reached.
     public func send(_ method: String, _ path: String, query: [String: String] = [:], body: Data? = nil, type: String = "application/json",
-                     headers: [String: String] = [:]) async -> (Int, Data)? {
+                     headers: [String: String] = [:], timeout: TimeInterval = 20) async -> (Int, Data)? {
         if let vault { return MacHub(vault: vault).handle(method, path, query: query, body: body, headers: headers) }
         guard let base, var c = URLComponents(url: base.appending(path: path), resolvingAgainstBaseURL: false) else { return nil }
         if !query.isEmpty { c.queryItems = query.map { URLQueryItem(name: $0.key, value: $0.value) } }
         guard let url = c.url else { return nil }
-        var r = URLRequest(url: url, timeoutInterval: 20)
+        var r = URLRequest(url: url, timeoutInterval: timeout)
         r.httpMethod = method; r.httpBody = body; r.cachePolicy = .reloadIgnoringLocalCacheData
         if body != nil { r.setValue(type, forHTTPHeaderField: "Content-Type") }
         for (k, v) in headers { r.setValue(v, forHTTPHeaderField: k) }

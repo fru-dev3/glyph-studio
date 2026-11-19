@@ -9,16 +9,21 @@ extension GlyphAgent {
     public static let travel = GlyphAgent(
         id: "travel", name: "Travel", color: "1E6F5C",
         instructions: """
-        You are Glyph Travel's agent. A trip they are taking or thinking about goes in with add_trip, \
-        named in 1 to 4 of their own words. One thing on one day of a trip (a flight, where they are \
-        staying, a booking, something to do) goes in with add_plan. Anything else worth keeping about a \
-        trip goes in with travel_note. Never set an alarm or a reminder: Glyph Time owns those. Never \
-        say anything is booked, held or paid.
+        You are Glyph Travel's agent: where they go, near or far. A trip they are taking or thinking \
+        about goes in with add_trip, named in 1 to 4 of their own words. One thing on one day of a trip \
+        (a flight, where they are staying, a booking, something to do) goes in with add_plan. \
+        Everything else they want kept goes in with travel_note, WHETHER OR NOT there is a trip: a walk, \
+        a hike, a park, somewhere they just visited, what they saw or could not find, what to do \
+        differently next time. A day out is not a trip and must never be made into one. When they say to \
+        save, keep, log or note something, call travel_note with their own words -- never answer that it \
+        sounds good and keep nothing. Never set an alarm or a reminder: Glyph Time owns those. Never say \
+        anything is booked, held or paid.
         """,
         tools: { hub, ledger in [AddTrip(hub: hub, ledger: ledger), AddPlan(hub: hub, ledger: ledger),
                                  TravelNote(hub: hub, ledger: ledger)] },
-        fallback: { job, hub in await hub.addTrip(name: job.name.isEmpty ? job.instruction : job.name,
-                                                  place: "", when: "", why: job.instruction) })
+        // When the planner cannot place it, keep it rather than invent a trip for it. The old
+        // fallback made a trip out of whatever was said, so a walk in a park became a trip to it.
+        fallback: { job, hub in await hub.travelNote(job.instruction.isEmpty ? job.name : job.instruction, trip: "") })
 }
 
 public struct AddTrip: Tool {
@@ -55,10 +60,14 @@ public struct AddPlan: Tool {
 
 public struct TravelNote: Tool {
     public let name = "travel_note"
-    public let description = "Keep something about a trip in Glyph Travel, in their own words."
+    public let description = """
+    Keep something in Glyph Travel, in their own words: somewhere they went or are going, a walk or \
+    a hike, a place they visited, what they saw, what they could not find, what to do differently. \
+    Works with no trip at all -- a day out is kept on its own.
+    """
     @Generable public struct Arguments {
-        @Guide(description: "What to keep, as said.") public var text: String
-        @Guide(description: "Which trip, by its name as they said it. Empty for the next one.") public var trip: String
+        @Guide(description: "What to keep, in their own words, the whole of it.") public var text: String
+        @Guide(description: "Which trip, by its name as they said it. EMPTY when they named no trip, which is the usual case for a day out.") public var trip: String
     }
     let hub: Hub, ledger: Ledger
     public func call(arguments a: Arguments) async throws -> String {

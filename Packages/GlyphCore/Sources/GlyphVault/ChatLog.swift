@@ -9,9 +9,14 @@ import Foundation
 ///     {"mine":true,"n":0,"text":"Remind me Wednesdays at 9","ts":"2026-10-30T09:12:04-05:00"}
 ///     {"mine":false,"n":1,"short":"Wednesdays · 9:00 AM","status":"done","text":"Reminder: every Wednesday at 9:00 AM","ts":"2026-10-30T09:12:05-05:00"}
 ///
+/// A chat can also be given a name, which is a line of its own and may be written more than once;
+/// the last one wins, as with any other line:
+///
+///     {"name":"Cameroon trip","ts":"2026-11-14T09:40:11-06:00"}
+///
 /// Status: done, asking, failed, undone, review (waits for a yes in its app), working. `who` is the
-/// agent a line came from (Glyph Native's cards). Archiving never deletes: the file moves into
-/// `archived-<YYYY-MM-DD>/` beside it, on the phone and in the vault.
+/// agent a line came from (Glyph Native's cards, and which model answered). Archiving never
+/// deletes: the file moves into `archived-<YYYY-MM-DD>/` beside it, on the phone and in the vault.
 public struct ChatLine: Codable, Equatable, Sendable, Identifiable {
     public var n: Int
     public var mine: Bool
@@ -34,8 +39,13 @@ public struct Chat: Identifiable, Equatable, Sendable {
     public var started: Date
     public var device: String?
     public var lines: [ChatLine]
-    /// The first thing said: the chat's name in the history list.
-    public var title: String { lines.first { $0.mine }?.text ?? lines.first?.text ?? "" }
+    /// What it was called, if it was ever named (Fru, 2026-11-14: "I can give a different name to
+    /// the different chat sessions and come back to them").
+    public var name: String?
+    /// The first thing said: what a chat is called until it is named.
+    public var said: String { lines.first { $0.mine }?.text ?? lines.first?.text ?? "" }
+    /// What to call it in a list: its name, else the first thing said.
+    public var title: String { name?.isEmpty == false ? name! : said }
 }
 
 public struct ChatLog: Sendable {
@@ -59,6 +69,7 @@ public struct ChatLog: Sendable {
     private struct Entry: Codable {
         var id: String?, app: String?, started: Date?, device: String?
         var n: Int?, mine: Bool?, text: String?, short: String?, status: String?, who: String?
+        var name: String?
         var ts: Date
     }
 
@@ -67,6 +78,17 @@ public struct ChatLog: Sendable {
     /// Starts a chat's file with its first line.
     public func start(_ id: String, device: String?, at date: Date = .now) throws {
         try write(Entry(id: id, app: app, started: date, device: device, ts: date), to: id)
+    }
+
+    /// Names the chat, or renames it: one more line, so the file is still only ever appended to and
+    /// the vault takes the change the same way it takes a reply. An empty name takes the name off.
+    public func rename(_ id: String, to name: String, at date: Date = .now) throws {
+        // A name line carries no `started`, so a file that began with one would fold to no chat at
+        // all and the name would be lost with it. Naming a chat nobody has spoken in is the only
+        // way to get there, and it costs one line to make it safe.
+        if chat(id) == nil { try start(id, device: nil, at: date) }
+        try write(Entry(name: name.trimmingCharacters(in: .whitespacesAndNewlines), ts: date), to: id)
+        mark(send: id)
     }
 
     /// One line of the chat (or a line again, changed), appended; the chat is marked for sending.
@@ -100,15 +122,20 @@ public struct ChatLog: Sendable {
     public func chat(_ id: String) -> Chat? { Self.fold(id, (try? Data(contentsOf: url(id))) ?? Data(), app: app) }
 
     static func fold(_ id: String, _ data: Data, app: String) -> Chat? {
-        var c: Chat?, lines: [Int: ChatLine] = [:]
+        var c: Chat?, lines: [Int: ChatLine] = [:], name: String?
         for raw in data.split(separator: 0x0A) {
             guard let e = try? TimeLog.decoder.decode(Entry.self, from: Data(raw)) else { continue }
             if let started = e.started { c = Chat(id: e.id ?? id, app: e.app ?? app, started: started, device: e.device, lines: []) }
             else if let n = e.n, let mine = e.mine, let text = e.text {
                 lines[n] = ChatLine(n: n, mine: mine, text: text, short: e.short, status: e.status, who: e.who, ts: lines[n]?.ts ?? e.ts)
             }
+            // A name line carries nothing else, and the last one wins, so a rename is just another
+            // line. Written before the header (a name given to a chat with nothing said in it yet)
+            // it still lands, because it is applied after the whole file is read.
+            else if let given = e.name { name = given }
         }
         c?.lines = lines.values.sorted { $0.n < $1.n }
+        c?.name = name
         return c
     }
 

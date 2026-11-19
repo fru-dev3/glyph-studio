@@ -132,6 +132,26 @@ public enum Spoken {
         return out
     }
 
+    /// Every word that carries no meaning for a reader of what was said. Glyph Time's set, which is
+    /// the one `declined` is calibrated against.
+    public static let fillers: Set<String> = ["uh", "uhh", "um", "umm", "uhm", "er", "erm", "ah", "hmm", "hm", "mm",
+                                              "hey", "ok", "okay", "please", "glyph", "siri", "actually", "basically",
+                                              "just", "yeah", "well", "oh"]
+
+    /// Said not to do anything ("don't do anything", "you don't need to set anything", "just testing",
+    /// "never mind", "nothing to do"): this wins over every reader, Claude's and Apple's model's too.
+    ///
+    /// One definition, because it was three. Glyph Time held four patterns the launcher's copy lacked,
+    /// so "you don't need to set anything" and "nothing to do" were a refusal in Glyph Time and an
+    /// instruction in Glyph Native -- which dispatches real jobs. Never copy these patterns into an app.
+    public static func declined(_ said: String) -> Bool {
+        let s = normalize(said, dropping: fillers)
+        return first(#"\b(do ?n'?t|do not|did ?n'?t|did not|no need to|you don'?t (need|have) to)( want you to| need you to)? (do|set|start|make|create|add|change) (anything|nothing|a thing)\b"#
+            + #"|\b(did ?n'?t|did not|never) ask(ed)?( you)? (for|to)\b|\b(this is|it's|its|that was) (only )?a test\b"#
+            + #"|^ *(only )?testing\b|\btesting (you|your|this|the app|the mic|the microphone|it|1 2 3)\b"#
+            + #"|\bnever ?mind\b|\bignore (that|this|me|it)\b|\bforget (it|that|about it)\b|\bnothing to (do|set)\b"#, s) != nil
+    }
+
     public static func sub(_ s: String, _ pattern: String, _ with: String) -> String {
         s.replacingOccurrences(of: pattern, with: with, options: [.regularExpression, .caseInsensitive])
     }

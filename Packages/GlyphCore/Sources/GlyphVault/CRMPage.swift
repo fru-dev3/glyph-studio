@@ -9,10 +9,15 @@ import Foundation
 /// instead of products. standardize once adn for all"). The folder and the prefix were `orgs` and
 /// `org/` all along, so the name now matches what is on disk and not one page moves.
 public enum CRMKind: String, CaseIterable, Codable, Sendable, Identifiable {
-    case person, place, org, thing, event
+    case person, place, org, thing, event, tag
     public var id: String { rawValue }
-    /// The four Entities; Events sit under Activities with Projects, as in Glyph Bot.
-    public static let entities: [CRMKind] = [.person, .place, .org, .thing]
+    /// The Entities; Events sit under Activities with Projects, as in Glyph Bot.
+    ///
+    /// Tags are among them (Fru, 2026-11-14: "you have people, places, things, products, and
+    /// hashtags, and then even domains"). A tag is an entity like any other rather than a list of
+    /// its own, so it is stored, named, aliased, linked and read by everything that already reads
+    /// entities, and every app can show the tags that exist instead of keeping its own list.
+    public static let entities: [CRMKind] = [.person, .place, .org, .thing, .tag]
 
     public var prefix: String { rawValue }
     public var dir: String {
@@ -22,6 +27,7 @@ public enum CRMKind: String, CaseIterable, Codable, Sendable, Identifiable {
         case .org: "orgs"
         case .thing: "things"
         case .event: "events"
+        case .tag: "tags"
         }
     }
     public var label: String {
@@ -31,6 +37,7 @@ public enum CRMKind: String, CaseIterable, Codable, Sendable, Identifiable {
         case .org: "Orgs"
         case .thing: "Things"
         case .event: "Events"
+        case .tag: "Tags"
         }
     }
     public var singular: String {
@@ -40,6 +47,7 @@ public enum CRMKind: String, CaseIterable, Codable, Sendable, Identifiable {
         case .org: "Org"
         case .thing: "Thing"
         case .event: "Event"
+        case .tag: "Tag"
         }
     }
     public var symbol: String {
@@ -49,6 +57,7 @@ public enum CRMKind: String, CaseIterable, Codable, Sendable, Identifiable {
         case .org: "building.2"
         case .thing: "applewatch"
         case .event: "calendar"
+        case .tag: "number"
         }
     }
     /// Rows written before the rename say "product". Decoding goes through the raw value, not
@@ -97,7 +106,17 @@ public struct CRMPage: Equatable, Sendable {
     public var created = ""
     public var updated = ""
     public var mentionCount = 0
-    public var domain: String?
+    /// The domains this entity rolls up into. Fru, 2026-11-14: "I can have hashtags that will roll
+    /// up into one or multiple domains", and a place or a thing "could be part of a domain or
+    /// standalone", so this is a list and an empty one is a perfectly good answer.
+    public var domains: [String] = []
+
+    /// The first domain. Everything written before an entity could be in several reads and writes
+    /// this, so it stays: reading gives the first, setting replaces the list.
+    public var domain: String? {
+        get { domains.first }
+        set { domains = newValue.map { [$0] } ?? [] }
+    }
     public var website: String?
     public var picture: String?
     public var extra: [(key: String, value: String)] = []
@@ -131,10 +150,11 @@ public struct CRMPage: Equatable, Sendable {
                 defer { i += 1 }
                 guard let (key, raw) = CRMPage.keyValue(lines[i]) else { continue }
                 let val = CRMPage.unquote(raw.trimmingCharacters(in: .whitespaces))
-                if key == "aliases" && raw.trimmingCharacters(in: .whitespaces).isEmpty {
+                if (key == "aliases" || key == "domains") && raw.trimmingCharacters(in: .whitespaces).isEmpty {
                     var items: [String] = []
                     while i + 1 < lines.count, let item = CRMPage.dashItem(lines[i + 1]) { items.append(item); i += 1 }
-                    aliases = items.filter { !$0.isEmpty }
+                    let kept = items.filter { !$0.isEmpty }
+                    if key == "aliases" { aliases = kept } else { domains = kept }
                     continue
                 }
                 switch key {
@@ -145,7 +165,11 @@ public struct CRMPage: Equatable, Sendable {
                 case "created": created = val
                 case "updated": updated = val
                 case "mention_count": mentionCount = Int(val) ?? 0
-                case "domain": domain = val.isEmpty ? nil : val
+                case "domains": domains = CRMPage.list(raw)
+                // The single key a page written before 2026-11-14 carries, and the one this still
+                // writes beside the list so an older reader keeps working. It never overwrites a
+                // list that was already read, whichever order the two keys appear in.
+                case "domain": if domains.isEmpty, !val.isEmpty { domains = [val] }
                 case "website": website = val.isEmpty ? nil : val
                 case "picture": picture = val.isEmpty ? nil : val
                 default: extra.append((key, raw))
@@ -240,7 +264,12 @@ public struct CRMPage: Equatable, Sendable {
     public func render() -> String {
         var fm = ["---", "name: \(CRMPage.yamlStr(name))", "kind: \(kind)", "aliases: [\(aliases.map(CRMPage.yamlStr).joined(separator: ", "))]",
                   "saved: \(saved)", "created: \(created)", "updated: \(updated)", "mention_count: \(mentionCount)"]
-        if let domain { fm.append("domain: \(domain)") }
+        if !domains.isEmpty {
+            fm.append("domains: [\(domains.map(CRMPage.yamlStr).joined(separator: ", "))]")
+            // Kept beside the list on purpose: 798 pages and the hub's own reader know `domain`
+            // and nothing else, so dropping it would hide every entity's domain from them.
+            fm.append("domain: \(domains[0])")
+        }
         if let website { fm.append("website: \(CRMPage.yamlStr(website))") }
         if let picture { fm.append("picture: \(CRMPage.yamlStr(picture))") }
         fm += extra.map { "\($0.key): \($0.value)" }

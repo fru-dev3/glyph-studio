@@ -1,6 +1,6 @@
 > **Glyph Bot is part of Glyph**, the apps by fru.dev for your AI agents.
 >
-> **Glyph Native** installs every Glyph app and keeps them up to date: [Download for Mac](https://github.com/fru-dev3/glyph-native/releases/latest/download/Glyph-Native.dmg) · [glyph.fru.dev](https://glyph.fru.dev/?from=bot-readme)
+> **Glyph Native** installs every Glyph app and keeps them up to date: [Download for Mac](https://github.com/fru-dev3/glyph-studio/releases/download/native/Glyph-Native.dmg) · [glyph.fru.dev](https://glyph.fru.dev/?from=bot-readme)
 >
 > **Glyph Jot** types what you say anywhere on your Mac and records meetings: [glyph.fru.dev/jot](https://glyph.fru.dev/jot?from=bot-readme)
 
